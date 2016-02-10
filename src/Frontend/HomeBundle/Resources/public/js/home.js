@@ -403,7 +403,8 @@ function getPromosVigentes(){
 
     var today = moment().format('DD/MM/YYYY');
     var data="today="+today;
-    var id = 1;
+    var id = 0;
+    var active = "active";
 
     $.ajax({
         type: "POST",
@@ -418,10 +419,10 @@ function getPromosVigentes(){
             $.each(data, function (index) {
 
                 var url = data[index].img;
-                $("#item"+id).attr("src",url);
-
+                $("#carousel-indicators").append('<li data-target="#carousel-example-generic" data-slide-to="'+id+'" class="'+active+'"></li>');
+                $("#carousel-inner").append('<div class="item '+active+'"><a href="'+data[index].link+'"><img id="item'+id+'" src="'+url+'" ></a></div>');
                 id++;
-
+                active='';
             });
 
         });

@@ -260,6 +260,7 @@ class HomeController extends Controller
             $where .=" and ( s.name like '%".$que."%' or u.name like '%".$que."%')";
         }
         
+
         $dql .=$where." order by u.id";
         $em = $this->getDoctrine()->getManager();
         $sql="select count(u.id)".$dql;
@@ -267,9 +268,10 @@ class HomeController extends Controller
                 ->getSingleScalarResult();
        
        
-       
+      
             
-        $sql=$select.$dql;     
+        $sql=$select.$dql; 
+            
         
     		$query = $em->createQuery($sql)->setMaxResults($limit)->setFirstResult($offset);
     		$tiendas = $query->getResult();
@@ -284,8 +286,9 @@ class HomeController extends Controller
         
         $listado=array();
         
+
         foreach ($tiendas as $tienda) {
-			  
+			         
       			  $open = false;
       			  $horarios = $tienda->getHorarios();
       			 
@@ -975,6 +978,7 @@ class HomeController extends Controller
                 $r = array();
                 $r['img'] = $b->getWebPath();
                 $r['tiendaId'] = $b->getSucursal()->getId();
+                $r['link']=$this->generateUrl('frontend_show_products', array('id' =>$b->getSucursal()->getId()));
                 $resultados[] = $r;
             }
         }

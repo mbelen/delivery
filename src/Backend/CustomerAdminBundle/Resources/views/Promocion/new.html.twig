@@ -2,7 +2,10 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/themes/proton/style.min.css')}}" />
-
+   
+    {% stylesheets '@BackendCustomerAdminBundle/Resources/public/css/promocion.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 {% endblock %}
 
 {% block container -%}

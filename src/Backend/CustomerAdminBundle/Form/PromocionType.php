@@ -27,6 +27,7 @@ class PromocionType extends AbstractType
             ->add('desde', 'datetime', array(
                 'input' => 'datetime',
                 'date_widget' => 'choice',
+                'date_format' => 'dd-MM-yyyy',
                // 'time_widget' => 'choice',
                 'years' => range(Date('Y'), 2020),
                 'required' => true,
@@ -35,6 +36,7 @@ class PromocionType extends AbstractType
             ->add('hasta', 'datetime', array(
                 'input' => 'datetime',
                 'date_widget' => 'choice',
+                'date_format' => 'dd-MM-yyyy',
               //  'time_widget' => 'choice',
                 'years' => range(Date('Y'), 2020),
                 'required' => true,
@@ -54,8 +56,9 @@ class PromocionType extends AbstractType
                 'class'=>'BackendCustomerAdminBundle:Producto',
                 'query_builder'=>function(EntityRepository $er ) use ( $customerId ) {
                     return $er->createQueryBuilder('u')
-                        //->where('u.customer = '.$customerId)
-                        ->orderBy('u.name', 'ASC');
+                  ->innerjoin("u.sucursales", "s")
+                  ->where('s.customer = '.$customerId)
+                  ->orderBy('u.name', 'ASC');
                 },
 
                 'multiple'=>true,
@@ -67,8 +70,9 @@ class PromocionType extends AbstractType
                 'class'=>'BackendCustomerAdminBundle:Producto',
                 'query_builder'=>function(EntityRepository $er ) use ( $customerId ) {
                     return $er->createQueryBuilder('u')
-                        //->where('u.customer = '.$customerId)
-                        ->orderBy('u.name', 'ASC');
+                  ->innerjoin("u.sucursales", "s")
+                  ->where('s.customer = '.$customerId)
+                  ->orderBy('u.name', 'ASC');
                 },
 
                 'multiple'=>true,

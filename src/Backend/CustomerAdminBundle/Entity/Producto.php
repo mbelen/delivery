@@ -40,12 +40,11 @@ class Producto
     private $precio;
 
     /**
-     * @ORM\Column(name="pricePromo", type="decimal", scale=2,nullable=true)
+     * @ORM\Column(name="pricePromo", type="decimal", scale=2, nullable=true)
      */
     private $precioPromo;
 
     /**
-
      * @ORM\Column(name="always_available", type="boolean")
      */
     private $alwaysAvailable;    
@@ -874,4 +873,6 @@ class Producto
     {
         return $this->precioPromo;
     }
+
 }
+

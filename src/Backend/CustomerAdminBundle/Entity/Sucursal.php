@@ -4,10 +4,12 @@ namespace Backend\CustomerAdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="sucursal")
  * @ORM\Entity()
+ * @UniqueEntity("direccion")
  * @ORM\HasLifecycleCallbacks  
  */
 class Sucursal 

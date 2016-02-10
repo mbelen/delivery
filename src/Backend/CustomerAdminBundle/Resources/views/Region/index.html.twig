@@ -21,7 +21,7 @@
 
     <div class="row">
         <div class="col-lg-2">
-        {% if  is_granted("ROLE_NEWREGION") %}
+        {% if  is_granted("ROLE_ADDREGION") %}
             <button type="button" class="btn btn-primary" id="new_button" data-url="{{ path('region_new',{id: sucursal }) }}">Nuevo</button>
         {% endif %}
         </div>
