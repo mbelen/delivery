@@ -3,6 +3,9 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/themes/proton/style.min.css')}}" />
     <link rel="stylesheet" href="{{ asset('plugins/boostrap-datepicker/css/datepicker.css')}}" />
+    {% stylesheets '@BackendCustomerAdminBundle/Resources/public/css/banner.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 {% endblock %}
 
 {% block container -%}

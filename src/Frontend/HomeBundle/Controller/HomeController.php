@@ -978,6 +978,7 @@ class HomeController extends Controller
                 $r = array();
                 $r['img'] = $b->getWebPath();
                 $r['tiendaId'] = $b->getSucursal()->getId();
+                $r['link']=$this->generateUrl('frontend_show_products', array('id' =>$b->getSucursal()->getId()));
                 $resultados[] = $r;
             }
         }

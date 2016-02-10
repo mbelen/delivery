@@ -23,7 +23,8 @@ class BannerType extends AbstractType
             ->add('desde', 'datetime', array(
                 'input' => 'datetime',
                 'date_widget' => 'choice',
-                'time_widget' => 'choice',
+                'date_format' => 'dd-MM-yyyy',
+                //'time_widget' => 'choice',
                 'years' => range(Date('Y'), 2020),
                 'required' => true,
 
@@ -32,7 +33,8 @@ class BannerType extends AbstractType
             ->add('hasta', 'datetime', array(
                 'input' => 'datetime',
                 'date_widget' => 'choice',
-                'time_widget' => 'choice',
+                //'time_widget' => 'choice',
+                'date_format' => 'dd-MM-yyyy',
                 'years' => range(Date('Y'), 2020),
                 'required' => true,
 
