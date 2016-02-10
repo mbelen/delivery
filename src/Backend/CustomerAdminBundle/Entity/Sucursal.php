@@ -196,6 +196,7 @@ class Sucursal
         $this->productos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->regiones = new \Doctrine\Common\Collections\ArrayCollection();
         $this->horarios = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subcategorias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->favoritos =  new ArrayCollection();     
     }
     
