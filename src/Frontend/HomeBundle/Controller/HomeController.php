@@ -200,7 +200,9 @@ class HomeController extends Controller
     }
 
     // devuelve las tiendas según barrio y subcategoria devolver con status
-
+    //si selecciono un barrio elijo en ese barrio
+    //si selecciono solo que me fijo si esta geolocalizado y sino busco en general
+    //si selecciono barrio y que me fijo tiendas en ese barrio que eligio
     public function getTiendasAction(Request $request){
         
         $barrioId =trim(mb_convert_case($request->get("barrio"),MB_CASE_LOWER));
@@ -268,8 +270,7 @@ class HomeController extends Controller
                 ->getSingleScalarResult();
        
        
-      
-            
+          
         $sql=$select.$dql; 
             
         
