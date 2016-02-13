@@ -27,7 +27,8 @@
         "knplabs/knp-paginator-bundle": "dev-master",
         "liuggio/excelbundle": ">=1.0.4",
         "dompdf/dompdf": "dev-master",
-        "beberlei/DoctrineExtensions": "@dev"
+        "beberlei/DoctrineExtensions": "@dev",
+        "liip/imagine-bundle": "^1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

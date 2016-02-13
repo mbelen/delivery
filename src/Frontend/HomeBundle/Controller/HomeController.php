@@ -199,6 +199,24 @@ class HomeController extends Controller
     
     }
 
+
+    private function getThumb($pathImage, $filter='logo_thumb'){
+
+      $imagemanagerResponse = $this->container
+            ->get('liip_imagine.controller')
+            ->filterAction(
+                new Request(),         // http request
+                $pathImage,      // original image you want to apply a filter to
+                $filter              // filter defined in config.yml
+            );
+
+        // string to put directly in the "src" of the tag <img>
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
+        $srcPath = $cacheManager->getBrowserPath($pathImage, $filter);
+        return $srcPath;
+
+    }
+
     // devuelve las tiendas según barrio y subcategoria devolver con status
     //si selecciono un barrio elijo en ese barrio
     //si selecciono solo que me fijo si esta geolocalizado y sino busco en general
@@ -301,10 +319,11 @@ class HomeController extends Controller
                     $record["id"]=$tienda->getId();
                     $record["name"]=$tienda->getName();              
       			  if($tienda->getWebPath()){
-                    	$record["imagen"]=$tienda->getWebPath();
-      		  	  }else{		  	  	
-      				$record["imagen"]="images/home/shop_default.png";
-      		  	  }
+                     
+                        $record["imagen"]=$this->getThumb($tienda->getWebPath());
+    		  	  }else{		  	  	
+      				    $record["imagen"]="images/home/shop_default.png";
+    		  	  }
                     $record["horario"] = $horarios_tienda; 
                     
                     if($open){				  

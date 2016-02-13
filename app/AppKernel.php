@@ -20,10 +20,11 @@ class AppKernel extends Kernel
             new Backend\UserBundle\BackendUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Backend\AdminBundle\BackendAdminBundle(),
-			     new Backend\CustomerBundle\BackendCustomerBundle(),
-			     new Backend\CustomerAdminBundle\BackendCustomerAdminBundle(),
+            new Backend\CustomerBundle\BackendCustomerBundle(),
+            new Backend\CustomerAdminBundle\BackendCustomerAdminBundle(),
             new Frontend\HomeBundle\FrontendHomeBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

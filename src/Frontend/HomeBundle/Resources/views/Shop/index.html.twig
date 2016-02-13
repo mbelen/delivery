@@ -10,7 +10,7 @@
                     {% if tienda.getWebPath() %}
                         <img src="{{ asset(tienda.getWebPath()) }}" class="logo" />
                      {%else%}
-                           <img src="{{ asset('images/home/shop_default.png') }}" class="logo" />
+                           <img src="{{ asset('images/home/shop_default.png') | imagine_filter('logo_thumb') }}" class="logo" />
                     {% endif %}
                     <input type="hidden" name="restricted" id="restricted" value="{{restricted}}" >
                     <div class="info">
@@ -20,7 +20,7 @@
                         <ul class="list-inline text-left payments-method">
                             {% for p in  tienda.getPaymethods() %}
                                 <li>
-                                    <img src="{{ asset(p.getWebPath()) }}" class="icon" title="{{ p.getName() }}">
+                                    <img src="{{ asset(p.getWebPath())  }}" class="icon" title="{{ p.getName() }}">
                                 </li>
                             {% endfor %}
                         </ul>
@@ -112,7 +112,7 @@
             </div>
         </div>
     </div>
-</header> <!--<div style="width: 100%; height: 50px;"></div> -->
+</header> 
 {% endblock %}
 
 {% block container %}
@@ -211,7 +211,7 @@
 			{% for p in productos %}
             <div class="col-md-3 col-sm-6 hero-feature">
                 <div class="thumbnail">
-                    <img src="{{ asset(p.getWebPath()) }}" alt="">
+                    <img src="{{ asset(p.getWebPath()) | imagine_filter('product_thumb')  }}" alt="">
                     <div class="caption">
                         <p class="product-title">{{ p.getName() }}</p>
                         <p class="product-desc">{{ p.getDescription }}</p>
