@@ -23,7 +23,7 @@ class PromocionType extends AbstractType
             ->add('detail')
             ->add('terms')
             ->add('stock')
-            ->add('stop')
+            ->add('stop','checkbox',array("required" => false))
             ->add('desde', 'datetime', array(
                 'input' => 'datetime',
                 'date_widget' => 'choice',

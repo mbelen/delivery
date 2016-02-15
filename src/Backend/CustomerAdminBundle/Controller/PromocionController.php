@@ -177,7 +177,7 @@ class PromocionController extends Controller
             $dias = $em->getRepository('BackendAdminBundle:Dia')->findAll();
             $form   = $this->createForm(new PromocionType(), $entity, array("customerId"=>$customerId));
 
-            return $this->render('BackendCustomerAdminBundle:Promocion:new.html.twig', array(
+            return $this->render('BackendCustomerAdminBundle:Promocion:promocion.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
                 'dias'   => $dias

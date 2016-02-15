@@ -1,0 +1,240 @@
+{% extends '::customer/backend.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/themes/proton/style.min.css')}}" />
+
+    {% stylesheets '@BackendCustomerAdminBundle/Resources/public/css/promocion.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block container -%}
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#producto" data-toggle="tab">Producto</a></li>
+    <li><a href="#categoria" data-toggle="tab">Categoria</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane active in" id="producto">
+        <form class="form-horizontal" id="tab" name="tab" method="post" novalidate  {{ form_enctype(form) }} action="" >
+            {{ form_errors(form) }}
+
+            <input type="hidden" name="action" value="create" />
+
+            <div class="form-group">
+
+                {{ form_label(form.name,"Nombre", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_name_errorloc' class="help-block"> {{ form_errors(form.name) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.type,"Tipo de Promocion", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.type, { 'attr': {'class': 'form-control'} }) }}
+
+                    <span id='backend_customeradminbundle_promocion_type_errorloc' class="help-block"> {{ form_errors(form.type) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{ form_label(form.detail,"Detalle", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Ejemplo: 25% o 2x1"></i>
+                <div class="col-xs-6">
+                    {{ form_widget(form.detail, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_detail_errorloc' class="help-block"> {{ form_errors(form.detail) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{ form_label(form.productos,"Productos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione un producto para la promocion."></i>
+                <div class="col-xs-6">
+                    {{ form_widget(form.productos, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_productos_errorloc' class="help-block"> {{ form_errors(form.productos) }} </span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+
+                {{ form_label(form.terms,"Terminos y condiciones", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.terms, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_terms_errorloc' class="help-block"> {{ form_errors(form.terms) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{ form_label(form.sucursales,"Sucursales", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Sucursal en la cual vende el producto"></i>
+                <div class="col-xs-6">
+                    {{ form_widget(form.sucursales, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_sucursales_errorloc' class="help-block"> {{ form_errors(form.sucursales) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{ form_label(form.mediosPago,"Medios de Pago", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione aquellos medios de pago que participan de la promocion."></i>
+                <div class="col-xs-6">
+                    {{ form_widget(form.mediosPago, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_mediosPago_errorloc' class="help-block"> {{ form_errors(form.mediosPago) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{ form_label(form.desde,"Vigente desde", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.desde, { 'attr': {'class': ''} }) }}
+                    <span id='backend_customeradminbundle_promocion_desde_errorloc' class="help-block"> {{ form_errors(form.desde) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{ form_label(form.hasta,"Vigente hasta", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.hasta, { 'attr': {'class': ''} }) }}
+                    <span id='backend_customeradminbundle_promocion_hasta_errorloc' class="help-block"> {{ form_errors(form.hasta) }} </span>
+                </div>
+            </div>
+
+            <h4>Dias y horarios de la promoción</h4>
+            <div id="hourForm" class="container">
+
+                {% for d in dias %}
+
+                    <div  data-name="{{ d.getName() }}" data-id="{{ d.getId() }}" class="day col-md-12" style="margin-bottom: 10px;">
+                        <div id="label">{{ d.getName() }}: </div>
+
+       <span  id="hora{{ d.getId()}}" {% if horarios is defined and (horarios[d.getId()]['abierto'] == 1)  %}   style="display:none;" {% endif %} >
+       <select name="fromH[{{ d.getId()}}]" class="hour from" style="width: 60px">
+           {% for  h in 0..23 %}
+               {% set selected='' %}
+               {% if horarios is defined and horarios[d.getId()]['fromH'] == h%}
+                   {% set selected='selected'%}
+               {% endif %}
+               <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+           {% endfor %}
+       </select>
+       <select name="fromM[{{ d.getId()}}]" class="min from" style="width: 60px">
+           {% for  h in [':00', ':15', ':30', ':45'] %}
+
+               {% set selected='' %}
+               {% if horarios is defined and horarios[d.getId()]['fromM'] == h%}
+                   {% set selected='selected'%}
+               {% endif %}
+               <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+           {% endfor %}
+       </select>
+
+       a
+
+       <select name="toH[{{ d.getId()}}]" class="hour to" style="width: 60px">
+           {% for  h in 0..23 %}
+               {% set selected='' %}
+               {% if horarios is defined and horarios[d.getId()]['toH'] == h%}
+                   {% set selected='selected'%}
+               {% endif %}
+               <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+           {% endfor %}
+       </select>
+       <select name="toM[{{ d.getId()}}]" class="min to" style="width: 60px">
+           {% for  h in [':00', ':15', ':30', ':45']  %}
+               {% set selected='' %}
+               {% if horarios is defined and horarios[d.getId()]['toM'] == h%}
+                   {% set selected='selected'%}
+               {% endif %}
+               <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+           {% endfor %}
+       </select>
+       </span>
+                        {% set checkedAbierto='' %}
+                        {% if horarios is defined and horarios[d.getId()]['abierto'] == 1%}
+                            {% set checkedAbierto='checked'%}
+                        {% endif %}
+                        <label id="abierto{{d.getId()}}"><input type="checkbox" data-id="{{d.getId()}}" {{ checkedAbierto}} name="abierto[{{d.getId()}}]" value="1"  class="abierto"><span>Todo el día</span></label>
+
+                    </div>
+                {% endfor %}
+
+
+            </div>
+
+
+            <div class="form-group col-xs-10">
+                <button type="submit" class="btn btn-primary center-block"><i class="fa fa-check"></i>Crear</button>
+
+            </div>
+
+        </form>
+    </div>
+    <div class="tab-pane fade" id="categoria">
+        <form id="tab2" class="form-horizontal" name="tab2" method="post" novalidate  {{ form_enctype(form) }} action="" >
+
+            <input type="hidden" name="action" value="crear" />
+
+            <div class="form-group">
+                {{ form_label(form.type,"Tipo de Promocion", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.type, { 'attr': {'class': 'form-control'} }) }}
+
+                    <span id='backend_customeradminbundle_promocion_type_errorloc' class="help-block"> {{ form_errors(form.type) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.stop,"Corta por fin de stock", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="La promocion pierde vigencia al alcanzar el stock definido."></i>
+                <div class="col-xs-6">
+                    {{ form_widget(form.stop, { 'attr': {'class': ''} }) }}
+
+                    <span id='backend_customeradminbundle_promocion_stop_errorloc' class="help-block"> {{ form_errors(form.stop) }} </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.stock,"Stock disponible", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.stock, { 'attr': {'class': 'form-control'} }) }}
+
+                    <span id='backend_customeradminbundle_promocion_stock_errorloc' class="help-block"> {{ form_errors(form.stock) }} </span>
+                </div>
+            </div>
+
+
+            <div class="form-group col-xs-10">
+
+
+                <button type="submit" class="btn btn-primary center-block"><i class="fa fa-check"></i>Cambiar</button>
+
+            </div>
+
+
+        </form>
+    </div>
+
+
+
+
+
+
+
+
+    {% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+
+        {% javascripts '@BackendUserBundle/Resources/public/js/validate_profile.js' filter='?uglifyjs2' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
