@@ -39,6 +39,23 @@
                     <span id='backend_customeradminbundle_promocion_type_errorloc' class="help-block"> {{ form_errors(form.type) }} </span>
                 </div>
             </div>
+            <div class="form-group" id="porcentaje_group">
+            <label class="control-label col-xs-2">Valor</label>
+            <div class="col-xs-6">
+            <input type="text" class="form-control" name="porcentaje" value=""/>
+            </div>
+            </div>
+
+            <div class="form-group" id="unidad_group">
+            <label class="control-label col-xs-2">Unidad</label>
+                <div class="col-xs-2">
+                <input type="text" class="form-control" name="unidad1" value=""/>
+                </div>
+                <label class="control-label col-xs-2">Unidad</label>
+                <div class="col-xs-2">
+                <input type="text" class="form-control" name="unidad2" value=""/>
+                </div>
+            </div>
 
             <div class="form-group">
 
@@ -54,6 +71,8 @@
 
                 {{ form_label(form.productos,"Productos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
                 <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione un producto para la promocion."></i>
+   
+    
                 <div class="col-xs-6">
                     {{ form_widget(form.productos, { 'attr': {'class': 'form-control'} }) }}
                     <span id='backend_customeradminbundle_promocion_productos_errorloc' class="help-block"> {{ form_errors(form.productos) }} </span>
@@ -223,18 +242,11 @@
         </form>
     </div>
 
-
-
-
-
-
-
-
     {% endblock %}
     {% block javascripts %}
         {{ parent() }}
-
-        {% javascripts '@BackendUserBundle/Resources/public/js/validate_profile.js' filter='?uglifyjs2' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% javascripts '@BackendCustomerAdminBundle/Resources/public/js/validate_promo.js' %}
+        <script type="text/javascript" src="{{ asset_url }}">
+        </script>
         {% endjavascripts %}
     {% endblock %}

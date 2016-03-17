@@ -28,7 +28,22 @@ class Promocion
      * @ORM\Column(name="detail", type="string", length=200)
      */
     private $detail;
-
+    
+    /**
+     * @ORM\Column(name="porcentaje", type="integer",nullable=true)
+     */
+    private $porcentaje;
+    
+    /**
+     * @ORM\Column(name="unidad1", type="integer",nullable=true)
+     */
+    private $unidad1;
+    
+    /**
+     * @ORM\Column(name="unidad2", type="integer",nullable=true)
+     */
+    private $unidad2;
+    
     /**
      * @ORM\Column(name="terms", type="text")
      */
@@ -793,5 +808,74 @@ class Promocion
     public function getMediosPago()
     {
         return $this->mediosPago;
+    }
+
+    /**
+     * Set porcentaje
+     *
+     * @param integer $porcentaje
+     * @return Promocion
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return integer 
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+
+    /**
+     * Set unidad1
+     *
+     * @param integer $unidad1
+     * @return Promocion
+     */
+    public function setUnidad1($unidad1)
+    {
+        $this->unidad1 = $unidad1;
+
+        return $this;
+    }
+
+    /**
+     * Get unidad1
+     *
+     * @return integer 
+     */
+    public function getUnidad1()
+    {
+        return $this->unidad1;
+    }
+
+    /**
+     * Set unidad2
+     *
+     * @param integer $unidad2
+     * @return Promocion
+     */
+    public function setUnidad2($unidad2)
+    {
+        $this->unidad2 = $unidad2;
+
+        return $this;
+    }
+
+    /**
+     * Get unidad2
+     *
+     * @return integer 
+     */
+    public function getUnidad2()
+    {
+        return $this->unidad2;
     }
 }
