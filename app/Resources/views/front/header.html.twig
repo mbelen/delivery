@@ -14,38 +14,55 @@
             
             <div class="row">
 				
-                <div class="col-md-6">
-					   <div class="intro-text">
-                        <span class="name">Donde</span>
-                      </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="intro-text">
-                        <span class="name">QUE</span>
-                    </div>
-                </div>        
-                    
-            <div class="row">
-			       <div class = "col-md-6">
+        		<div class="col-md-6">
+				
+					<div class="row">
+					
+  					   <div class="intro-text">
+                          <span class="name">Donde</span>
+                        </div>
+					
+					</div>
+					
+					<div class="row">
+					
                         <div class="input" id="menuZona" data-url="{{ path('frontend_menuZona')}}">
 
                             <input id="barrio" class="form-control ui-autocomplete-input" placeholder="Barrio o localidad">
                             <input type="hidden" id="barrio-id">
                             <input type="hidden" id="zona-id">
 
-                        </div><!-- /input-group -->
-
+                        </div><!-- /input-group -->				
+					
+					</div>
+				
+				</div> <!-- end column donde -->
+				
+				<div class="col-md-6">
+				
+   			     	<div class="row">
+                    	<div class="intro-text">
+                        	<span class="name">QUE</span>
+                    	   </div>
                     </div>
+					
+					<div class="row">
+					
+ 					 <div class="input" id="menuCategoria" data-url="{{ path('frontend_que')}}">
+                       <input id="que" class="form-control ui-autocomplete-input typeahead" placeholder="pizza, empanadas, lo que quieras!">
+                       </div><!-- /input-group -->
+					
+					
+					</div>
+				
+				
+				</div> <!-- end column que -->
+		
+		    		
+			
+        	</div>	  		  
 
-                   <div class = "col-md-6">
-  					 <div class="input" id="menuCategoria" data-url="{{ path('frontend_que')}}">
-                        <input id="que" class="form-control ui-autocomplete-input typeahead" placeholder="pizza, empanadas, lo que quieras!">
-                        
-                       
-
-                        </div><!-- /input-group -->
-   					</div> <!-- row -->
-          </div> <!-- row -->
+	
           <div class="row">
 					<div class="col-sm-4">
 					</div>
