@@ -982,10 +982,10 @@ class HomeController extends Controller
 
     public function getPromosVigentesAction(Request $request){
 
-        // TODO validar la fecha y el tema de stock
-        $today = trim(mb_convert_case($request->get("today"),MB_CASE_LOWER));
-        //$hora = trim(mb_convert_case($request->get("time"),MB_CASE_LOWER));
-        $hoy = $today." 00:00:00";
+        // TODO validar el tema de stock
+        $hoy = new \DateTime($request->get("today"));
+      
+        
         $resultados = array();
 
         $em = $this->getDoctrine()->getManager();
@@ -993,8 +993,8 @@ class HomeController extends Controller
         $banners = $em->getRepository('BackendCustomerAdminBundle:Banner')->findAll();
 
         foreach ($banners as $b){
-
-            if(($b->getDesde() >= $hoy || $b->getHasta() < $hoy) && $b->getIsActive() == true){
+        	
+            if(( $hoy >= $b->getDesde() && $hoy<= $b->getHasta()) && $b->getIsActive() == true){
                 $r = array();
                 $r['img'] = $b->getWebPath();
                 $r['tiendaId'] = $b->getSucursal()->getId();

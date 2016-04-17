@@ -401,7 +401,7 @@ function getTiendas(ubicacion){
 
 function getPromosVigentes(){
 
-    var today = moment().format('DD/MM/YYYY');
+    var today = moment().format('YYYY-MM-DD');
     var data="today="+today;
     var id = 0;
     var active = "active";
