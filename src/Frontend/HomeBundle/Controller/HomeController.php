@@ -586,12 +586,13 @@ class HomeController extends Controller
         $search = " ";
         $session = $this->getRequest()->getSession();
         $time = "00:00";//trim(mb_convert_case($request->get("time"),MB_CASE_LOWER));
-        $dia = 1; //trim(mb_convert_case($request->get("day"),MB_CASE_LOWER));
+        //$dia = 1; //trim(mb_convert_case($request->get("day"),MB_CASE_LOWER));
         $subId = $session->get('categoria');
         $filter = trim(mb_convert_case($request->get("filter"),MB_CASE_LOWER));
         $resultado = array();
         $resultado_promos = array();
         $r_promo = array();
+        $today= new \DateTime("today");
 
 		    if($id) {
             $em = $this->getDoctrine()->getManager();
@@ -603,7 +604,7 @@ class HomeController extends Controller
 
             foreach($promos as $promo){
 
-                if($promo->getStatus() == 1) {
+                if($promo->getStatus() == 1 && $today >= $promo->getDesde() && $today<= $promo->getHasta() ) {
 
                     //if($this->checkPromoNow($promo->getHorarios(), 1, '00:00') == true) {
 
@@ -982,10 +983,10 @@ class HomeController extends Controller
 
     public function getPromosVigentesAction(Request $request){
 
-        // TODO validar la fecha y el tema de stock
-        $today = trim(mb_convert_case($request->get("today"),MB_CASE_LOWER));
-        //$hora = trim(mb_convert_case($request->get("time"),MB_CASE_LOWER));
-        $hoy = $today." 00:00:00";
+        // TODO validar el tema de stock
+        $hoy = new \DateTime($request->get("today"));
+      
+        
         $resultados = array();
 
         $em = $this->getDoctrine()->getManager();
@@ -993,8 +994,8 @@ class HomeController extends Controller
         $banners = $em->getRepository('BackendCustomerAdminBundle:Banner')->findAll();
 
         foreach ($banners as $b){
-
-            if(($b->getDesde() >= $hoy || $b->getHasta() < $hoy) && $b->getIsActive() == true){
+        	
+            if(( $hoy >= $b->getDesde() && $hoy<= $b->getHasta()) && $b->getIsActive() == true){
                 $r = array();
                 $r['img'] = $b->getWebPath();
                 $r['tiendaId'] = $b->getSucursal()->getId();
