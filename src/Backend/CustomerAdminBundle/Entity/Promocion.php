@@ -23,12 +23,7 @@ class Promocion
      * @ORM\Column(name="name", type="string", length=200)
      */
     private $name;
-
-    /**
-     * @ORM\Column(name="detail", type="string", length=200)
-     */
-    private $detail;
-    
+ 
     /**
      * @ORM\Column(name="porcentaje", type="integer",nullable=true)
      */
@@ -550,30 +545,7 @@ class Promocion
     {
         return $this->type;
     }
-
-    /**
-     * Set detail
-     *
-     * @param string $detail
-     * @return Promocion
-     */
-    public function setDetail($detail)
-    {
-        $this->detail = $detail;
-
-        return $this;
-    }
-
-    /**
-     * Get detail
-     *
-     * @return string 
-     */
-    public function getDetail()
-    {
-        return $this->detail;
-    }
-
+   
     /**
      * Set path
      *

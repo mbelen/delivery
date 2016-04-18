@@ -160,23 +160,59 @@ class PromocionController extends Controller
             
             $entity = new Promocion();
             
-            $entity.setName();
+            $entity->setName($nombre);
                     
-                    
-            //$entity.setType($tipo);
+            $entity->setType($tipo);
+            
+            $productos = $request->get("productos");
             
             if($tipo == 1){
                 
-                $valor = $request->get("valor");
-                $entity.setPorcentaje($valor);
-            
-            }else{
+                $porcentaje = $request->get("valor");
+                $entity->setPorcentaje($porcentaje);
                 
-                $entity.setUnidad1($request->get("u1"));
-                $entity.setUnidad2($request->get("u2"));
+                if(isset($productos)){
+                
+                    foreach($productos as $id){
+                        $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
+                        $precio = $producto->getPrecio()*$porcentaje;
+                        $producto->setPrecioPromo($precio);
+                        $em->persist($producto);
+                        $em->flush();
+                    }    
+                }
+            }else{
+     
+                $entity->setUnidad1($request->get("u1"));
+                $entity->setUnidad2($request->get("u2"));
+            }
+   
+            $sucursales = $request->get("sucursales");
+            
+            foreach($sucursales as $id){
+                    $sucursal = $em->getRepository('BackendCustomerAdminBundle:Sucursal')->find($id);
+                    $entity->addSucursale($sucursal);
+            } 
+            
+            $subcategorias = $request->get("categorias");
+            
+            if(isset($subcategorias)){
+                foreach($subcategorias as $id){
+                        $subcategoria = $em->getRepository('BackendCustomerAdminBundle:Subcategoria')->find($id);
+                        $entity->addSubcategoria($subcategoria);
+                } 
             }
             
-           
+            $excluidos = $request->get("excluidos");
+            
+            if(isset($excluidos) && !empty($excluidos)){
+                
+                foreach($excluidos as $id){
+                    $excluido = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
+                    $entity->addProductosExcluido($excluido);
+                }  
+            }
+            
             $em->persist($entity);
             $em->flush();
             

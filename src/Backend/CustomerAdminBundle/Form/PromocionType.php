@@ -20,7 +20,6 @@ class PromocionType extends AbstractType
 
         $builder
             ->add('name')
-            ->add('detail')
             ->add('terms')
             ->add('stock')
             ->add('stop','checkbox',array("required" => false))
