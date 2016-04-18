@@ -26,6 +26,11 @@ promocion_status:
     defaults: { _controller: "BackendCustomerAdminBundle:Promocion:toUpdateStatus" }
     requirements: { _method: post|put }
 
+promocion_cargar:
+    pattern:  /tocreate
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:toCreate" }
+    requirements: { _method: post|put }    
+
 promocion_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "BackendCustomerAdminBundle:Promocion:delete" }

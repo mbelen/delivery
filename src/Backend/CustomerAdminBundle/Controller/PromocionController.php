@@ -70,9 +70,11 @@ class PromocionController extends Controller
      * Creates a new Producto entity.
      *
      */
+    /*
     public function createAction(Request $request)
     {
         if ( $this->get('security.context')->isGranted('ROLE_ADDPRODUCTO')) {
+           
             $entity  = new Promocion();
             $customerId=$this->getUser()->getId();
             $em = $this->getDoctrine()->getManager();
@@ -144,7 +146,49 @@ class PromocionController extends Controller
         else
             throw new AccessDeniedException();
     }
+    */
+    public function toCreateAction(Request $request)
+    {
+        if ( $this->get('security.context')->isGranted('ROLE_ADDPRODUCTO')) {
+            
+            $customerId=$this->getUser()->getId();
+            $em = $this->getDoctrine()->getManager();
+            
+            $nombre = $request->get("nombre");
+            $terms = $request->get("terms");
+            $tipo = $request->get("tipo");
+            
+            $entity = new Promocion();
+            
+            $entity.setName();
+                    
+                    
+            //$entity.setType($tipo);
+            
+            if($tipo == 1){
+                
+                $valor = $request->get("valor");
+                $entity.setPorcentaje($valor);
+            
+            }else{
+                
+                $entity.setUnidad1($request->get("u1"));
+                $entity.setUnidad2($request->get("u2"));
+            }
+            
+           
+            $em->persist($entity);
+            $em->flush();
+            
+            $data['ok'] = true;
+            $data['dato'] = $nombre;
+        }
 
+        $response = new Response(json_encode($data));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+
+    }
     /**
      * Creates a form to create a Cliente entity.
      *
