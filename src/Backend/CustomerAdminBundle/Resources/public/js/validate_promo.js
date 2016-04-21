@@ -93,11 +93,30 @@ $(document).ready(function() {
         var categorias = $('#backend_customeradminbundle_promociontype_categorias').val();
         var excluidos = $('#backend_customeradminbundle_promociontype_productosExcluidos').val();
       
-        alert("aca");
+        
+      
+        var desde_dia = $('#backend_customeradminbundle_promociontype_desde_date_day').val();
+        var desde_mes = $('#backend_customeradminbundle_promociontype_desde_date_month').val();
+        var desde_anio = $('#backend_customeradminbundle_promociontype_desde_date_year').val();
+        
+        var desde_hora =$('#backend_customeradminbundle_promociontype_desde_time_hour').val();
+        var desde_minutos = $('#backend_customeradminbundle_promociontype_desde_time_minute').val();
+        
+        if(desde_dia.length == 1){ desde_dia = "0"+desde_dia; }
+        if(desde_mes.length == 1) { desde_mes = "0"+desde_mes; }
+        
+        if(desde_hora.length == 1) { desde_hora = "0"+desde_hora; }
+        if(desde_minutos.length == 1) { desde_minutos = "0"+desde_minutos; }
+        
+        var desde = desde_anio+"/"+desde_mes+"/"+desde_dia+" "+desde_hora+":"+desde_minutos+":00";
+        
+        console.log(desde);
+        
+        var hasta = $('#backend_customeradminbundle_promociontype_hasta').val();
        
         var params = {'nombre':nombre,'tipo':tipo,'valor':valor,'u1':u1,'u2':u2,'sucursales':sucursales,
                       'medios':medios,'productos':productos,'stop':stop,'stock':stock,'categorias':categorias,
-                      'excluidos':excluidos};
+                      'excluidos':excluidos,'desde':desde};
 
         $.ajax({
             type: "POST",

@@ -164,6 +164,38 @@ class PromocionController extends Controller
                     
             $entity->setType($tipo);
             
+            $desde = $request->get("desde");
+            $hasta = $request->get("hasta");
+            
+            //$entity->setDesde(strtotime($desde));
+            //$entity->setHasta($hasta);
+            
+            $fromH=$request->get("fromH");
+            $fromM=$request->get("fromM");
+            $toH=$request->get("toH");
+            $toM=$request->get("toM");
+
+            $abierto=$request->get("abierto");
+            
+            $dias = $em->getRepository('BackendAdminBundle:Dia')->findAll();
+            /*
+            foreach($dias as $d) {
+                $horario = new HorarioPromo();
+                $horario->setDia($d);
+                    //esta cerrado
+                if (isset($abierto[$d->getId()]) && $abierto[$d->getId()] == 1) {
+                        $horario->setAllDay(true);
+                } else {
+
+                $horario->setAllDay(false);
+                $horario->setDesde($fromH[$d->getId()] . $fromM[$d->getId()]);
+                $horario->setHasta($toH[$d->getId()] . $toM[$d->getId()]);
+            }
+                $em->persist($horario);
+                $em->flush();
+                $entity->addHorario($horario);
+            }
+            */
             $productos = $request->get("productos");
             
             if($tipo == 1){
