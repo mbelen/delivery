@@ -70,7 +70,12 @@
                                 Unidades
                                 {% endif %}
                             </td>
-                            <td>{{ promo.detail }}</td>
+                            <td>{% if promo.type == 1 %}
+                            {{ promo.porcentaje }}
+                            {% else %}
+                            {{ promo.unidad1 ~"x"~ promo.unidad2 }}
+                            {% endif %}
+                            </td>
                             <td>{{ promo.terms }}</td>
                             <td>
                             {% if promo.getSubcategorias() is defined %}
