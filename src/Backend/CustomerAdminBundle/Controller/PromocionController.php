@@ -163,12 +163,14 @@ class PromocionController extends Controller
             $entity->setName($nombre);
                     
             $entity->setType($tipo);
+           
+            $entity->setTerms($terms);
             
             $desde = $request->get("desde");
             $hasta = $request->get("hasta");
             
-            //$entity->setDesde(strtotime($desde));
-            //$entity->setHasta($hasta);
+            $entity->setDesde(new \DateTime($desde));
+            $entity->setHasta(new \DateTime($hasta));
             
             $fromH=$request->get("fromH");
             $fromM=$request->get("fromM");
@@ -178,7 +180,7 @@ class PromocionController extends Controller
             $abierto=$request->get("abierto");
             
             $dias = $em->getRepository('BackendAdminBundle:Dia')->findAll();
-            /*
+            
             foreach($dias as $d) {
                 $horario = new HorarioPromo();
                 $horario->setDia($d);
@@ -195,7 +197,7 @@ class PromocionController extends Controller
                 $em->flush();
                 $entity->addHorario($horario);
             }
-            */
+           
             $productos = $request->get("productos");
             
             if($tipo == 1){
@@ -203,7 +205,7 @@ class PromocionController extends Controller
                 $porcentaje = $request->get("valor");
                 $entity->setPorcentaje($porcentaje);
                 
-                if(isset($productos)){
+                if(!empty($productos)){
                 
                     foreach($productos as $id){
                         $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
@@ -211,21 +213,32 @@ class PromocionController extends Controller
                         $producto->setPrecioPromo($precio);
                         $em->persist($producto);
                         $em->flush();
+                        $entity->addProducto($producto);
                     }    
                 }
             }else{
      
                 $entity->setUnidad1($request->get("u1"));
                 $entity->setUnidad2($request->get("u2"));
+                
+                if(!empty($productos)){
+                
+                    foreach($productos as $id){
+                        $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
+                        $entity->addProducto($producto);
+                    }    
+                }
             }
    
             $sucursales = $request->get("sucursales");
             
-            foreach($sucursales as $id){
-                    $sucursal = $em->getRepository('BackendCustomerAdminBundle:Sucursal')->find($id);
-                    $entity->addSucursale($sucursal);
-            } 
+            if(isset($sucursales) && !empty($sucursales)){
             
+                foreach($sucursales as $id){
+                        $sucursal = $em->getRepository('BackendCustomerAdminBundle:Sucursal')->find($id);
+                        $entity->addSucursale($sucursal);
+                } 
+            }
             $subcategorias = $request->get("categorias");
             
             if(isset($subcategorias)){

@@ -65,7 +65,7 @@ $(document).ready(function() {
         
         var path = $(this).data("url");
         
-        alert(path);
+        console.log(path);
     
         var nombre = $('#backend_customeradminbundle_promociontype_name').val();
         var tipo = $('#backend_customeradminbundle_promociontype_type').val();
@@ -82,6 +82,7 @@ $(document).ready(function() {
         }
         
         var terms = $('#backend_customeradminbundle_promociontype_terms').val();
+        alert(terms);
         var sucursales = $('#backend_customeradminbundle_promociontype_sucursales').val();
         var medios = $('#backend_customeradminbundle_promociontype_mediosPago').val();
         
@@ -108,15 +109,29 @@ $(document).ready(function() {
         if(desde_hora.length == 1) { desde_hora = "0"+desde_hora; }
         if(desde_minutos.length == 1) { desde_minutos = "0"+desde_minutos; }
         
-        var desde = desde_anio+"/"+desde_mes+"/"+desde_dia+" "+desde_hora+":"+desde_minutos+":00";
+        var desde = desde_anio+"-"+desde_mes+"-"+desde_dia+" "+desde_hora+":"+desde_minutos+":00";
         
         console.log(desde);
         
-        var hasta = $('#backend_customeradminbundle_promociontype_hasta').val();
+        
+        var hasta_dia = $('#backend_customeradminbundle_promociontype_hasta_date_day').val();
+        var hasta_mes = $('#backend_customeradminbundle_promociontype_hasta_date_month').val();
+        var hasta_anio = $('#backend_customeradminbundle_promociontype_hasta_date_year').val();
+        
+        var hasta_hora =$('#backend_customeradminbundle_promociontype_desde_time_hour').val();
+        var hasta_minutos = $('#backend_customeradminbundle_promociontype_desde_time_minute').val();
+        
+        if(hasta_dia.length == 1){ hasta_dia = "0"+hasta_dia; }
+        if(hasta_mes.length == 1) { hasta_mes = "0"+hasta_mes; }
+        
+        if(hasta_hora.length == 1) { hasta_hora = "0"+hasta_hora; }
+        if(hasta_minutos.length == 1) { hasta_minutos = "0"+hasta_minutos; }
+        
+        var hasta = hasta_anio+"-"+hasta_mes+"-"+hasta_dia+" "+hasta_hora+":"+hasta_minutos+":00";
        
         var params = {'nombre':nombre,'tipo':tipo,'valor':valor,'u1':u1,'u2':u2,'sucursales':sucursales,
-                      'medios':medios,'productos':productos,'stop':stop,'stock':stock,'categorias':categorias,
-                      'excluidos':excluidos,'desde':desde};
+                      'medios':medios,'terms':terms,'productos':productos,'stop':stop,'stock':stock,'categorias':categorias,
+                      'excluidos':excluidos,'desde':desde,'hasta':hasta};
 
         $.ajax({
             type: "POST",
