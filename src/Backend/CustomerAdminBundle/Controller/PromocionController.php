@@ -70,7 +70,7 @@ class PromocionController extends Controller
      * Creates a new Producto entity.
      *
      */
-    /*
+    
     public function createAction(Request $request)
     {
         if ( $this->get('security.context')->isGranted('ROLE_ADDPRODUCTO')) {
@@ -146,7 +146,10 @@ class PromocionController extends Controller
         else
             throw new AccessDeniedException();
     }
-    */
+    
+    
+    /*
+    
     public function toCreateAction(Request $request)
     {
         if ( $this->get('security.context')->isGranted('ROLE_ADDPRODUCTO')) {
@@ -270,6 +273,9 @@ class PromocionController extends Controller
         return $response;
 
     }
+    
+     */
+    
     /**
      * Creates a form to create a Cliente entity.
      *
@@ -302,7 +308,7 @@ class PromocionController extends Controller
             $dias = $em->getRepository('BackendAdminBundle:Dia')->findAll();
             $form   = $this->createForm(new PromocionType(), $entity, array("customerId"=>$customerId));
 
-            return $this->render('BackendCustomerAdminBundle:Promocion:promocion.html.twig', array(
+            return $this->render('BackendCustomerAdminBundle:Promocion:new.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
                 'dias'   => $dias

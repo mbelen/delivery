@@ -1,6 +1,40 @@
 $(document).ready(function() {
    
-    $('#unidad_group').hide()
+    $('#unidad_group').hide();
+    
+    $('#categorias').hide();
+    $('#productos').hide();
+    
+    /*
+    $("input[name=optradio]:radio").change(function () {
+    
+        
+        if($('#radio_categorias').val() == "on"){
+            
+            $('#productos').hide();
+            $('#categorias').show();
+        }
+        if($('#radio_productos').val() == "on"){
+            
+            
+        }    
+    });
+    */
+    $("#promos").change(function () {
+        
+        var option = $('#promos').val();
+        if(option == 1) {
+            
+            $('#productos').hide();
+            $('#categorias').show();
+        }
+        if(option == 2){
+            
+            $('#categorias').hide();
+            $('#productos').show();
+        }
+    });
+    
     
     $("#backend_customeradminbundle_promociontype_type").change(function () {
         

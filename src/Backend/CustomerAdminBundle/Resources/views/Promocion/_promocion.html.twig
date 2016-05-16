@@ -1,142 +1,108 @@
-<div class="form-group">
+<div class="panel panel-warning">
 
-    {{ form_label(form.file,"Imagen (tamaño recomendado: 300x300 px)", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.file, { 'attr': {'class': 'input-xlarge'} }) }}
-        <span id='backend_customeradminbundle_promocion_file_errorloc' class="help-block"> {{ form_errors(form.file) }} </span>
-    </div>
-    {% if entity.getWebPath() %}
-        <img src="{{ asset(entity.getWebPath()) }}" width="100" height="100" />
-    {% endif %}
-</div>
+    <div class="panel-heading">Condiciones Generales</div>
+    
+    <div class="panel-body">
 
-<div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.name,"Nombre", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_promocion_name_errorloc' class="help-block"> {{ form_errors(form.name) }} </span>
+        </div>
+        </div>
+        <!--
+        <div class="form-group">
+            {{ form_label(form.file,"Imagen (tamaño recomendado: 300x300 px)", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <div class="col-xs-6">
+                {{ form_widget(form.file, { 'attr': {'class': 'input-xlarge'} }) }}
+                <span id='backend_customeradminbundle_promocion_file_errorloc' class="help-block"> {{ form_errors(form.file) }} </span>
+            </div>
+            {% if entity.getWebPath() %}
+                <img src="{{ asset(entity.getWebPath()) }}" width="100" height="100" />
+            {% endif %}
+        </div>
+        </div>
+        -->
+            <div class="form-group">
+                {{ form_label(form.type,"Tipo de Promocion", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.type, { 'attr': {'class': 'form-control'} }) }}
 
-    {{ form_label(form.sucursales,"Sucursales", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Sucursal en la cual vende el producto"></i>
-    <div class="col-xs-6">
-        {{ form_widget(form.sucursales, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_sucursales_errorloc' class="help-block"> {{ form_errors(form.sucursales) }} </span>
-    </div>
-</div>
+                    <span id='backend_customeradminbundle_promocion_type_errorloc' class="help-block"> {{ form_errors(form.type) }} </span>
+                </div>
+            </div>
+            <div class="form-group" id="porcentaje_group">
+            <label class="control-label col-xs-2">Valor</label>
+            <div class="col-xs-6">
+            <input id="backend_customeradminbundle_promocion_porcentaje" type="text" class="form-control" name="porcentaje" value=""/>
+            </div>
+            </div>
 
-<div class="form-group">
+            <div class="form-group" id="unidad_group">
+            <label class="control-label col-xs-2">Unidad</label>
+                <div class="col-xs-2">
+                <input type="text" class="form-control" id="backend_customeradminbundle_promocion_unidad1" name="unidad1" value=""/>
+                </div>
+                <label class="control-label col-xs-2">Unidad</label>
+                <div class="col-xs-2">
+                <input type="text" class="form-control" id="backend_customeradminbundle_promocion_unidad2" name="unidad2" value=""/>
+                </div>
+            </div>
 
-    {{ form_label(form.name,"Nombre", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_name_errorloc' class="help-block"> {{ form_errors(form.name) }} </span>
-    </div>
-</div>
+            <div class="form-group">
+            {{ form_label(form.terms,"Terminos y condiciones", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <div class="col-xs-6">
+                {{ form_widget(form.terms, { 'attr': {'class': 'form-control'} }) }}
+                <span id='backend_customeradminbundle_promocion_terms_errorloc' class="help-block"> {{ form_errors(form.terms) }} </span>
+            </div>
+            </div>
 
-<div class="form-group">
-    {{ form_label(form.type,"Tipo de Promocion", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.type, { 'attr': {'class': 'form-control'} }) }}
+            <div class="form-group">
 
-        <span id='backend_customeradminbundle_promocion_type_errorloc' class="help-block"> {{ form_errors(form.type) }} </span>
-    </div>
-</div>
+                {{ form_label(form.sucursales,"Sucursales", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Sucursal en la cual vende el producto"></i>
+                <div class="col-xs-6">
+                    {{ form_widget(form.sucursales, { 'attr': {'class': 'form-control'} }) }}
+                    <span id='backend_customeradminbundle_promocion_sucursales_errorloc' class="help-block"> {{ form_errors(form.sucursales) }} </span>
+                </div>
+            </div>
 
-<div class="form-group">
-    {{ form_label(form.stop,"Corta por fin de stock", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="La promocion pierde vigencia al alcanzar el stock definido."></i>
-    <div class="col-xs-6">
-        {{ form_widget(form.stop, { 'attr': {'class': ''} }) }}
+            <div class="form-group">
+            {{ form_label(form.mediosPago,"Medios de Pago", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione aquellos medios de pago que participan de la promocion."></i>
+            <div class="col-xs-6">
+                {{ form_widget(form.mediosPago, { 'attr': {'class': 'form-control'} }) }}
+                <span id='backend_customeradminbundle_promocion_mediosPago_errorloc' class="help-block"> {{ form_errors(form.mediosPago) }} </span>
+            </div>
+            </div>
 
-        <span id='backend_customeradminbundle_promocion_stop_errorloc' class="help-block"> {{ form_errors(form.stop) }} </span>
-    </div>
-</div>
+            <div class="form-group">
+            {{ form_label(form.status,"Estado", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <div class="col-xs-6">
+                {{ form_widget(form.status, { 'attr': {'class': 'form-control'} }) }}
+                <span id='backend_customeradminbundle_promocion_estado_errorloc' class="help-block"> {{ form_errors(form.status) }} </span>
+            </div>
+            </div>
 
-<div class="form-group">
-    {{ form_label(form.stock,"Stock disponible", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.stock, { 'attr': {'class': 'form-control'} }) }}
+            <div class="form-group">
+            {{ form_label(form.desde,"Vigente desde", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <div class="col-xs-6">
+                {{ form_widget(form.desde, { 'attr': {'class': ''} }) }}
+                <span id='backend_customeradminbundle_promocion_desde_errorloc' class="help-block"> {{ form_errors(form.desde) }} </span>
+            </div>
+            </div>
 
-        <span id='backend_customeradminbundle_promocion_stock_errorloc' class="help-block"> {{ form_errors(form.stock) }} </span>
-    </div>
-</div>
+            <div class="form-group">
 
+                {{ form_label(form.hasta,"Vigente hasta", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.hasta, { 'attr': {'class': ''} }) }}
+                    <span id='backend_customeradminbundle_promocion_hasta_errorloc' class="help-block"> {{ form_errors(form.hasta) }} </span>
+                </div>
+            </div>
 
-
-<div class="form-group">
-
-    {{ form_label(form.terms,"Terminos y condiciones", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.terms, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_terms_errorloc' class="help-block"> {{ form_errors(form.terms) }} </span>
-    </div>
-</div>
-
-<div class="form-group">
-
-    {{ form_label(form.status,"Estado", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.status, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_estado_errorloc' class="help-block"> {{ form_errors(form.status) }} </span>
-    </div>
-</div>
-
-<div class="form-group">
-
-    {{ form_label(form.productos,"Productos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione un producto para la promocion."></i>
-    <div class="col-xs-6">
-        {{ form_widget(form.productos, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_productos_errorloc' class="help-block"> {{ form_errors(form.productos) }} </span>
-    </div>
-</div>
-
-
-<div class="form-group">
-
-    {{ form_label(form.subcategorias,"Subcategoría", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione una categoría completa."></i>
-    <div class="col-xs-6">
-        {{ form_widget(form.subcategorias, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_producto_subcategorias_errorloc' class="help-block"> {{ form_errors(form.subcategorias) }} </span>
-    </div>
-</div>
-
-<div class="form-group">
-
-    {{ form_label(form.productosExcluidos,"Productos excluidos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione aquellos productos que no participan de la promocion."></i>
-    <div class="col-xs-6">
-        {{ form_widget(form.productosExcluidos, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_productosExcluidos_errorloc' class="help-block"> {{ form_errors(form.productosExcluidos) }} </span>
-    </div>
-</div>
-
-<div class="form-group">
-
-    {{ form_label(form.mediosPago,"Medios de Pago", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione aquellos medios de pago que participan de la promocion."></i>
-    <div class="col-xs-6">
-        {{ form_widget(form.mediosPago, { 'attr': {'class': 'form-control'} }) }}
-        <span id='backend_customeradminbundle_promocion_mediosPago_errorloc' class="help-block"> {{ form_errors(form.mediosPago) }} </span>
-    </div>
-</div>
-
-<div class="form-group">
-
-    {{ form_label(form.desde,"Vigente desde", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.desde, { 'attr': {'class': ''} }) }}
-        <span id='backend_customeradminbundle_promocion_desde_errorloc' class="help-block"> {{ form_errors(form.desde) }} </span>
-    </div>
-</div>
-
-<div class="form-group">
-
-    {{ form_label(form.hasta,"Vigente hasta", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
-    <div class="col-xs-6">
-        {{ form_widget(form.hasta, { 'attr': {'class': ''} }) }}
-        <span id='backend_customeradminbundle_promocion_hasta_errorloc' class="help-block"> {{ form_errors(form.hasta) }} </span>
-    </div>
-</div>
-
-<h4>Dias y horarios de la promoción</h4>
+            <h4>Dias y horarios de la promoción</h4>
 <div id="hourForm" class="container">
 
     {% for d in dias %}
@@ -195,5 +161,89 @@
         </div>
     {% endfor %}
 
+</div>
+
+</div> 
+
+</div>  <!-- condiciones generales -->
+
+<div class="panel panel-info">
+
+    <div class="panel-heading">Condiciones Particulares</div>
+    
+    <div class="panel-body">
+        
+        <div class="form-group" style="margin-left: 185px;">
+           
+            <label for="sel1" style="float: left;margin-top:5px;">Seleccione:</label>
+              <div class="col-xs-6">
+                  <select class="form-control" id="promos">
+                    <option value="1">Promoción de Categorías</option>
+                    <option value="2">Promoción de Productos</option>
+                  </select>
+              </div>
+          </div>
+
+
+        </div>
+
+    <div id="productos">    
+
+        <div class="form-group">
+
+        {{ form_label(form.productos,"Productos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione un producto para la promocion."></i>
+        <div class="col-xs-6">
+            {{ form_widget(form.productos, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_promocion_productos_errorloc' class="help-block"> {{ form_errors(form.productos) }} </span>
+        </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.stop,"Corta por fin de stock", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="La promocion pierde vigencia al alcanzar el stock definido."></i>
+            <div class="col-xs-6">
+                {{ form_widget(form.stop, { 'attr': {'class': ''} }) }}
+
+                <span id='backend_customeradminbundle_promocion_stop_errorloc' class="help-block"> {{ form_errors(form.stop) }} </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.stock,"Stock disponible", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <div class="col-xs-6">
+                {{ form_widget(form.stock, { 'attr': {'class': 'form-control'} }) }}
+
+                <span id='backend_customeradminbundle_promocion_stock_errorloc' class="help-block"> {{ form_errors(form.stock) }} </span>
+            </div>
+        </div>
+
+    </div>    
+
+    <div id="categorias">
+
+        <div class="form-group">
+
+        {{ form_label(form.subcategorias,"Subcategoría", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione una categoría completa."></i>
+        <div class="col-xs-6">
+            {{ form_widget(form.subcategorias, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_subcategorias_errorloc' class="help-block"> {{ form_errors(form.subcategorias) }} </span>
+        </div>
+        </div>
+
+        <div class="form-group">
+
+            {{ form_label(form.productosExcluidos,"Productos excluidos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+            <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione aquellos productos que no participan de la promocion."></i>
+            <div class="col-xs-6">
+                {{ form_widget(form.productosExcluidos, { 'attr': {'class': 'form-control'} }) }}
+                <span id='backend_customeradminbundle_promocion_productosExcluidos_errorloc' class="help-block"> {{ form_errors(form.productosExcluidos) }} </span>
+            </div>
+        </div>
+
+    </div>
+    
+    </div>
 
 </div>
