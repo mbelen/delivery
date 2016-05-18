@@ -84,8 +84,8 @@ class Promocion
      * @ORM\JoinTable(name="paymethod_promocion")
      */
     private $mediosPago;
-
-
+    
+   
     /**
      * @ORM\Column(name="stock", type="integer",nullable=true)
      */
@@ -850,4 +850,6 @@ class Promocion
     {
         return $this->unidad2;
     }
+
+    
 }

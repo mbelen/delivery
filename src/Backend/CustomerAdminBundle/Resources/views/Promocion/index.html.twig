@@ -33,10 +33,11 @@
 
             </form>
         </div>
+        <!--
         <div class="col-lg-2">
             {% if is_granted("ROLE_VIEWPRODUCTO") %} <button class="btn btn-primary" type="button" id="exportar_button" data-url="{{ path('promocion_exportar') }}" >Exportar </button> {% endif %}
         </div>
-
+        -->
     </div>
 
 
@@ -63,7 +64,7 @@
                         <tr>
                             <td>{{ promo.name |capitalize }}</td>
                             <td>{{ promo.desde | date("d/m/Y H:i:s")}}</td>
-                            <td>{{ promo.hasta |date("d/m/Y H:i:s")}}</td>
+                            <td class="hasta" data-id="{{ promo.id }}" data-hasta="{{ promo.hasta |date("d/m/Y H:i:s") }}" data-status ="{{promo.status}}" data-url = "{{ path('promocion_status') }}">{{ promo.hasta |date("d/m/Y H:i:s")}}</td>
                             <td>{% if promo.type == 1 %}
                                 Porcentaje
                                 {% else %}
@@ -229,6 +230,9 @@
       <script type="text/javascript" src="{{ asset_url }}"></script>
       {% endjavascripts %}
       {% javascripts '@BackendCustomerAdminBundle/Resources/public/js/cambiar_promo_status.js' filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+      {% javascripts '@BackendCustomerAdminBundle/Resources/public/js/check_vigencia.js' filter='?uglifyjs2' %}
       <script type="text/javascript" src="{{ asset_url }}"></script>
       {% endjavascripts %}
       {% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2' %}

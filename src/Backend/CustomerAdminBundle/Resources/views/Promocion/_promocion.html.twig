@@ -32,21 +32,35 @@
                     <span id='backend_customeradminbundle_promocion_type_errorloc' class="help-block"> {{ form_errors(form.type) }} </span>
                 </div>
             </div>
+            <!--
             <div class="form-group" id="porcentaje_group">
             <label class="control-label col-xs-2">Valor</label>
             <div class="col-xs-6">
             <input id="backend_customeradminbundle_promocion_porcentaje" type="text" class="form-control" name="porcentaje" value=""/>
             </div>
             </div>
+            -->
+            <div class="form-group" id="porcentaje_group">
+                {{ form_label(form.porcentaje,"Valor", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-6">
+                    {{ form_widget(form.porcentaje, { 'attr': {'class': 'form-control'} }) }}
 
-            <div class="form-group" id="unidad_group">
-            <label class="control-label col-xs-2">Unidad</label>
-                <div class="col-xs-2">
-                <input type="text" class="form-control" id="backend_customeradminbundle_promocion_unidad1" name="unidad1" value=""/>
+                    <span id='backend_customeradminbundle_promocion_porcentaje_errorloc' class="help-block"> {{ form_errors(form.porcentaje) }} </span>
                 </div>
-                <label class="control-label col-xs-2">Unidad</label>
+            </div>
+            
+            <div class="form-group" id="unidad_group">
+                {{ form_label(form.unidad1,"Unidad 1", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
                 <div class="col-xs-2">
-                <input type="text" class="form-control" id="backend_customeradminbundle_promocion_unidad2" name="unidad2" value=""/>
+                    {{ form_widget(form.unidad1, { 'attr': {'class': 'form-control'} }) }}
+
+                    <span id='backend_customeradminbundle_promocion_unidad1_errorloc' class="help-block"> {{ form_errors(form.unidad1) }} </span>
+                </div>
+                {{ form_label(form.unidad2,"Unidad 2", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+                <div class="col-xs-2">
+                    {{ form_widget(form.unidad2, { 'attr': {'class': 'form-control'} }) }}
+
+                    <span id='backend_customeradminbundle_promocion_unidad2_errorloc' class="help-block"> {{ form_errors(form.unidad2) }} </span>
                 </div>
             </div>
 
@@ -178,8 +192,13 @@
             <label for="sel1" style="float: left;margin-top:5px;">Seleccione:</label>
               <div class="col-xs-6">
                   <select class="form-control" id="promos">
-                    <option value="1">Promoción de Categorías</option>
-                    <option value="2">Promoción de Productos</option>
+                    {% if(entity.getProductos() is not empty) %}
+                        <option value="1">Promoción de Categorías</option>
+                        <option value="2" selected>Promoción de Productos</option>
+                    {% else %}
+                        <option value="1" selected>Promoción de Categorías</option>
+                        <option value="2">Promoción de Productos</option>
+                    {% endif %}
                   </select>
               </div>
           </div>

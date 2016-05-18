@@ -21,6 +21,9 @@ class PromocionType extends AbstractType
         $builder
             ->add('name')
             ->add('terms')
+            ->add('porcentaje','text',array("required"=>false))
+            ->add('unidad1','text',array("required"=>false))
+            ->add('unidad2','text',array("required"=>false))    
             ->add('stock')
             ->add('stop','checkbox',array("required" => false))
             ->add('desde', 'datetime', array(
@@ -47,7 +50,7 @@ class PromocionType extends AbstractType
                 'choices' => array( 1 => 'Porcentaje', 2 => 'Unidades'),
             ))
             ->add('status', 'choice', array(
-                'choices' => array( 1 => 'Vigente', 2 => 'Pausada'),
+                'choices' => array( 1 => 'Vigente', 2 => 'Pausada', 3 => 'Finalizada'),
                 'required' => true,
                 'mapped' => true
             ))
