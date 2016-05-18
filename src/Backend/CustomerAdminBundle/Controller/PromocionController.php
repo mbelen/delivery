@@ -119,28 +119,45 @@ class PromocionController extends Controller
                 }
 
                 $productos = $request->get("productos");
-                
+                $subcategorias = $request->get("categorias");
+                               
                 if(!empty($productos)){
                     
                     foreach($productos as $id){
                         $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
-                        
                         if(isset($porcentaje)){
-                        
                             $precio = ($producto->getPrecio()*$porcentaje)/100;
                             $producto->setPrecioPromo($precio);
                             $em->persist($producto);
                             $em->flush();
                             $entity->addProducto($producto);
                         }        
-                        
                     }                        
                 }
-                
+                $excluidos = $request->get("excluidos");
+                /*
+                if(!empty($subcategorias)){
+                    if(isset($porcentaje)){
+                        foreach($subcategorias as $id){
+                            $subcategoria = $em->getRepository('BackendAdminBundle:Subcategoria')->find($id);
+                            $productos = $subcategoria->getProductos();
+                            if(!empty($excluidos)){
+                                foreach($productos as $producto){
+                                    if(!in_array($producto->getId(),$excluidos)){
+                                       $precio = ($producto->getPrecio()*$porcentaje)/100;
+                                       $producto->setPrecioPromo($precio);
+                                       $em->persist($producto);
+                                       $em->flush();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                */
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
                 $em->flush();
-                
                  
                 $this->get('session')->getFlashBag()->add('success' , 'Se ha agregado una nueva promocion.');
                 return $this->redirect($this->generateUrl('promocion_edit', array('id' => $entity->getId())));

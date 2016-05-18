@@ -3,18 +3,18 @@ $(document).ready(function(){
 			rules: {
         "password":{
         	required:true,
-          maxlength:100,
-          minlength: 6         	
+                maxlength:100,
+                minlength: 6         	
         },
         "confirm":{
-        	required:true,
+          required:true,
           maxlength:100,
-          minlength: 6,
-          equalTo: "#password"         	
+          minlength: 6
+          //equalTo: "#password"         	
         }
-			},
+	},
 			
-			 messages: {
+	messages: {
             "password": {
             required: "Olvido ingresar una contraseña",
             maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
