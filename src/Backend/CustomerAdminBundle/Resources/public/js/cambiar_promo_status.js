@@ -10,6 +10,7 @@ $('.confirm-status').on('click', function(e) {
 $("#myModal .btn-warning").on('click',function(){
 
     console.log($(this).data('id'));
+    
     if ( $(this).data('id') != 0 ) {
         var id = $(this).data("id");
         var path = $(this).data("url");
@@ -42,6 +43,8 @@ $("#myModal .btn-warning").on('click',function(){
                     alert(data.msg);
 
                 }
+                
+                $('#myModal').hide("slow");
             });
 
 

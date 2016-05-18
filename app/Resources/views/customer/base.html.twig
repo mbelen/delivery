@@ -89,12 +89,13 @@
           <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
           
-           <script src="{{ asset('js/shadowbox/shadowbox.js') }}"></script>
+          <script src="{{ asset('js/shadowbox/shadowbox.js') }}"></script>
           <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script> 
           <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/js/select2.min.js"></script>
           <script type="text/javascript">
             $('select').select2();
           </script>
+          <script src="{{ asset("js/moment.min.js")}}"></script>
         {% endblock %}
     </body>
 </html>

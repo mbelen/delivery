@@ -30,12 +30,12 @@ class PromocionController extends Controller
         if ($search)
             $dql .= " and u.name like '%$search%' ";
 
-        $dql .= " order by u.name";
+        $dql .= " order by u.createdAt desc";
 
         return $dql;
 
     }
-
+   
     /**
      * Lists all Promocion entities.
      *
@@ -47,7 +47,7 @@ class PromocionController extends Controller
 
             $dql = $this->generateSQL($search);
             $query = $em->createQuery($dql);
-
+ 
             $paginator = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
                 $query,
@@ -70,7 +70,7 @@ class PromocionController extends Controller
      * Creates a new Producto entity.
      *
      */
-    /*
+    
     public function createAction(Request $request)
     {
         if ( $this->get('security.context')->isGranted('ROLE_ADDPRODUCTO')) {
@@ -110,28 +110,38 @@ class PromocionController extends Controller
                     $em->flush();
                     $entity->addHorario($horario);
                 }
-
-                $promoType = $entity->getType();
-
-                $productos = $entity->getProductos();
-
-                if($promoType->getId() == 1){
-
-                    $porcentaje = $entity->getDetail();
-
-                    foreach($productos as $prod){
-
-                        $price = $prod->getPrice();
-                        $prod->setPromoPrice($price*0.25);
-
-                        $em->persist($prod);
-                        $em->flush();
-                    }
+                
+                $type = $request->get("type");
+                
+                if($type == 1){
+                    
+                    $porcentaje = $request->get("porcentaje");
                 }
 
+                $productos = $request->get("productos");
+                
+                if(!empty($productos)){
+                    
+                    foreach($productos as $id){
+                        $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
+                        
+                        if(isset($porcentaje)){
+                        
+                            $precio = ($producto->getPrecio()*$porcentaje)/100;
+                            $producto->setPrecioPromo($precio);
+                            $em->persist($producto);
+                            $em->flush();
+                            $entity->addProducto($producto);
+                        }        
+                        
+                    }                        
+                }
+                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
                 $em->flush();
+                
+                 
                 $this->get('session')->getFlashBag()->add('success' , 'Se ha agregado una nueva promocion.');
                 return $this->redirect($this->generateUrl('promocion_edit', array('id' => $entity->getId())));
             }
@@ -146,123 +156,8 @@ class PromocionController extends Controller
         else
             throw new AccessDeniedException();
     }
-    */
-    public function toCreateAction(Request $request)
-    {
-        if ( $this->get('security.context')->isGranted('ROLE_ADDPRODUCTO')) {
-            
-            $customerId=$this->getUser()->getId();
-            $em = $this->getDoctrine()->getManager();
-            
-            $nombre = $request->get("nombre");
-            $terms = $request->get("terms");
-            $tipo = $request->get("tipo");
-            
-            $entity = new Promocion();
-            
-            $entity->setName($nombre);
-                    
-            $entity->setType($tipo);
-            
-            $desde = $request->get("desde");
-            $hasta = $request->get("hasta");
-            
-            $time = strtotime($desde);
-
-            $desde_date = date("Y-m-d H:i:s",$time);
-
-            
-            $entity->setDesde($desde_date);
-            //$entity->setHasta($hasta);
-            
-            $fromH=$request->get("fromH");
-            $fromM=$request->get("fromM");
-            $toH=$request->get("toH");
-            $toM=$request->get("toM");
-
-            $abierto=$request->get("abierto");
-            
-            $dias = $em->getRepository('BackendAdminBundle:Dia')->findAll();
-            /*
-            foreach($dias as $d) {
-                $horario = new HorarioPromo();
-                $horario->setDia($d);
-                    //esta cerrado
-                if (isset($abierto[$d->getId()]) && $abierto[$d->getId()] == 1) {
-                        $horario->setAllDay(true);
-                } else {
-
-                $horario->setAllDay(false);
-                $horario->setDesde($fromH[$d->getId()] . $fromM[$d->getId()]);
-                $horario->setHasta($toH[$d->getId()] . $toM[$d->getId()]);
-            }
-                $em->persist($horario);
-                $em->flush();
-                $entity->addHorario($horario);
-            }
-            */
-            $productos = $request->get("productos");
-            
-            if($tipo == 1){
-                
-                $porcentaje = $request->get("valor");
-                $entity->setPorcentaje($porcentaje);
-                
-                if(isset($productos) && !empty($productos)){
-                
-                    foreach($productos as $id){
-                        $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
-                        $precio = $producto->getPrecio()*$porcentaje;
-                        $producto->setPrecioPromo($precio);
-                        $em->persist($producto);
-                        $em->flush();
-                    }    
-                }
-            }else{
-     
-                $entity->setUnidad1($request->get("u1"));
-                $entity->setUnidad2($request->get("u2"));
-            }
+    
    
-            $sucursales = $request->get("sucursales");
-            
-            if(!empty($sucursales)){
-                foreach($sucursales as $id){
-                    $sucursal = $em->getRepository('BackendCustomerAdminBundle:Sucursal')->find($id);
-                    $entity->addSucursale($sucursal);
-                } 
-            }
-            
-            $subcategorias = $request->get("categorias");
-            
-            if(isset($subcategorias) && !empty($subcategorias)){
-                foreach($subcategorias as $id){
-                        $subcategoria = $em->getRepository('BackendCustomerAdminBundle:Subcategoria')->find($id);
-                        $entity->addSubcategoria($subcategoria);
-                } 
-            }
-            
-            $excluidos = $request->get("excluidos");
-            
-            if(isset($excluidos) && !empty($excluidos)){
-                foreach($excluidos as $id){
-                    $excluido = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
-                    $entity->addProductosExcluido($excluido);
-                }  
-            }
-            
-            $em->persist($entity);
-            $em->flush();
-            
-            $data['ok'] = true;
-            $data['dato'] = $nombre;
-        }
-
-        $response = new Response(json_encode($data));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-    }
     /**
      * Creates a form to create a Cliente entity.
      *
@@ -295,7 +190,7 @@ class PromocionController extends Controller
             $dias = $em->getRepository('BackendAdminBundle:Dia')->findAll();
             $form   = $this->createForm(new PromocionType(), $entity, array("customerId"=>$customerId));
 
-            return $this->render('BackendCustomerAdminBundle:Promocion:promocion.html.twig', array(
+            return $this->render('BackendCustomerAdminBundle:Promocion:new.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
                 'dias'   => $dias
