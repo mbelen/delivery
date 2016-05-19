@@ -590,7 +590,7 @@ class HomeController extends Controller
         $subId = $session->get('categoria');
         $filter = trim(mb_convert_case($request->get("filter"),MB_CASE_LOWER));
         $resultado = array();
-        $resultado_promos = array();
+        $promo_data = array();
         $r_promo = array();
         $today= new \DateTime("today");
 
@@ -609,27 +609,17 @@ class HomeController extends Controller
                     //if($this->checkPromoNow($promo->getHorarios(), 1, '00:00') == true) {
 
                         $type = $promo->getType();
+                        
+                        $r_promo['promo'] = $promo;
 
                         if($promo->getProductos() != null) { // promo de producto
-
-                            if ($type == 1) {
-
-                                $precioProd = 1; // $promo->getProducto()->getPrecio();
-                                $valor = ((1 - ($promo->getDetail() / 100)) * $precioProd);
-                                $r_promo['promo'] = $promo;
-                                $r_promo['valor'] = $valor;
-
-                            } else { // supongo solo ejemplo 2x1
-
-                                $valores = explode("x", $promo->getDetail());
-                                $r_promo['promo'] = $promo;
-                                $r_promo['valor'] = $valores;
-                            }
-                            $r_promo['producto'] = 1;
-                            $resultado_promos[] = $r_promo;
-
+                            
+                            $r_promo['items_productos'] = $productos;
+                            
+                            $promo_data[] = $r_promo;
+                            
                         }else{ // promo de categoria
-
+                            /*
                             if($type == 1){
                                 $r_promo['valor'] = $promo->getDetail();
 
@@ -642,7 +632,8 @@ class HomeController extends Controller
                             $r_promo['promo'] = $promo;
                             $r_promo['producto'] = 0;
                             $resultado_promos[] = $r_promo;
-
+                            */
+                            
                         }
                     //}
                 }
@@ -697,7 +688,7 @@ class HomeController extends Controller
                 'count' => $count,
                 'search'=>$search,
                 'horarios'=>$horarios,
-                'promos' =>$resultado_promos,
+                'promos' =>$promo_data,
                 'status' =>1,
                 'regiones'=>$regiones
             ));

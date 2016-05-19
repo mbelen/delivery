@@ -409,6 +409,11 @@ header .shop-horarios table td{
 
 }
 
+.promo-item .thumbnail h1 span{
+	
+	text-transform: lowercase;
+}
+
 .promo-item .caption{
 
     margin-top:5px;
@@ -429,7 +434,7 @@ header .shop-horarios table td{
 
 .promo-item .terms{
 
-    font-size:15px;
+    font-size:14px;
 }
 
 .promo-item .list-categories {

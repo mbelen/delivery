@@ -157,42 +157,35 @@
                 <div class="promo-item">
                     <div class="thumbnail">
                         {% if promo['promo'].getType() == 1 %}
-                            <h1>{{ promo['promo'].getDetail() ~"%" }}</h1>
+                            <h1>{{ promo['promo'].getPorcentaje() ~"%" }}</h1>
                         {% else %}
-                            <h1>{{ promo['promo'].getDetail() }}</h1>
+                            <h1>{{ promo['promo'].getUnidad1()}}<span>x</span>{{promo['promo'].getUnidad2() }}</h1>
                         {% endif %}
                     </div>
                     <div class="caption">
                         <p class="title">{{ promo['promo'].getName() }}</p>
-                        <p class="terms">{{ promo['promo'].getTerms() }}</p>
-                        {% if promo['producto'] == 1 %}
-                            {% if promo['promo'].getType() == 1 %}
-                                <ul>
-                                    {% for prod in promo['promo'].getProductos() %}
-                                            <li>{{ prod.getName() }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% else %}
-                                <div class="unidades">
-                                    <p>LLEVATE <span class="unidades-precio">{{ promo['valor'][0] }}</span> AL PRECIO DE  <span class="unidades-precio">{{ promo['valor'][1] }}</span></p>
-                                </div>
-                            {% endif %}
-                        {% else %}
                             {% if promo['promo'].getType() == 1 %}
                                 <div class="unidades">
-                                    <p>LLEVATE TODO AL <span class="unidades-precio">{{ promo['promo'].getDetail() }} % de descuento</span></p>
+                                    <p>LLEVATE TODO AL <span class="unidades-precio">{{ promo['promo'].getPorcentaje() }} % de descuento</span></p>
                                 </div>
                             {% else %}
                                 <div class="unidades">
-                                    <p>LLEVATE <span class="unidades-precio">{{ promo['valor'][0] }}</span> al precio de <span class="unidades-precio">{{ promo['valor'][1] }}</span></p>
+                                    <p>LLEVATE <span class="unidades-precio">{{ promo['promo'].getUnidad1() }}</span> al precio de <span class="unidades-precio">{{ promo['promo'].getUnidad2() }}</span></p>
                                 </div>
                             {% endif %}
+                            <ul>
+                                {% for prod in promo['promo'].getProductos() %}
+                                    <li>{{ prod.getName() }}</li>
+                                {% endfor %}
+                            </ul>
+                            
+    
                             <p class="list-categories">Válido para:
                                 {% for cat in promo['promo'].getSubcategorias() %}
                                     {{ cat.getName() ~" "}}
                                 {% endfor %}
                             </p>
-                        {% endif %}
+                            <p class="terms">{{ promo['promo'].getTerms() }}</p>
                     </div>
 
                 </div>
