@@ -35,7 +35,12 @@ class SucursalType extends AbstractType
 
           'multiple'=>false
       ));
-     
+     $builder->add('show_direccion','checkbox',array(
+       'value'=>1,
+       'label'=>"Mostrar direccion",
+       'attr' => array('checked' => 'checked'), 
+       'required'=>false
+      )); 
       $builder->add('paymethods','entity',array(
           'class'=>'BackendAdminBundle:PayMethod',
           'query_builder'=>function(EntityRepository $er ) {

@@ -57,7 +57,7 @@ class Sucursal
      */
     private $open;	
 	
-	/**
+    /**
      * @ORM\Column(name="premium", type="boolean",nullable=true)
      */
     private $premium;	
@@ -176,6 +176,12 @@ class Sucursal
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    
+    /**
+     * @ORM\Column(name="show_direccion", type="boolean",nullable=true)
+     */
+    private $show_direccion;	
+
     
     private $path;
     private $temp;
@@ -1170,5 +1176,28 @@ class Sucursal
     public function getRegiones()
     {
         return $this->regiones;
+    }
+
+    /**
+     * Set show_direccion
+     *
+     * @param boolean $showDireccion
+     * @return Sucursal
+     */
+    public function setShowDireccion($showDireccion)
+    {
+        $this->show_direccion = $showDireccion;
+
+        return $this;
+    }
+
+    /**
+     * Get show_direccion
+     *
+     * @return boolean 
+     */
+    public function getShowDireccion()
+    {
+        return $this->show_direccion;
     }
 }

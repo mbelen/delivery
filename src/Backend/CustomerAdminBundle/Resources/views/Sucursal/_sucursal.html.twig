@@ -30,6 +30,17 @@
 </div>
 
 <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <div class="checkbox">
+                <label>{{ form_widget(form.show_direccion) }}
+                 {{ form_label(form.show_direccion,"Mostrar direccion") }}</label>
+                 <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Mostrar direccion completa en la home de la sucursal"></i>
+            </div>
+            <span id='backend_customeradminbundle_sucursal_show_direccion_errorloc' class="help-block"> {{ form_errors(form.show_direccion) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
         
         {{ form_label(form.phone,"Telefono", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">

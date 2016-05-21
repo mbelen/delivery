@@ -34,7 +34,12 @@
                 <div class="intro-text">
                     <div class="info">
                         <p class="shop-title text-right">{{ tienda.getName() }}</p>
+                        {% if tienda.getShowDireccion() %}
                         <p class="shop-address text-right">{{ tienda.getDireccion().getCalle() ~ " " ~ tienda.getDireccion().getNumero() ~ " - " ~ tienda.getDireccion().getBarrio().getName()~ ", " ~ tienda.getDireccion().getZona().getName() }}</p>
+                        {%else %}
+                        <p class="shop-address text-right">{{ tienda.getDireccion().getBarrio().getName()~ ", " ~ tienda.getDireccion().getZona().getName() }}</p>
+                     
+                        {% endif %}
                         {% if tienda.getRegiones() | length > 0 %}
                          <p class="shop-delivery text-right">Zona de entrega: <a href="#myMapModal" class="btn btn-primary" data-toggle="modal">Ver</a></p>
                          
