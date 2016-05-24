@@ -119,8 +119,31 @@ class PromocionController extends Controller
                 }
 
                 $productos = $request->get("productos");
-                $subcategorias = $request->get("categorias");
+                $subcategorias = $request->get("subcategorias");
                                
+                if(!empty($subcategorias)){
+                    
+                    $excluidos = $request->get("excluidos");
+                    
+                    foreach ($subcategorias as $sId){
+                    
+                        $prod_cat = $em->getRepository('BackendCustomerAdminBundle:Producto')->findBy(array('subcategoria'=>$sId));
+                        if(!empty($excluidos)){
+                            
+                            if(!in_array($prod_cat->getId(), $excluidos)){
+                                
+                                $entity->addProducto($prod_cat);
+                            }
+                            
+                        }else{
+                            
+                            $entity->addProducto($prod_cat);
+                        }
+                    
+                    
+                    }
+                }
+                
                 if(!empty($productos)){
                     
                     foreach($productos as $id){
@@ -134,7 +157,7 @@ class PromocionController extends Controller
                         }        
                     }                        
                 }
-                $excluidos = $request->get("excluidos");
+                
                 /*
                 if(!empty($subcategorias)){
                     if(isset($porcentaje)){

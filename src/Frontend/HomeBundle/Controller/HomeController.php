@@ -582,7 +582,7 @@ class HomeController extends Controller
      */
 
     public function getProductsByTiendaAction(Request $request, $id){
-
+        
         $search = " ";
         $session = $this->getRequest()->getSession();
         $time = "00:00";//trim(mb_convert_case($request->get("time"),MB_CASE_LOWER));
@@ -594,14 +594,14 @@ class HomeController extends Controller
         $r_promo = array();
         $today= new \DateTime("today");
 
-		    if($id) {
+        if($id) {
             $em = $this->getDoctrine()->getManager();
             $sucursal = $em->getRepository('BackendCustomerAdminBundle:Sucursal')->find($id);
             $productos = $sucursal->getProductos();
             $horarios = $sucursal-> getHorarios();
             $promos = $sucursal->getPromociones();
 
-
+            
             foreach($promos as $promo){
 
                 if($promo->getStatus() == 1 && $today >= $promo->getDesde() && $today<= $promo->getHasta() ) {
@@ -612,33 +612,64 @@ class HomeController extends Controller
                         
                         $r_promo['promo'] = $promo;
 
-                        if($promo->getProductos() != null) { // promo de producto
-                            
-                            $r_promo['items_productos'] = $productos;
-                            
-                            $promo_data[] = $r_promo;
-                            
-                        }else{ // promo de categoria
-                            /*
-                            if($type == 1){
-                                $r_promo['valor'] = $promo->getDetail();
+                            if($promo->getProductos() != null) { // promo de producto
 
-                            }else{
+                                if($type == 1){
+                                    
+                                    $productos_promo = $promo->getProductos();
+                                    
+                                    foreach($productos_promo as $prId){
 
-                                $valores = explode("x", $promo->getDetail());
-                                $r_promo['valor'] = $valores;
+                                        $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($prId);
+                                        $prod->setPrecioPromo($prod->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                                        $em->persist($prod);
+                                        $em->flush();
+                                    }
+                                }    
+                                $r_promo['items_productos'] = $productos;
+                                $promo_data[] = $r_promo;
                             }
+                    }    
+                }
+                            /*                          
+                            $excluidos = $promo->getProductosExcluidos();
+                            
+                        if(!empty($promo->getSubcategorias())){
+                            
+                            foreach($promo->getSubcategorias() as $sId){ 
+                        
+                                $prod_cat = $em->getRepository('BackendCustomerAdminBundle:Producto')->findBy(array('subcategoria'=>$sId));
+                            
+                                if(!empty($excluidos)){
 
-                            $r_promo['promo'] = $promo;
-                            $r_promo['producto'] = 0;
-                            $resultado_promos[] = $r_promo;
-                            */
+                                    if(!in_array($prod_cat->getId(), $excluidos)){
+
+                                        if($type == 1){ 
+                                            $prod_cat->setPrecioPromo($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                                            $em->persist($prod);
+                                            $em->flush();
+                                        }
+                                        
+                                        // agrego a productos_promo
+                                    }
+                                }else{
+                                    
+                                    if($type == 1){ 
+                                            $prod_cat->setPrecioPromo($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                                            $em->persist($prod);
+                                            $em->flush();
+                                    }
+                                    
+                                    // agrego a productos_promo
+                                }
+                            }
                             
                         }
+                        
                     //}
                 }
             }
-
+*/
             if ($subId) {
 
                 $subcategoria = $em->getRepository('BackendAdminBundle:Subcategoria')->find($subId)->getName();
@@ -697,6 +728,7 @@ class HomeController extends Controller
 			
 			return $this->render('FrontendHomeBundle:Home:index.html.twig');
 		}
+         
 	}
 
 

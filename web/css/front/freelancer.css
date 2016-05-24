@@ -321,6 +321,17 @@ header .shop-horarios table td{
 	font-size: 1.5em;	
 }
 
+.product-img{
+    
+    height: 200px;
+    width: 200px;
+}
+
+.product-details{
+    
+    margin-bottom: 10px !important;
+}
+
 .product-desc, .product-details{
 	
 	font-size: 15px;
@@ -423,7 +434,7 @@ header .shop-horarios table td{
 
     color: #ffffff;
     font-weight: 600;
-    padding-top: 15px;
+    /*padding-top: 15px;*/
     font-size: 26px;
 }
 
@@ -446,7 +457,7 @@ header .shop-horarios table td{
 
 .promo-producto{
 
-    height: 80px;
+    height: 105px;
     margin-bottom: 10px;
     margin-top: 10px;
 }
@@ -461,7 +472,7 @@ header .shop-horarios table td{
 .promo-producto .antes {
 
     float:left;
-    margin-left: 30px;
+    margin-left: 15px;
     padding-top: 5px;
 
 }
@@ -526,11 +537,17 @@ header .shop-horarios table td{
     color: #FE980F;
 }
 
+
 .promo-item .unidades, .promo-producto .unidades{
 
-    margin-top:10px;
-    height: 73px;
+    margin-top:-10px;
+    height: 50px;
 
+}
+
+.promo-producto .unidades{
+    
+    margin-top: 0px;
 }
 
 .promo-item .unidades p{
@@ -538,6 +555,64 @@ header .shop-horarios table td{
     font-size:18px;
     color:#ffffff;
 
+}
+
+
+
+.promo-producto .unidades p{
+    
+    font-size: 36px;
+    color: #FE980F;
+    font-weight: bold;
+}
+
+.promo-producto .unidades span{
+    
+    color: #5e5e5e;
+}
+
+.promo-producto .unidades .ahora{
+    
+    float:right;
+    border-left: solid;
+    border-color:#5E5E5E;
+    margin-right: 15px;
+    padding-top: 5px;
+}
+
+.promo-producto .unidades .antes {
+
+    float:left;
+    margin-left: 5px;
+    padding-top: 5px;
+
+}
+
+.promo-producto .unidades .ahora .ahora-precio{
+
+    font-size:20px;
+    color: #FE980F;
+    font-weight: 600;
+}
+
+
+.promo-producto .unidades .precio-normal{
+    
+    font-size:16px;
+    font-weight: normal;
+    color: #5e5e5e;
+    margin-top: -10px;
+    
+}
+
+.promo-producto .unidades .precio-pagas{
+    
+    font-size:16px;
+    font-weight: bold;
+    color: #FE980F;
+    margin-top: -10px;
+    
+    
 }
 
 .promo-item .unidades .unidades-precio{
