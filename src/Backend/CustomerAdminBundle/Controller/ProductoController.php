@@ -27,7 +27,7 @@ class ProductoController extends Controller
         $search=mb_convert_case($search,MB_CASE_LOWER);
        
         if ($search)
-          $dql.=" and u.name like '%$search%' ";
+          $dql.=" and u.name like '%$search%' or u.description like '%$search%' or u.code like '%$search%'";
           
         $dql .=" order by u.name"; 
         
@@ -248,11 +248,9 @@ class ProductoController extends Controller
             }
            else{
             
-              //TODO: si se borran y hay pedidos? hay compras?
-            
-            $em->remove($entity);
+            $entity->setIsActive(false);   
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success' , 'Se han borrado los datos del producto.');
+            $this->get('session')->getFlashBag()->add('success' , 'Se ha despublicado el producto.');
             
             }
         }
@@ -668,8 +666,6 @@ class ProductoController extends Controller
 
     public function exportarCategoriasAction(Request $request)
     {
-     
-         
         
         $excelService = $this->get('phpexcel')->createPHPExcelObject();
                          

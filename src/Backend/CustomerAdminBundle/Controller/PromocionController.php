@@ -21,31 +21,34 @@ class PromocionController extends Controller
 
     public function generateSQL($search)
     {
-
+        
         $user = $this->getUser();
 
         $dql = "SELECT u FROM BackendCustomerAdminBundle:Promocion u JOIN u.sucursales s where s.customer = " . $user->getId();
+        
         $search = mb_convert_case($search, MB_CASE_LOWER);
 
         if ($search)
             $dql .= " and u.name like '%$search%' ";
-
+            
+        
         $dql .= " order by u.createdAt desc";
 
         return $dql;
-
+      
+     
     }
    
     /**
      * Lists all Promocion entities.
      *
      */
-    public function indexAction(Request $request, $search)
+    public function indexAction(Request $request,$search)
     {
         if ($this->get('security.context')->isGranted('ROLE_VIEWPRODUCTO')) {
             $em = $this->getDoctrine()->getManager();
 
-            $dql = $this->generateSQL($search);
+            $dql=$this->generateSQL($search);
             $query = $em->createQuery($dql);
  
             $paginator = $this->get('knp_paginator');

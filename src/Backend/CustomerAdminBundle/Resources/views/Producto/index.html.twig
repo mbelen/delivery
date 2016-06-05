@@ -120,7 +120,7 @@
                                                   <a href="{{ path('producto_edit', { 'id': producto.id }) }}"><i class="fa fa-pencil"></i></a>
                                                   {% endif %}
                                                   {% if is_granted("ROLE_DELPRODUCTO") %}
-                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ producto.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ producto.id }}  data-target="#myModal"><i class="fa fa-eye-slash"></i></a>
                                                   {% endif %}
                                                   </td>
                                       </tr>
@@ -147,14 +147,14 @@
         <div class="modal-content">
             <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
+            <h4 class="modal-title" id="myModalLabel">Confirmar Despublicación</h4>
             </div>
             <div class="modal-body">
-                <p class="error-text">Esta seguro que desea borrar el producto?</p>
+                <p class="error-text">Esta seguro que desea despublicar el producto?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Borrar</button>
+                <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Confirmar</button>
         </div>
     </div>
   </div>
