@@ -366,7 +366,44 @@ class PromocionController extends Controller
                     }
 
                 }
+                
+                $promoId = $request->get("promos"); // de productos o de categorias
+                $productos_anteriores = $entity->getProductos();
+                
+                if($promoId == 1){
+                    
+                    if(!empty($productos_anteriores)){
+                    
+                        foreach($productos_anteriores as $prod){
+ 
+                            $prod->removePromocione($entity);
+                            
+                            $em->persist($prod);
+                            
+                            $entity->removeProducto($prod);
 
+                        }
+                    }
+                }else{ 
+                    
+                    $subs = $entity->getSubcategorias();
+                    
+                    if(!empty($subs)){
+                    
+                        foreach($subs as $s){
+ 
+                            $s->removePromocione($entity);
+                            
+                            $em->persist($s);
+                            
+                            $entity->removeProducto($s);
+
+                        }
+                    }
+                    
+                }
+               
+               
                 $em->persist($entity);
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success' , 'Se han actualizado los datos de la promocion .');

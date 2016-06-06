@@ -117,7 +117,7 @@
             </div>
 
             <h4>Dias y horarios de la promoción</h4>
-<div id="hourForm" class="container">
+    <div id="hourForm" class="container">
 
     {% for d in dias %}
 
@@ -191,7 +191,7 @@
            
             <label for="sel1" style="float: left;margin-top:5px;">Seleccione:</label>
               <div class="col-xs-6">
-                  <select class="form-control" id="promos">
+                  <select class="form-control" id="promos" name="promos">
                     {% if(entity.getProductos() is not empty) %}
                         <option value="1">Promoción de Categorías</option>
                         <option value="2" selected>Promoción de Productos</option>
@@ -247,7 +247,7 @@
         <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Seleccione una categoría completa."></i>
         <div class="col-xs-6">
             {{ form_widget(form.subcategorias, { 'attr': {'class': 'form-control'} }) }}
-            <span id='backend_customeradminbundle_producto_subcategorias_errorloc' class="help-block"> {{ form_errors(form.subcategorias) }} </span>
+            <span id='backend_customeradminbundle_promocion_subcategorias_errorloc' class="help-block"> {{ form_errors(form.subcategorias) }} </span>
         </div>
         </div>
 
