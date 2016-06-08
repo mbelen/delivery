@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Backend\CustomerAdminBundle\Entity\Favorito;
 use Backend\CustomerAdminBundle\Entity\Sucursal;
+use Backend\CustomerAdminBundle\Entity\Producto;
 use Backend\CustomerBundle\Entity\Customer;
 /**
  * Home controller.
@@ -586,13 +587,15 @@ class HomeController extends Controller
         $search = " ";
         $session = $this->getRequest()->getSession();
         $time = "00:00";//trim(mb_convert_case($request->get("time"),MB_CASE_LOWER));
-        //$dia = 1; //trim(mb_convert_case($request->get("day"),MB_CASE_LOWER));
+        $dia = trim(mb_convert_case($request->get("day"),MB_CASE_LOWER));
         $subId = $session->get('categoria');
         $filter = trim(mb_convert_case($request->get("filter"),MB_CASE_LOWER));
         $resultado = array();
         $promo_data = array();
+        $promo_categorias = array();
         $r_promo = array();
         $today= new \DateTime("today");
+        $prodsPromoCategorias = array();
 
         if($id) {
             $em = $this->getDoctrine()->getManager();
@@ -603,13 +606,10 @@ class HomeController extends Controller
 
             
             foreach($promos as $promo){
+ 
+                if($promo->getStatus() == 1 && $this->checkPromoDia($promo->getHorarios(), $dia) == true ) {
 
-                if($promo->getStatus() == 1 && $today >= $promo->getDesde() && $today<= $promo->getHasta() ) {
-
-                    //if($this->checkPromoNow($promo->getHorarios(), 1, '00:00') == true) {
-
-                        $type = $promo->getType();
-                        
+                        $type = $promo->getType();                        
                         $r_promo['promo'] = $promo;
 
                             if($promo->getProductos() != null) { // promo de producto
@@ -626,50 +626,51 @@ class HomeController extends Controller
                                         $em->flush();
                                     }
                                 }    
-                                $r_promo['items_productos'] = $productos;
-                                $promo_data[] = $r_promo;
+                                $r_promo['prods_cat'] = false;
+                              //  $promo_data[] = $r_promo;
                             }
-                    }    
-                }
-                            /*                          
-                            $excluidos = $promo->getProductosExcluidos();
                             
-                        if(!empty($promo->getSubcategorias())){
+                            $subs = $promo->getSubcategorias();
                             
-                            foreach($promo->getSubcategorias() as $sId){ 
-                        
-                                $prod_cat = $em->getRepository('BackendCustomerAdminBundle:Producto')->findBy(array('subcategoria'=>$sId));
+                            if(!empty($subs)){ // promo de categoria
+                                
+                                $excluidos = $promo->getProductosExcluidos(); 
+                                    
+                                if(empty($excluidos)){
                             
-                                if(!empty($excluidos)){
-
-                                    if(!in_array($prod_cat->getId(), $excluidos)){
-
-                                        if($type == 1){ 
-                                            $prod_cat->setPrecioPromo($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
-                                            $em->persist($prod);
-                                            $em->flush();
-                                        }
+                                    foreach($subs as $subcat){ 
+                                      
+                                        $prods_subcat = $subcat->getProductos();
                                         
-                                        // agrego a productos_promo
+                                        foreach($prods_subcat as $prod_cat){
+                                            
+                                            $prodPromo = new Producto();
+                                            $prodPromo->setName($prod_cat->getName());
+                                            $prodPromo->setDescription($prod_cat->getDescription());
+                                            //$prodPromo->setPath($prod_cat->getWebPath());
+                                            
+                                            if($type == 1){ 
+                                                
+                                                    $prodPromo->setPrecioPromo($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                                                    $prodPromo->setPrecio($prod_cat->getPrecio());
+                                                    
+                                            }else{
+                                        
+                                                $prodPromo->setPrecio($prod_cat->getPrecio());
+                                                
+                                            }
+                                            $prodsPromoCategorias[] = $prodPromo;
+                                        }
+                                         
+                                        $r_promo['prods_cat'] = $prodsPromoCategorias;
+                                        
                                     }
-                                }else{
-                                    
-                                    if($type == 1){ 
-                                            $prod_cat->setPrecioPromo($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
-                                            $em->persist($prod);
-                                            $em->flush();
-                                    }
-                                    
-                                    // agrego a productos_promo
-                                }
-                            }
-                            
-                        }
-                        
-                    //}
-                }
-            }
-*/
+                                }   // excluidos 
+                            }    
+                            $promo_data[] = $r_promo;
+                    }   // promos del día 
+                } // foreach promos
+                           
             if ($subId) {
 
                 $subcategoria = $em->getRepository('BackendAdminBundle:Subcategoria')->find($subId)->getName();
@@ -724,14 +725,12 @@ class HomeController extends Controller
                 'regiones'=>$regiones
             ));
 
-		}else{
+	}else{
 			
-			return $this->render('FrontendHomeBundle:Home:index.html.twig');
-		}
-         
+            return $this->render('FrontendHomeBundle:Home:index.html.twig');
 	}
 
-
+}
 
     /**
      * @param Request $request
@@ -773,8 +772,37 @@ class HomeController extends Controller
   
        return $response;
       
-    
     }
+    
+    /**
+     * 
+     * @param type $horarios
+     * @param type $dia
+     * @return boolean
+     */
+    
+    private function checkPromoDia($horarios,$dia){
+ 
+        foreach ($horarios as $horario) {
+
+            if ($horario->getDia()->getNro() == $dia) {
+
+                if($horario->getAllDay() || ($horario->getDesde() != "0:00" && $horario->getHasta() != "0:00"))
+                    return true;
+                   
+            }
+
+        }
+        return false;
+    }
+    
+    /**
+     * 
+     * @param type $horarios
+     * @param type $dia
+     * @param type $time
+     * @return boolean
+     */
 
     private function checkPromoNow($horarios,$dia,$time){
 

@@ -196,6 +196,47 @@
         </div>
         <div class="row text-center id="productos-promos">
             {% for promo in promos %}
+                
+                {% if promo['prods_cat'] is not empty %}
+                    
+                    {% for pc in promo['prods_cat'] %}
+                        
+                        <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                   
+                    <div class="caption">
+                        <p class="product-title">{{ pc.getName() }}</p>
+                        <p class="product-desc">{{ pc.getDescription }}</p>
+                        {% if promo['promo'].getType() == 1 %}
+                        <div class="promo-producto">
+                            <div class="antes">
+                                <p>ANTES</p>
+                                <p class="antes-precio">$ {{ pc.getPrecio() }}</p>
+                            </div>
+                            <div class="ahora">
+                                <p>AHORA</p>
+                                <p class="ahora-precio">$ {{ pc.getPrecioPromo() }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="promo-producto">
+                            <div class="unidades">
+                                <p>{{ promo['promo'].getUnidad1() }}<span> x</span> {{ promo['promo'].getUnidad2() }}</p>
+                                <div class="antes">
+                                <p class="antes-precio"> $ {{ pc.getPrecio() }} c/u</p>
+                                </div>
+                                <div class="ahora">
+                                <p class="ahora-precio"> {{promo['promo'].getUnidad1()}} x $ {{ promo['promo'].getUnidad2()*pc.getPrecio() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>    
+                </div>
+                </div>
+
+                    {% endfor %}
+                {% endif %}
 
                 {% if promo['promo'].getProductos() is not null %}
                 

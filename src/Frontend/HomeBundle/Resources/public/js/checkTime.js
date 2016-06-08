@@ -14,7 +14,7 @@ setInterval(function() {
 	var tienda = $("#status").data("tienda");
 	console.log(day);
 	console.log(time);
-    console.log(url);
+        console.log(url);
 	//alert("Cambio");
 
 	var data = {'day':day,'time':time,'tienda':tienda}  
