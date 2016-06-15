@@ -29,11 +29,17 @@ class Detalle
      */
     private $cantidad;
     
-	/**
+    /**
      * @ORM\ManyToOne(targetEntity="Producto", inversedBy="detalles")
      * @ORM\JoinColumn(name="producto_id", referencedColumnName="id")
      */
     private $producto;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="detalles")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     */
+    private $item;
     
     /**
      * @ORM\ManyToOne(targetEntity="Pedido", inversedBy="detalles")
@@ -169,5 +175,28 @@ class Detalle
     public function getVariedades()
     {
         return $this->variedades;
+    }
+
+    /**
+     * Set item
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Item $item
+     * @return Detalle
+     */
+    public function setItem(\Backend\CustomerAdminBundle\Entity\Item $item = null)
+    {
+        $this->item = $item;
+
+        return $this;
+    }
+
+    /**
+     * Get item
+     *
+     * @return \Backend\CustomerAdminBundle\Entity\Item 
+     */
+    public function getItem()
+    {
+        return $this->item;
     }
 }

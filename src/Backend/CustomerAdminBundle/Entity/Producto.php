@@ -119,11 +119,17 @@ class Producto
      */
     protected $promosExcluidos;
 
-	 /**
+    /**
      * @ORM\OneToMany(targetEntity="Detalle", mappedBy="producto")
      */
     private $detalles;	
 	
+    /**
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="producto")
+     */
+    private $items;	
+
+    
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -874,4 +880,37 @@ class Producto
         return $this->precioPromo;
     }
 
+
+    /**
+     * Add items
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Item $items
+     * @return Producto
+     */
+    public function addItem(\Backend\CustomerAdminBundle\Entity\Item $items)
+    {
+        $this->items[] = $items;
+
+        return $this;
+    }
+
+    /**
+     * Remove items
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Item $items
+     */
+    public function removeItem(\Backend\CustomerAdminBundle\Entity\Item $items)
+    {
+        $this->items->removeElement($items);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
 }

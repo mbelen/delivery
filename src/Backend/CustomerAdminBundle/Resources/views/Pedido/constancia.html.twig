@@ -16,12 +16,13 @@
 	 .valores{ text-align:right; margin-left:560px;float:right;}
      .tecnicas{ width: 100%}
      .tecnicas .first{ width: 400px}
-	 .tecnicas .first-long { width:250px;}
+     .tecnicas .first-long { width:100px;}
      .tecnicas .second { width: 150px; text-align: left;}
      .tecnicas .third { width: 150px; text-align: right;}
      .tecnicas .fourth { width: 150px; text-align: right; }
-	 .tecnicas .second-long { width: 450px; text-align: left; }
-	 .tecnicas .third-long { width: 150px; }
+     .tecnicas .second-long { width: 400px; text-align: left; }
+     .tecnicas .third-long { width: 150px; }
+     .tecnicas .fourth-long { width: 150px; text-align: right;}
      .separador {border-top: 1px solid #000; margin: 0; padding: 0}
 	 .subitems {margin-left:20px;}
 	 p{
@@ -59,10 +60,14 @@
 	 <table class="tecnicas">
 	            {% for d in entity.getDetalles() %}
 	               <tr>
-	                <td class="first">{{ d.getCantidad() }}</td>
-	                <td class="second">{{ d.getProducto().getName() }}</td>
-                    <td class="third">{{ d.getVariedades() }}</td>
-	                <td class="fourth">{{ d.getPrecio() }}</td>
+	                <td class="first-long">{{ d.getCantidad() }}</td>
+                        {% if d.getProducto() is not null %}
+	                <td class="second-long">{{ d.getProducto().getName() }}</td>
+                        {% else %}
+                        <td class="second-long">{{ d.getItem().getPromocion().getName()}} {% if d.getItem().getPromocion().getType() == 2 %} {{d.getItem().getPromocion().getUnidad1 ~"x"~ d.getItem().getPromocion().getUnidad2}}{% endif %} {{" : "~ d.getItem().getProducto.getName() }}</td>
+                        {% endif %}
+                        <td class="third-long">{{ d.getVariedades() }}</td>
+	                <td class="fourth-long">{{ d.getPrecio() }}</td>
 	               </tr>
 	            {% endfor %}
 	 </table>

@@ -73,9 +73,21 @@
                                                               <div class="modal-content">
 
                                                                   <table class="table table-bordered table-hover" style="margin-top: 10px;">
-                                                                          <th style="width: 80px;">Cantidad</th><th>Producto</th><th>Variedades</th><th style="width: 100px;">Precio</th>
+                                                                          <th style="width: 80px;">Cantidad</th><th>Items</th><th>Variedades</th><th style="width: 100px;">Precio</th>
                                                                       {% for d in pedido.getDetalles %}
+                                                                        {% if d.getProducto is not null %}
                                                                           <tr><td style="text-align: center;">{{ d.getCantidad() }}</td><td>{{ d.getProducto.getName() }}</td><td>{{ d.getVariedades() }}</td><td style="text-align:right;">$ {{ d.getPrecio() }}</td></tr>
+                                                                        {% else %}
+                                                                          <tr><td style="text-align: center;">{{ d.getCantidad() }}</td>
+                                                                          <td>{{ d.getItem.getPromocion.getName() }}
+                                                                          {% if d.getItem.getPromocion().getType == 2 %} 
+                                                                          {{ d.getItem.getPromocion.getUnidad1 ~"x"~ d.getItem.getPromocion.getUnidad2 }}
+                                                                          </br>
+                                                                          {% endif %}  
+                                                                          {{ d.getItem.getProducto().getName() }}
+                                                                          </td>
+                                                                          <td>{{ d.getVariedades() }}</td><td style="text-align:right;">$ {{ d.getPrecio() }}</td></tr>  
+                                                                        {% endif %}    
                                                                       {% endfor %}
                                                                       <tr><td><strong>Total:</strong></td><td></td><td></td><td style="text-align: right">${{ pedido.total }}</td></tr>
                                                                   </table>

@@ -112,6 +112,11 @@ class Promocion
      */
 
     private $horarios;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="promocion")
+     */
+    private $items;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -852,4 +857,37 @@ class Promocion
     }
 
     
+
+    /**
+     * Add items
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Item $items
+     * @return Promocion
+     */
+    public function addItem(\Backend\CustomerAdminBundle\Entity\Item $items)
+    {
+        $this->items[] = $items;
+
+        return $this;
+    }
+
+    /**
+     * Remove items
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Item $items
+     */
+    public function removeItem(\Backend\CustomerAdminBundle\Entity\Item $items)
+    {
+        $this->items->removeElement($items);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
 }
