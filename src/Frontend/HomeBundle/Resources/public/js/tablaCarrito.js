@@ -204,7 +204,8 @@ $(document).ready(function(){
           var quantity = item.quantity();
           total += parseFloat(price) * parseFloat(quantity);
           var variedad = item.get("variedad"); 
-          productos.push({ id: id, price: price, quantity: quantity, variedad: variedad });
+          var itemId = item.get("item");
+          productos.push({ id: id, price: price, quantity: quantity, variedad: variedad, itemId:itemId });
         }
       
       });

@@ -393,8 +393,13 @@ class ProductoController extends Controller
              $productos = $request->get("productos");
              foreach($productos as $p){
                $detalle = new Detalle();
-               $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($p["id"]);
-               $detalle->setProducto($producto);
+               if($p["itemId"]){
+                   $item = $em->getRepository('BackendCustomerAdminBundle:Item')->find($p["itemId"]);
+                   $detalle->setItem($item);
+               }else{
+                   $producto = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($p["id"]);
+                   $detalle->setProducto($producto);
+               }
                $detalle->setPedido($pedido);
                $detalle->setCantidad($p["quantity"]);
                $detalle->setPrecio($p["price"]);

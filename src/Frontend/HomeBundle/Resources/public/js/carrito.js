@@ -89,12 +89,12 @@ simpleCart({
                                   return '<span data-toggle="tooltip" data-placement="left" title="'+item.get("variedad")+'">'+name+"</span>"; 
                             }
                         }, 
-                        {
+                       {
                             attr: "price",
                             label: "Precio",
                             view: 'currency'
                         }, 
-                         { view: "decrement" , label: false , text: "-" } ,
+                        { view: "decrement" , label: false , text: "-" } ,
         
         
                         { 	attr: "quantity" ,
@@ -132,6 +132,7 @@ simpleCart({
      var id = $(this).data("id");
      var thumb =$(this).data("thumb");
      var name =$(this).data("name");
+     var item = $(this).data("item");
      var price =$(this).data("price");
      var sucursalId =$(this).data("sucursalid");
      var sucursalImg =$(this).data("sucursalimg");
@@ -143,7 +144,7 @@ simpleCart({
      if (value < 100){
         input.val(value);
         //aumento de uno en el carrito
-        simpleCart.add({thumb: thumb,name: name, quantity: 1, price: price, product_id: id, sucursal: sucursalId, sucursalImg: sucursalImg, sucursalName: sucursalName, costo: costo , minimo: minimo, maxVariedad: 0, variedad: '' });
+        simpleCart.add({thumb: thumb,name: name, item:item, quantity: 1, price: price, product_id: id, sucursal: sucursalId, sucursalImg: sucursalImg, sucursalName: sucursalName, costo: costo , minimo: minimo, maxVariedad: 0, variedad: '' });
      }
      
  
@@ -201,7 +202,8 @@ simpleCart({
     
      var element = $("#slider-plus-variedad-"+id);
      var thumb =element.data("thumb");
-     var name =element.data("name");
+     var name = element.data("name");
+     var item = element.data("item");
      var price =element.data("price");
      var sucursalId =element.data("sucursalid");
      var sucursalImg =element.data("sucursalimg");
@@ -220,7 +222,7 @@ simpleCart({
          if (value < 100){
             input.val(value);
             //aumento de uno en el carrito
-            simpleCart.add({thumb: thumb,name: name, quantity: 1, price: price, product_id: id, sucursal: sucursalId, sucursalImg: sucursalImg, sucursalName: sucursalName, costo: costo , minimo: minimo, maxVariedad: maxVariedad, variedad: resultado.listado });
+            simpleCart.add({thumb: thumb,name: name, item:item, quantity: 1, price: price, product_id: id, sucursal: sucursalId, sucursalImg: sucursalImg, sucursalName: sucursalName, costo: costo , minimo: minimo, maxVariedad: maxVariedad, variedad: resultado.listado });
          }
          
          $("#seleccionarvariedades").modal('hide');
