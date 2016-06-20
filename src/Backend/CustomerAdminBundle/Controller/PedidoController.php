@@ -30,7 +30,7 @@ class PedidoController extends Controller
           
           $dql.=" where u.id like '%$search%' ";
           
-		  $dql .=" order by u.id"; 
+		  $dql .=" order by u.id desc"; 
         
         return $dql;
      

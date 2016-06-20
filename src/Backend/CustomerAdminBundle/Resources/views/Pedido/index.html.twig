@@ -54,7 +54,7 @@
 										<th>Productos</th>										
 										<th>Observaciones</th>
 										<th>Estado</th>
-                                        <th style="width: 105px;">Acciones</th>
+                                        <th style="width: 108px;">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,7 +120,7 @@
 												  </td>
                                                   <td>
                                                   {% if is_granted("ROLE_MODPRODUCTO") %}
-                                                  <a data-toggle="tooltip" title="Editar Pedido" href="{{ path('pedido_edit', { 'id': pedido.id }) }}"><i class="fa fa-pencil"></i></a>
+                                                  <a data-toggle="tooltip" title="Editar Pedido" href="{{ path('pedido_edit', { 'id': pedido.id }) }}"><i class="fa fa-comment"></i></a>
                                                   {% endif %}
 												  {% if is_granted("ROLE_VIEWPRODUCTO") %}
                                                       <a href="#"  title="Ver Pedido Completo" data-toggle="modal" data-target="#completo{{pedido.id}}"><i class="fa fa-eye"></i></a>
@@ -141,7 +141,7 @@
                                                       <a data-toggle="tooltip" title="Imprimir Pedido" href="{{ path('pedido_print',{ 'id': pedido.id }) }}"><i class="fa fa-print"></i></a>
 												  {% endif %}
                                                   {% if is_granted("ROLE_DELPRODUCTO") %}
-                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ pedido.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ pedido.id }}  data-target="#myModal"><i class="fa fa-pencil"></i></a>
                                                   {% endif %}
                                                   </td>
                                       </tr>
