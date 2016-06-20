@@ -575,6 +575,94 @@ class HomeController extends Controller
         return $this->getProductsByTiendaAction($request,$id);
     }
 
+    /**
+     * @param Promocion $promocion
+     * @return Item item
+     */
+    
+    private function createItemPromo($promo,&$items_promo){
+        
+        //$items_promo = array();
+        $em = $this->getDoctrine()->getManager();
+        $type = $promo->getType();                        
+   
+        if($promo->getProductos() != null) { // promo de producto
+
+            $productos_promo = $promo->getProductos();
+                                
+            foreach($productos_promo as $prId){
+
+                $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($prId);
+                $item = new Item();
+                $item->setProducto($prod);
+                $item->setPromocion($promo);
+                                     
+                if($type == 1){  
+                    $item->setPrecio($prod->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                }else{
+                    $item->setPrecio($prod->getPrecio()* $promo->getUnidad2());
+                }      
+                    $em->persist($item);
+                    $em->flush();    
+                    $items_promo[] = $item;
+                    
+            }
+        }                       
+                                
+        if($promo->getSubcategorias() != null ){ // promo de categoria
+                                
+            $excluidos = $promo->getProductosExcluidos(); 
+                                
+            $subs = $promo->getSubcategorias();
+                  
+            foreach($subs as $subcat){ 
+
+                $prods_subcat = $subcat->getProductos();
+
+                foreach($prods_subcat as $prod_cat){
+                                                                                                  
+                    if($excluidos != null && count($excluidos) > 0 ){
+                                                        
+                        foreach($excluidos as $ex){
+                                                                
+                            if($ex->getId() != $prod_cat->getId()){
+                                                                
+                                $item = new Item();
+                                $item->setPromocion($promo);
+                                $item->setProducto($prod_cat);
+                                                                
+                                if($type == 1){ // por porcentaje
+                                    $item->setPrecio($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                                }else{ // por unidades
+                                    $item->setPrecio($prod_cat->getPrecio()* $promo->getUnidad2());
+                                }
+                                    $em->persist($item);
+                                    $em->flush();  
+                                    $items_promo[]  = $item;
+                            }
+                        }    
+                    }else{
+                                                    
+                                                            $item = new Item();
+                                                            $item->setPromocion($promo);
+                                                            $item->setProducto($prod_cat);
+
+                                                            if($type == 1){ // por porcentaje
+                                                                    $item->setPrecio($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
+                                                            }else{ // por unidades
+                                                                $item->setPrecio($prod_cat->getPrecio()* $promo->getUnidad2());
+                                                            }
+                                                            $em->persist($item);
+                                                            $em->flush();  
+                                                            $items_promo[] = $item;  
+                                                            
+                                                }  
+                                        }
+                                    }    
+                            }    
+            return;       
+    }
+    
 
     /**
      * @param Request $request
@@ -597,6 +685,7 @@ class HomeController extends Controller
         $today= new \DateTime("today");
         $prodsPromoCategorias = array();
         $items_promo = array();
+        $items_basicos = array();
        
 
         if($id) {
@@ -608,92 +697,66 @@ class HomeController extends Controller
             $promos = $sucursal->getPromociones();
 
             
-            foreach($promos as $promo){
+            foreach($promos as $promo){ // recorro las promos y retorno arreglo de productos
  
                 if($promo->getStatus() == 1 && $this->checkPromoDia($promo->getHorarios(), $dia) == true ) {
+                    
+                    $this->createItemPromo($promo,$items_promo);
+                    $r_promo['promo'] = $promo;
+                    $promo_data[] = $r_promo;
+                    
+                    if($promo->getType() == 1 || ($promo->getType() == 2 && $promo->getUnidad2() == 1)){
+                        
+                        if($subId){                           
+                            $subcategoria = $em->getRepository('BackendAdminBundle:Subcategoria')->find($subId)->getName();
 
-                        $type = $promo->getType();                        
-                        $r_promo['promo'] = $promo;
+                            foreach ($productos as $prod) {
 
-                            if($promo->getProductos() != null) { // promo de producto
+                                if ($prod->getSubcategoria()->getId() == $subId && $prod->getIsActive() == true) {
 
-                                $productos_promo = $promo->getProductos();
-                                
-                                    foreach($productos_promo as $prId){
+                                    $in = false;
 
-                                        $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($prId);
-                                        $item = new Item();
-                                        $item->setProducto($prod);
-                                        $item->setPromocion($promo);
-                                     
-                                        if($type == 1){  
-                                            $item->setPrecio($prod->getPrecio()*(1 - $promo->getPorcentaje()/100));
-                                        }else{
-                                            $item->setPrecio($prod->getPrecio()* $promo->getUnidad2());
-                                        }      
-                                        $em->persist($item);
-                                        $em->flush();    
-                                        $items_promo[] = $item;
+                                    foreach($items_promo as $it){
+
+                                        if($it->getProducto()->getId() == $p->getId()){
+                                            $in = true;
+                                        }                    
                                     }
+                                    if(!$in){
+                                        $resultado[] = $prod;
+                                    }
+                                    $in = false;
                                 }
-                                
-                            if($promo->getSubcategorias() != null ){ // promo de categoria
-                                
-                                $excluidos = $promo->getProductosExcluidos(); 
-                                
-                                $subs = $promo->getSubcategorias();
-                  
-                                    foreach($subs as $subcat){ 
+                            }                       
+                        }else{                       
+                            foreach($productos as $p){
 
-                                        $prods_subcat = $subcat->getProductos();
+                                $in = false;
 
-                                        foreach($prods_subcat as $prod_cat){
-                                                                                                  
-                                                 if($excluidos != null && count($excluidos) > 0 ){
-                                                        
-                                                      //  foreach($excluidos as $ex){
-                                                                
-                                                      //      if($ex->getId() != $prod_cat->getId()){
-                                                                
-                                                                $item = new Item();
-                                                                $item->setPromocion($promo);
-                                                                $item->setProducto($prod_cat);
-                                                                
-                                                                if($type == 1){ // por porcentaje
-                                                                        $item->setPrecio($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
-                                                                }else{ // por unidades
-                                                                    $item->setPrecio($prod_cat->getPrecio()* $promo->getUnidad2());
-                                                                }
-                                                                    $em->persist($item);
-                                                                    $em->flush();  
+                                foreach($items_promo as $it){
 
-                                                                    $items_promo[] = $item;
-                                                        //    }
-                                                    //    }    
-                                                }else{
-                                                    
-                                                            $item = new Item();
-                                                            $item->setPromocion($promo);
-                                                            $item->setProducto($prod_cat);
+                                    if($it->getProducto()->getId() == $p->getId()){
 
-                                                            if($type == 1){ // por porcentaje
-                                                                    $item->setPrecio($prod_cat->getPrecio()*(1 - $promo->getPorcentaje()/100));
-                                                            }else{ // por unidades
-                                                                $item->setPrecio($prod_cat->getPrecio()* $promo->getUnidad2());
-                                                            }
-                                                            $em->persist($item);
-                                                            $em->flush();  
-                                                            $items_promo[] = $item;
-                                                            
-                                                }  
-                                    }
-                                    }    
-                            }    
-                            $promo_data[] = $r_promo;
-                            
-                    }   // promos del día 
-                } // foreach promos
-                           
+                                        $in = true;
+                                    }                    
+                                }
+                                if(!$in){
+
+                                    $resultado[] = $p;
+                                }
+
+                                $in = false;
+                            }
+                            $subcategoria = "Todos";
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+           
+            /*
             if ($subId) {
 
                 $subcategoria = $em->getRepository('BackendAdminBundle:Subcategoria')->find($subId)->getName();
@@ -718,7 +781,7 @@ class HomeController extends Controller
 
                 $subcategoria = "Todos";
             }
-
+            */
             $count = count($resultado);
 
             $regiones=array();
@@ -744,7 +807,7 @@ class HomeController extends Controller
                 'search'=>$search,
                 'horarios'=>$horarios,
                 'promos' =>$promo_data,
-                'items' => $items_promo,
+                'items' =>$items_promo,
                 'status' =>1,
                 'regiones'=>$regiones
             ));

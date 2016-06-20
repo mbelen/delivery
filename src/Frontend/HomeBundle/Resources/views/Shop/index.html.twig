@@ -153,7 +153,9 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
+                {% if promos %}
                 <h2 class="subtitle_shop">Nuestras promos del día</h2>
+                {% endif %}
             </div>
         </div>
         <div class="row text-center" id="productos">
@@ -191,15 +193,13 @@
         <!-- Title -->
         <div class="row">
             <div class="col-lg-12">
+                {% if items %}
                 <h2 class="subtitle_shop">Nuestros productos en promoción</h2>
+                {% endif %}
             </div>
         </div>
         <div class="row text-center id="productos-promos">
-            {% if items is not empty %}
-               
-                 
-            {% endif %}
-
+           
             {% if items is not empty %}
  
                 {% for it in items %}

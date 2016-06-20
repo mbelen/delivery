@@ -86,14 +86,25 @@ class ProductoController extends Controller
         }
     
     }
+    
+    private function checkSucursalIsResctricted($subcategorias){
+    
+       $isRestricted = false;
+       foreach($subcategorias as $s){
+         
+          if ($s->getCategoria()->getIsRestrict()){
+            $isRestricted = true;
+          }
+       }
+       return $isRestricted;
+    
+    }
 
     /**
      * @param $search
      * @param $id
      * @return Response
      */
-
-
 
     public function getProductsByTiendaFilterAction($id,$search){
 
@@ -117,15 +128,20 @@ class ProductoController extends Controller
             $resultado = $productos;
             $count = count($resultado);
         }
-
+        $restricted = $this->checkSucursalIsResctricted($sucursal->getSubcategorias());
+        //$promos = $sucursal->getPromociones();  
+        $promos = array();
+        $items = array();
         return $this->render('FrontendHomeBundle:Shop:index.html.twig', array(
-
+            'restricted' => $restricted,
             'tienda' => $sucursal,
             'productos' => $resultado,
             'subcategoria' => $search,
             'count' => $count,
             'search'=>$search,
-            'horarios' =>$horarios
+            'horarios' =>$horarios,
+            'promos' => $promos,
+            'items'  => $items
         ));
 
     }
