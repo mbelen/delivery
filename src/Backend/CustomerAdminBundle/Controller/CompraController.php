@@ -238,7 +238,7 @@ class CompraController extends Controller
          throw new AccessDeniedException();  
     }
     /**
-     * Deletes a Producto entity.
+     * Deletes a Compra entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -256,9 +256,7 @@ class CompraController extends Controller
              
             }
            else{
-            
-         
-            
+               
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success' , 'Se han borrado los datos del producto.');

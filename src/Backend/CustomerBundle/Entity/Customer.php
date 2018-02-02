@@ -150,7 +150,14 @@ class Customer implements AdvancedUserInterface, \Serializable {
      * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Sucursal", mappedBy="customer")
      */
 
-	private $sucursales;
+    private $sucursales;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Promocion", mappedBy="customer")
+     */
+
+    private $promociones;
+
 		
     /**
      * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Variedad", mappedBy="customer")
@@ -1010,5 +1017,40 @@ class Customer implements AdvancedUserInterface, \Serializable {
     public function getTipodni()
     {
         return $this->tipodni;
+    }
+
+    
+
+    /**
+     * Add promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     * @return Customer
+     */
+    public function addPromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones[] = $promociones;
+
+        return $this;
+    }
+
+    /**
+     * Remove promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     */
+    public function removePromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones->removeElement($promociones);
+    }
+
+    /**
+     * Get promociones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPromociones()
+    {
+        return $this->promociones;
     }
 }

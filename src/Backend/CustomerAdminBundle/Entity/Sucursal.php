@@ -178,7 +178,7 @@ class Sucursal
      */
     
     /**
-     * @ORM\Column(name="show_direccion", type="boolean",nullable=true)
+     * @ORM\Column(name="show_direccion", type="boolean", nullable=true)
      */
     private $show_direccion;	
 

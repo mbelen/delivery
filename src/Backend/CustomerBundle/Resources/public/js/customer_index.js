@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	
 $("#search-button").on('click',function(){
   
   var path=$(this).data("url");
