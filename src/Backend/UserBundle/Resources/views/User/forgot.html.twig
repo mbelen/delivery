@@ -7,7 +7,7 @@
   <div class="modal-dialog">
   <div class="modal-content">
       <div class="modal-header">
-          <h1 class="text-center">William Hope - Administrador</h1>
+          <h1 class="text-center">Zona Delivery - Administrador</h1>
       </div>
       <div class="modal-body">
           {% include '::messages.html.twig' %}
@@ -33,7 +33,7 @@
 {% endblock %}
 {% block javascripts %}
   {{ parent() }}
- {% javascripts '@BackendUserBundle/Resources/public/js/forgot_pass.js' %}
+ {% javascripts '@BackendUserBundle/Resources/public/js/forgot_pass.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

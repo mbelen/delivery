@@ -1,0 +1,25 @@
+region_new:
+    pattern:  /{id}/new
+    defaults: { _controller: "BackendCustomerAdminBundle:Region:new" }
+
+region_add:
+    pattern:  /add
+    defaults: { _controller: "BackendCustomerAdminBundle:Region:add" }    
+
+region_update:
+    pattern:  /update
+    defaults: { _controller: "BackendCustomerAdminBundle:Region:update" }        
+
+region_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BackendCustomerAdminBundle:Region:edit" }
+
+region_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BackendCustomerAdminBundle:Region:delete" }
+    requirements: { _method: post|delete }
+
+        
+region:
+    pattern:  /{sucursal}/{search}
+    defaults: { _controller: "BackendCustomerAdminBundle:Region:index" , sucursal: '', search: ''}

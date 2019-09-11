@@ -9,7 +9,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-customers"></i> Tus Direcciones
@@ -27,7 +27,7 @@
                             
                             <div class="form-group input-group">
                                 <input type="text" class="form-control search-query" id="search-query" placeholder="Buscar" value="{{ search }}">
-                                <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('customer') }}" type="button"><i class="fa fa-search"></i></button></span>
+                                <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('direccion') }}" type="button"><i class="fa fa-search"></i></button></span>
                             </div>
                            
                           </form>
@@ -64,7 +64,7 @@
 												  <td>{{ direccion.depto }}</td>
 												  <td>{{ direccion.zip }}</td>
 												  <td>{{ direccion.getZona.getName }}</td>
-												  <td>{{ direccion.getBarrio.getName }}</td>
+												  <td>{% if  direccion.getBarrio %}{{ direccion.getBarrio.getName }}{% endif %}</td>
 												  <td>{{ direccion.getTipo.getName }}</td>
                                                   <td>   {% if direccion.isDefault == 1 %} <span class="label label-success">Por defecto</span> {% endif %} </td>
 												  <td>
@@ -98,7 +98,7 @@
             <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
             </div>
             <div class="modal-body">
-                <p class="error-text">Esta seguro que desea borrar el cliente?</p>
+                <p class="error-text">Esta seguro que desea borrar la direccion?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -126,7 +126,7 @@
 
 {% block javascripts %}
   {{ parent() }}
-   {% javascripts '@BackendCustomerBundle/Resources/public/js/customer_index.js' %}
+   {% javascripts '@BackendCustomerBundle/Resources/public/js/customer_index.js' filter='?uglifyjs2'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
    {% endjavascripts %}
 {% endblock %}

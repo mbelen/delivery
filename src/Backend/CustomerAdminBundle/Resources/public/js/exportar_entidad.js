@@ -21,8 +21,4 @@ $("#custom-search-form input").keyup(function(event){
     }
 });
 
-
-
-
-
 });

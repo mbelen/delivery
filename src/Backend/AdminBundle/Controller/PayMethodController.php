@@ -182,7 +182,7 @@ class PayMethodController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Categoria entity.
+     * Edits an existing Paymethod entity.
      *
      */
     public function updateAction(Request $request, $id)

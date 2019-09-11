@@ -3,39 +3,68 @@
 {% block container %}
 
   <input type="hidden" name="check" id="check" value="{{ path('frontend_checkbarrio') }}">
+  <input type="hidden" name="promo_chk" id="promo_chk" value="{{ path('frontend_checkPromos') }}">
 	<section>
+        <div class="row carousel-home">
+
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators se carga dinamicamente -->
+                <ol class="carousel-indicators" id="carousel-indicators">
+                   
+                </ol>
+
+                <!-- Wrapper for slides carga dinamica-->
+                <div class="carousel-inner" id="carousel-inner">
+                    
+                </div>
+
+                <!-- Controls -->
+                <!--
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                -->
+            </div> <!-- Carousel -->
+
+        </div>
 		<div class="container">
+
+
 			<div class="row">
 					
 					<div class="recommended_items"><!--recommended_items-->
-						<h2 class="title text-center">Sugeridos</h2>
+						<h2 class="title text-center">Hoy sugerimos</h2>
 						
 						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
 							<div class="carousel-inner" id="sugeridos" data-url="{{ path('frontend_premium') }}">
 							
           
-								</div>  <!-- items-->
-							</div>
+							</div>  <!-- items-->
+						</div>
 							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
 								<i class="fa fa-angle-left"></i>
 							  </a>
 							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
 								<i class="fa fa-angle-right"></i>
 							  </a>			
-						</div>
-					</div><!--/recommended_items-->
+					</div>
+			</div>
 					
           	<div class="col-sm-12 padding-right">
+				<h2 class="title text-center" id="title_mira">Mirá lo que tenes cerca</h2>
 					<div class="features_items" id="tiendas_listado" data-urlfavorito="{{ path('frontend_addFavorito')}}" data-url="{{ path('frontend_tiendas')}}"><!--features_items-->
-						<h2 class="title text-center">Mirá lo que tenes cerca</h2>
+						<p class="respuesta" id="aun">Aún no realizaste ninguna busqueda</p>
 					</div><!--features_items-->
           
           	<div class="col-sm-12 ">
-                    <a class="btn" id="see_more">queres ver más!</a>
+                    <a class="btn btn-warning" id="see_more">queres ver más!</a>
             </div>
-				</div>
-			</div>
-		</div>
+			</div><!-- col -->
+
+		</div><!-- container -->
 	</section>
 
   <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="horarioModal">
@@ -56,6 +85,17 @@
 {% endblock %}
   {% block javascripts %}
   {{ parent()}}
- <script src="{{ asset("js/front/geolocalizar.js") }}"></script>
- <script src="{{ asset("js/front/main.js") }}"></script>
+  {% javascripts '@FrontendHomeBundle/Resources/public/js/geolocalizar.js'filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+  
+  {% javascripts '@FrontendHomeBundle/Resources/public/js/home.js'filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+  
+  {% javascripts '@FrontendHomeBundle/Resources/public/js/checkTime.js'filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+ 
+  
  {% endblock %} 

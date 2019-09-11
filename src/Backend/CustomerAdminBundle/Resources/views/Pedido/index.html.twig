@@ -10,7 +10,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-shopping-cart"></i> Listado de Pedidos
@@ -54,7 +54,7 @@
 										<th>Productos</th>										
 										<th>Observaciones</th>
 										<th>Estado</th>
-                                        <th style="width: 90px;">Acciones</th>
+                                        <th style="width: 108px;">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,27 +67,81 @@
 												  <td>{{ pedido.direccion.getCalle() ~ " " ~ pedido.direccion.getNumero() ~ " " ~ pedido.direccion.getPiso() }}
                                                   <td>{{ pedido.paymethod.getName() | capitalize}}</td>
 												  <td>
-												  {% for producto in pedido.getProductos %}
-												  	{{ producto.getName() }}<br/>
-												  {% endfor %}
+                                                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detalle{{pedido.id}}"><i class="fa fa-list-ol"></i></button>
+                                                      <div class="modal fade " id="detalle{{pedido.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                                                          <div class="modal-dialog modal-lg">
+                                                              <div class="modal-content">
+
+                                                                  <table class="table table-bordered table-hover" style="margin-top: 10px;">
+                                                                          <th style="width: 80px;">Cantidad</th><th>Items</th><th>Variedades</th><th style="width: 100px;">Precio</th>
+                                                                      {% for d in pedido.getDetalles %}
+                                                                        {% if d.getProducto is not null %}
+                                                                          <tr><td style="text-align: center;">{{ d.getCantidad() }}</td><td>{{ d.getProducto.getName() }}</td><td>{{ d.getVariedades() }}</td><td style="text-align:right;">$ {{ d.getPrecio() }}</td></tr>
+                                                                        {% else %}
+                                                                          <tr><td style="text-align: center;">{{ d.getCantidad() }}</td>
+                                                                          <td>{{ d.getItem.getPromocion.getName() }}
+                                                                          {% if d.getItem.getPromocion().getType == 2 %} 
+                                                                          {{ d.getItem.getPromocion.getUnidad1 ~"x"~ d.getItem.getPromocion.getUnidad2 }}
+                                                                          </br>
+                                                                          {% endif %}  
+                                                                          {{ d.getItem.getProducto().getName() }}
+                                                                          </td>
+                                                                          <td>{{ d.getVariedades() }}</td><td style="text-align:right;">$ {{ d.getPrecio() }}</td></tr>  
+                                                                        {% endif %}    
+                                                                      {% endfor %}
+                                                                      <tr><td><strong>Total:</strong></td><td></td><td></td><td style="text-align: right">${{ pedido.total }}</td></tr>
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+
 												  </td>
-                                                  <td>{{ pedido.observaciones }}</td>
-												  <td>
-												  {% if pedido.status.getName == "Pendiente" %}
-                                                  	<span class="label label-danger"> {{ pedido.status.getName() }} </span>
-												  {% elseif pedido.status.getName == "Entregado" %}
-												  	 <span class="label label-success"> Entregado </span>
-                                                  {% endif %}
+                                                  <td>{{ pedido.comentarios }}</td>
+                                                  <td id="status{{ pedido.id }}">
+                                                    {% if pedido.getLastProceso().getStatus.getOrden() == 4 %}
+                                                        <span class="label label-success">{{ pedido.getLastProceso().getStatus().getName() }}</span>
+                                                    {% else %}
+                                                         {% if is_granted("ROLE_MODPRODUCTO") %}
+                                                             {% if pedido.getLastProceso().getStatus.getOrden() == 1 %}
+                                                       <a href="#myModal" role="button" class="btn btn-danger confirm-pay" data-toggle="modal" data-id={{ pedido.id }} >{{ pedido.getLastProceso().getStatus().getName() }}</a>
+                                                             {% endif %}
+                                                             {% if pedido.getLastProceso().getStatus.getOrden() == 2 %}
+                                                                 <a href="#myModal" role="button" class="btn btn-warning confirm-pay" data-toggle="modal" data-id={{ pedido.id }} >{{ pedido.getLastProceso().getStatus().getName() }}</a>
+                                                             {% endif %}
+                                                             {% if pedido.getLastProceso().getStatus.getOrden() == 3 %}
+                                                                 <a href="#myModal" role="button" class="btn btn-info confirm-pay" data-toggle="modal" data-id={{ pedido.id }} >{{ pedido.getLastProceso().getStatus().getName() }}</a>
+                                                             {% endif %}
+                                                             {% if pedido.getLastProceso().getStatus.getOrden() == 5 %}
+                                                                 <span class="label label-default">{{ pedido.getLastProceso().getStatus().getName() }}</span>
+                                                             {% endif %}
+                                                         {% endif %}
+                                                    {% endif %}
 												  </td>
                                                   <td>
                                                   {% if is_granted("ROLE_MODPRODUCTO") %}
-                                                  <a data-toggle="tooltip" title="Editar Pedido" href="{{ path('pedido_edit', { 'id': pedido.id }) }}"><i class="fa fa-pencil"></i></a>
+                                                  <a data-toggle="tooltip" title="Editar Pedido" href="{{ path('pedido_edit', { 'id': pedido.id }) }}"><i class="fa fa-comment"></i></a>
                                                   {% endif %}
 												  {% if is_granted("ROLE_VIEWPRODUCTO") %}
-												  <a data-toggle="tooltip" title="Imprimir Pedido" href="{{ path('pedido_print',{ 'id': pedido.id }) }}"><i class="fa fa-print"></i></a>
+                                                      <a href="#"  title="Ver Pedido Completo" data-toggle="modal" data-target="#completo{{pedido.id}}"><i class="fa fa-eye"></i></a>
+                                                      <div class="modal fade " id="completo{{pedido.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                                                          <div class="modal-dialog modal-lg">
+                                                              <div class="modal-content">
+
+                                                                  <table class="table table-bordered table-hover" style="margin-top: 10px;">
+                                                                      <th style="width: 100px;text-align: center">Estado</th><th style="width: 180px;">Fecha y hora</th><th>Comentarios</th>
+                                                                      {% for p in pedido.getProcesos() %}
+                                                                          <tr><td style="text-align: center;">{{ p.getStatus().getName() }}</td><td>{{ p.getCreatedAt() |date('d-m-Y h:m:s') }}</td><td>{{ p.getComentarios() | raw }}</td></tr>
+                                                                      {% endfor %}
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                      <a data-toggle="tooltip" title="Imprimir Pedido" href="{{ path('pedido_print',{ 'id': pedido.id }) }}"><i class="fa fa-print"></i></a>
 												  {% endif %}
                                                   {% if is_granted("ROLE_DELPRODUCTO") %}
-                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ pedido.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ pedido.id }}  data-target="#myModal"><i class="fa fa-pencil"></i></a>
                                                   {% endif %}
                                                   </td>
                                       </tr>
@@ -106,32 +160,24 @@
     
                </div>
 
-
-
-    
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Modificar Status</h4>
+                </div>
+                <div class="modal-body">
+                    {% include 'BackendCustomerAdminBundle:Pedido:status.html.twig' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-warning" data-id="0"  data-url="{{ path('pedido_status') }}">Confirmar</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <p class="error-text">Esta seguro que desea borrar el producto?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Borrar</button>
         </div>
     </div>
-  </div>
-</div>
-    
-    
-    
-    
-    
-    
+
     <form action="" id="delete-form" method="post" {{ form_enctype(delete_form) }}>
     {{ form_widget(delete_form) }}
     <input type="hidden" value="DELETE" name="_method">
@@ -146,13 +192,15 @@
   {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' %}
+{% javascripts '@BackendCustomerAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' %}
+{% javascripts '@BackendCustomerAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}      
-  
+{% endjavascripts %}
+{% javascripts '@BackendCustomerAdminBundle/Resources/public/js/cambiar_status.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 {% endblock %}
 
 

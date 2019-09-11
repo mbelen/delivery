@@ -143,7 +143,7 @@
 {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendUserBundle/Resources/public/js/validate_profile.js' %}
+{% javascripts '@BackendUserBundle/Resources/public/js/validate_profile.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

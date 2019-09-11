@@ -286,6 +286,7 @@ class SubcategoriaController extends Controller
         $excelService->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'Categoría')
                     ->setCellValue('B1', 'Nombre')
+                    ->setCellValue('C1', 'Código')
                     
                     ;
                     
@@ -294,8 +295,9 @@ class SubcategoriaController extends Controller
         foreach($resultados as $r)
         {
            $excelService->setActiveSheetIndex(0)
-                         ->setCellValue("A$i",$r->getZona()->getName())
+                         ->setCellValue("A$i",$r->getCategoria()->getName())
                          ->setCellValue("B$i",$r->getName())
+                         ->setCellValue("C$i",$r->getCode())
                          ;
           $i++;
         }
@@ -305,6 +307,7 @@ class SubcategoriaController extends Controller
         $excelService->setActiveSheetIndex(0);
         $excelService->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $excelService->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $excelService->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         
         
         $fileName="subcategorias_".date("Ymd").".xls";

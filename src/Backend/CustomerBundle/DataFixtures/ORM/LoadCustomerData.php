@@ -34,6 +34,7 @@ class LoadCustomerData extends AbstractFixture implements OrderedFixtureInterfac
         $userAdmin->setStatus($this->getReference('status-pendiente'));
         $userAdmin->setIsActive("1");
         $userAdmin->setIsComercio("0");
+        $userAdmin->setTipodni($this->getReference('tipodni-dni'));
         $userAdmin->setCreatedAt(new \DateTime('now'));
         $userAdmin->addGroup($this->getReference('cliente-group'));
         $manager->persist($userAdmin);
@@ -45,6 +46,7 @@ class LoadCustomerData extends AbstractFixture implements OrderedFixtureInterfac
         $userAdmin1->setEmail('comercio@admin.com');
         $userAdmin1->setName("Comercio");
         $userAdmin1->setLastname("ComercioLast");
+        $userAdmin1->setTipodni($this->getReference('tipodni-dni'));
         $userAdmin1->setStatus($this->getReference('status-pendiente'));
         $userAdmin1->setIsActive("1");
         $userAdmin1->setIsComercio("1");
@@ -57,7 +59,7 @@ class LoadCustomerData extends AbstractFixture implements OrderedFixtureInterfac
     
     public function getOrder()
     {
-        return 7; // the order in which fixtures will be loaded
+        return 17; // the order in which fixtures will be loaded
     }
     
 }

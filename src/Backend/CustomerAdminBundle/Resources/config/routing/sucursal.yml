@@ -36,6 +36,10 @@ sucursal_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "BackendCustomerAdminBundle:Sucursal:delete" }
     requirements: { _method: post|delete }
+
+sucursal_categorias:
+    pattern:  /categorias
+    defaults: { _controller: "BackendCustomerAdminBundle:Sucursal:categorias" }
         
 sucursal:
     pattern:  /{search}

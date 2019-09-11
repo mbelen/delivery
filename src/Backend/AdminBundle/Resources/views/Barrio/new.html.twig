@@ -38,7 +38,7 @@
 {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendAdminBundle/Resources/public/js/validate_barrio.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/validate_barrio.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

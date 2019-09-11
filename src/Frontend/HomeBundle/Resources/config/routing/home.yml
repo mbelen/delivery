@@ -2,18 +2,33 @@ frontend_homepage:
     pattern:  /
     defaults: { _controller: FrontendHomeBundle:Home:index }
 
+frontend_faqs:
+    pattern:  /faqs
+    defaults: { _controller: FrontendHomeBundle:Home:faq }
+
+frontend_terminos:
+    pattern:  /terminos
+    defaults: { _controller: FrontendHomeBundle:Home:terminos }
+
+frontend_politicas:
+    pattern:  /politicas
+    defaults: { _controller: FrontendHomeBundle:Home:politicas }
+
 frontend_menuZona:
     pattern:  /menuZona
     defaults: { _controller: FrontendHomeBundle:Home:menuZona }
     
 frontend_menuCategoria:
     pattern:  /menuCategoria
-    defaults: { _controller: FrontendHomeBundle:Home:menuCategoria } 
+    defaults: { _controller: FrontendHomeBundle:Home:menuCategoria }
+    
+frontend_que:
+    pattern:  /que
+    defaults: { _controller: FrontendHomeBundle:Home:getQue }     
 
 frontend_tiendas:
     pattern:  /tiendas
     defaults: { _controller: FrontendHomeBundle:Home:getTiendas }
-
 
 frontend_premium:
     pattern:  /tiendas_premium
@@ -34,4 +49,35 @@ frontend_forgot:
 frontend_addFavorito:
     pattern:  /frontAddFavorito
     defaults: { _controller: "FrontendHomeBundle:Home:addFavorito" }          
+
+frontend_change_pass:
+    pattern:  /frontend_change_pass/{codigo}
+    defaults: { _controller: "FrontendHomeBundle:Home:changePassword", codigo: '' }
+
+frontend_activate_account:
+    pattern:  /frontend_activar/{codigo}
+    defaults: { _controller: "FrontendHomeBundle:Home:activateAccount", codigo: '' }                  
         
+frontend_show_products:
+    pattern:  /{id}/frontShowProductos
+    defaults: { _controller: "FrontendHomeBundle:Home:getProductsByTienda" }
+
+frontend_all_products:
+    pattern:  /{id}/frontAllProductos
+    defaults: { _controller: "FrontendHomeBundle:Home:resetFiltro" }
+
+frontend_checkTime:
+    pattern:  /checkTime
+    defaults: { _controller: "FrontendHomeBundle:Home:checkTime" }
+
+frontend_islogin:        
+    pattern:  /isloginFront
+    defaults: { _controller: "FrontendHomeBundle:Home:islogin" }    
+    
+frontend_checkPromos:
+    pattern:  /checkPromos
+    defaults: { _controller: "FrontendHomeBundle:Home:getPromosVigentes" }
+
+
+
+

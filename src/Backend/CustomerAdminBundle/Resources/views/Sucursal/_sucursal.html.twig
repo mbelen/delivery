@@ -1,6 +1,6 @@
 <div class="form-group">
         
-        {{ form_label(form.name,"Nombre", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        {{ form_label(form.name,"Razón Social", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">
             {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
             <span id='backend_customeradminbundle_sucursal_name_errorloc' class="help-block"> {{ form_errors(form.name) }} </span>
@@ -19,9 +19,24 @@
 <div class="form-group">
         
         {{ form_label(form.direccion,"Direccion", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Si no ha ingresado una dirección previamente pulse el boton agregar nueva dirección"></i>
         <div class="col-xs-6">
+         
+         <a href="{{ path("direccion_new",{'type': 0}) }}" rel="shadowbox" id="agregar_direccion" data-url="{{ path('direccion_loadDireccion')}}" role="button" class="btn btn-info"  style="float:right; margin-right:-35%">Nueva Direccion</a>
+
             {{ form_widget(form.direccion, { 'attr': {'class': 'form-control'} }) }}
-            <span id='backend_customeradminbundle_sucursal_direccion_errorloc' class="help-block"> {{ form_errors(form.direccion) }} </span>
+                        <span id='backend_customeradminbundle_sucursal_direccion_errorloc' class="help-block"> {{ form_errors(form.direccion) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <div class="checkbox">
+                <label>{{ form_widget(form.show_direccion) }}
+                 {{ form_label(form.show_direccion,"Mostrar direccion") }}</label>
+                 <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Mostrar direccion completa en la home de la sucursal"></i>
+            </div>
+            <span id='backend_customeradminbundle_sucursal_show_direccion_errorloc' class="help-block"> {{ form_errors(form.show_direccion) }} </span>
         </div>
 </div>
 
@@ -63,35 +78,54 @@
         </div>
 </div>
 
+
 <div class="form-group">
         
-        {{ form_label(form.categorias,"Categorias", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        {{ form_label(form.radio,"Radio de Entrega (KM)", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">
-            {{ form_widget(form.categorias, { 'attr': {'class': 'form-control'} }) }}
-            <span id='backend_customeradminbundle_sucursal_categorias_errorloc' class="help-block"> {{ form_errors(form.categorias) }} </span>
+            {{ form_widget(form.radio, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_sucursal_radio_errorloc' class="help-block"> {{ form_errors(form.radio) }} </span>
         </div>
 </div>
 
+<div class="form-group">
+        
+        {{ form_label(form.delivery,"Costo de envio", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.delivery, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_sucursal_delivery_errorloc' class="help-block"> {{ form_errors(form.delivery) }} </span>
+        </div>
+</div>
 
 <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
-            <div class="checkbox">
-                <label>{{ form_widget(form.is_unica) }}
-                 {{ form_label(form.is_unica,"Sucursal unica") }}</label>
-            </div>
-            <span id='backend_customeradminbundle_sucursal_is_unica_errorloc' class="help-block"> {{ form_errors(form.is_unica) }} </span>
+        
+        {{ form_label(form.minimo,"Monto Mínimo", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.minimo, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_sucursal_minimo_errorloc' class="help-block"> {{ form_errors(form.minimo) }} </span>
         </div>
-    </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.tiempo_entrega,"Tiempo de entrega promedio", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Ingrese en texto si es minutos, horas,días,etc. "></i>
+        <div class="col-xs-6">
+            {{ form_widget(form.tiempo_entrega, { 'attr': {'class': 'form-control','placeholder':'30 minutos'} }) }}
+            <span id='backend_customeradminbundle_sucursal_tiempo_entrega_errorloc' class="help-block"> {{ form_errors(form.tiempo_entrega) }} </span>
+        </div>
+</div>
 
 <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
             <div class="checkbox">
                 <label>{{ form_widget(form.open) }}
-                 {{ form_label(form.open,"Abierto 24 hs") }}</label>
+                 {{ form_label(form.open,"Recibe pedidos 24 hs") }}</label>
+                 <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Recibe pedido las 24 hs aún estando cerrado "></i>
             </div>
             <span id='backend_customeradminbundle_sucursal_open_errorloc' class="help-block"> {{ form_errors(form.open) }} </span>
         </div>
-    </div>
+</div>
 
 
 <div class="form-group">
@@ -99,16 +133,154 @@
             <div class="checkbox">
                 <label>{{ form_widget(form.is_active) }}
                  {{ form_label(form.is_active,"Activa") }}</label>
+                 <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Si no marca activa la sucursal no será visible "></i>
             </div>
-            <span id='backend_customeradminbundle_sucursal_is_active_errorloc' class="help-block"> {{ form_errors(form.is_active) }} </span>
+            <span id='backend_customeradminbundle_sucursaltype_is_active_errorloc' class="help-block"> {{ form_errors(form.is_active) }} </span>
         </div>
     </div>
 
-
 <div class="form-group">
-<input class="btn" type="button" id="asociarHorario" value="Definir horarios atencion" style="float:right;margin-right:45%" data-url="{{ path('sucursal_load_horario')}}">
+        
+        {{ form_label(form.file,"Logo (tamaño recomendado: 300x300 px)", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.file, { 'attr': {'class': 'input-xlarge'} }) }}
+            <span id='backend_customeradminbundle_sucursaltype_file_errorloc' class="help-block"> {{ form_errors(form.file) }} </span>
+        </div>
+        {% if entity.getWebPath() %}
+          <img src="{{ asset(entity.getWebPath()) }}" width="100" height="100" />
+        {% endif %}
+</div>
 
-<div id="horarios" class="controls" disabled >
-<input class="btn" type="button" id="guardar" value="Guardar" style="float:right;margin-right:45%" data-url="{{ path('sucursal_tosavehorario')}}">
-</div>
-</div>
+   
+
+
+    <h3>Categorías y Subcategorías</h3>
+   
+   <input type="hidden" name="categorias" id="categorias" value="" data-url="{{ path('sucursal_categorias')}}" data-sucursalid="{{ entity.getId }}">
+    <div class="col-md-12" id="listado_categorias">
+  
+   
+    
+    
+   
+    
+     </div>
+    
+    <h3>Horarios de Atención </h3>
+    <div id="hourForm" class="container">
+
+    {% for d in dias %}
+
+    <div  data-name="{{ d.getName() }}" data-id="{{ d.getId() }}" class="day col-md-12" style="margin-bottom: 10px;">
+       <div id="label">{{ d.getName() }}: </div>
+       
+       <span  id="hora{{ d.getId()}}" {% if horarios is defined and (horarios[d.getId()]['closed'] == 1 or horarios[d.getId()]['abierto'] == 1)  %}   style="display:none;" {% endif %} >
+       <select name="fromH[{{ d.getId()}}]" class="hour from" style="width: 60px">
+       {% for  h in 0..23 %}
+         {% set selected='' %}
+          {% if horarios is defined and horarios[d.getId()]['fromH'] == h%}
+            {% set selected='selected'%}
+          {% endif %}
+        <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+        {% endfor %}
+       </select>
+       <select name="fromM[{{ d.getId()}}]" class="min from" style="width: 60px">
+       {% for  h in [':00', ':15', ':30', ':45'] %}
+        
+        {% set selected='' %}
+          {% if horarios is defined and horarios[d.getId()]['fromM'] == h%}
+            {% set selected='selected'%}
+          {% endif %}
+        <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+        {% endfor %}
+       </select>
+      
+       a
+
+       <select name="toH[{{ d.getId()}}]" class="hour to" style="width: 60px">
+       {% for  h in 0..23 %}
+       {% set selected='' %}
+          {% if horarios is defined and horarios[d.getId()]['toH'] == h%}
+            {% set selected='selected'%}
+          {% endif %}
+        <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+        {% endfor %}
+       </select>
+       <select name="toM[{{ d.getId()}}]" class="min to" style="width: 60px">
+       {% for  h in [':00', ':15', ':30', ':45']  %}
+       {% set selected='' %}
+          {% if horarios is defined and horarios[d.getId()]['toM'] == h%}
+            {% set selected='selected'%}
+          {% endif %}
+        <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+        {% endfor %}
+       </select>
+       </span>
+        <span  {% if (horarios is defined and horarios[d.getId()]['partido'] != 1) or horarios is not defined %} style="display:none;" {% endif %} id="horapartido{{ d.getId()}}">
+        --
+
+        <select name="fromHT[{{ d.getId()}}]" class="hour from" style="width: 60px; ">
+            {% for  h in 0..23 %}
+                {% set selected='' %}
+                {% if horarios is defined and horarios[d.getId()]['fromHT'] == h%}
+                    {% set selected='selected'%}
+                {% endif %}
+                <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+            {% endfor %}
+        </select>
+        <select name="fromMT[{{ d.getId()}}]" class="min from" style="width: 60px">
+            {% for  h in [':00', ':15', ':30', ':45'] %}
+
+                {% set selected='' %}
+                {% if horarios is defined and horarios[d.getId()]['fromMT'] == h%}
+                    {% set selected='selected'%}
+                {% endif %}
+                <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+            {% endfor %}
+        </select>
+
+        a
+
+        <select name="toHT[{{ d.getId()}}]" class="hour to" style="width: 60px; ">
+            {% for  h in 0..23 %}
+                {% set selected='' %}
+                {% if horarios is defined and horarios[d.getId()]['toHT'] == h%}
+                    {% set selected='selected'%}
+                {% endif %}
+                <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+            {% endfor %}
+        </select>
+        <select name="toMT[{{ d.getId()}}]" class="min to" style="width: 60px">
+            {% for  h in [':00', ':15', ':30', ':45']  %}
+                {% set selected='' %}
+                {% if horarios is defined and horarios[d.getId()]['toMT'] == h%}
+                    {% set selected='selected'%}
+                {% endif %}
+                <option value="{{ h }}" {{ selected }}> {{ h }}</option>
+            {% endfor %}
+        </select>
+        </span>
+
+               {% set checked='' %}
+                  {% if horarios is defined and horarios[d.getId()]['closed'] == 1%}
+                    {% set checked='checked'%}
+               {% endif %}
+               <label id="closed{{d.getId()}}" {% if horarios is defined and ( horarios[d.getId()]['abierto'] == 1 or horarios[d.getId()]['partido'] == 1) %} style="display: none;" {% endif %}  ><input type="checkbox" data-id="{{d.getId()}}" {{ checked}} name="closed[{{d.getId()}}]" value="1"  class="closed"><span>Cerrado</span></label>
+               {% set checkedAbierto='' %}
+                  {% if horarios is defined and horarios[d.getId()]['abierto'] == 1%}
+                    {% set checkedAbierto='checked'%}
+               {% endif %}
+               <label id="abierto{{d.getId()}}" {% if horarios is defined and ( horarios[d.getId()]['closed'] == 1 or horarios[d.getId()]['partido'] == 1) %} style="display: none;" {% endif %}><input type="checkbox" data-id="{{d.getId()}}" {{ checkedAbierto}} name="abierto[{{d.getId()}}]" value="1"  class="abierto"><span>Abierto 24hs</span></label>
+               {% set checkedPartido='' %}
+                  {% if horarios is defined and horarios[d.getId()]['partido'] == 1%}
+                    {% set checkedPartido='checked'%}
+               {% endif %}
+              <label id="partido{{d.getId()}}" {% if horarios is defined and ( horarios[d.getId()]['abierto'] == 1 or horarios[d.getId()]['closed'] == 1) %} style="display: none;" {% endif %}> <input type="checkbox" data-id="{{d.getId()}}" {{ checkedPartido}}  name="partido[{{d.getId()}}]" value="1"  class="partido"><span>Horario Partido</span></label>
+               
+        </div>
+        {% endfor %}
+    
+
+    </div>
+    
+

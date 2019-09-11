@@ -44,7 +44,7 @@
 {% endblock %}
 {% block javascripts %}
   {{ parent() }}
- {% javascripts '@BackendUserBundle/Resources/public/js/change_pass.js' %}
+ {% javascripts '@BackendUserBundle/Resources/public/js/change_pass.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

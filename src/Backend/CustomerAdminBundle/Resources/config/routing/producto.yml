@@ -5,7 +5,32 @@ producto_new:
 producto_exportar:
     pattern:  /exportar
     defaults: { _controller: "BackendCustomerAdminBundle:Producto:exportar" }
-    
+
+producto_exportar_categorias:
+    pattern:  /exportar_categorias
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:exportarCategorias" }    
+
+producto_exportar_subcategorias:
+    pattern:  /exportar_subcategorias
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:exportarSubcategorias" }        
+
+producto_importar:
+    pattern:  /importar
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:importar" }
+
+producto_procesar:
+    pattern:  /procesar
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:procesarExcel" }
+
+producto_edicion_masiva:
+    pattern:  /edicion_masiva
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:edicionMasiva" }
+
+producto_edicion:
+    pattern:  /edicion_excell
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:edicionExcell" }    
+
+
 producto_create:
     pattern:  /create
     defaults: { _controller: "BackendCustomerAdminBundle:Producto:create" }
@@ -25,7 +50,11 @@ producto_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "BackendCustomerAdminBundle:Producto:delete" }
     requirements: { _method: post|delete }
-        
+
+producto_categoria:
+    pattern:  /getsubcategorias
+    defaults: { _controller: "BackendCustomerAdminBundle:Producto:getSubcategoriaByCategoria" }
+
 producto:
     pattern:  /{search}
     defaults: { _controller: "BackendCustomerAdminBundle:Producto:index" , search: ''}

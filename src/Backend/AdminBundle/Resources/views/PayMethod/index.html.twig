@@ -10,7 +10,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-money"></i> Listado de Medios de Pago
@@ -47,6 +47,7 @@
                                     <tr>
                                         <th {% if pagination.isSorted('u.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Nombre', 'u.name') }}</th>
                                         <th>Habilitado</th>
+                                        <th>Imagen</th>
                                         <th style="width: 36px;">Acciones</th>
                                     </tr>
                                 </thead>
@@ -59,6 +60,11 @@
                                                   	<span class="label label-success"> Si </span>
 												  {% else %}
 												  	 <span class="label label-danger"> No </span>
+                                                  {% endif %}
+                                                  </td>
+                                                  <td>
+                                                  {% if pay.getWebPath() %}
+                                                    <img src="{{ asset(pay.getWebPath()) }}" width="30"  />
                                                   {% endif %}
                                                   </td>
                                                   <td>
@@ -96,7 +102,7 @@
             <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
             </div>
             <div class="modal-body">
-                <p class="error-text">Esta seguro que desea borrar la categoria?</p>
+                <p class="error-text">Esta seguro que desea borrar el medio de pago?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -125,10 +131,10 @@
   {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}      
   

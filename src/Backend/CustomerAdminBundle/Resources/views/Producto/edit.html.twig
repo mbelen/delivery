@@ -66,23 +66,10 @@
 {% block javascripts %}
   {{ parent() }}
 
-{% javascripts '@BackendAdminBundle/Resources/public/js/validate_producto.js' %}
+{% javascripts '@BackendCustomerAdminBundle/Resources/public/js/validate_producto.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
- <script type="text/javascript" src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('js/tinymce/langs/es.js') }}"></script>
-  <script type="text/javascript">
-        tinymce.init({
-            selector: "textarea",
-            plugins: "paste",
-            paste_word_valid_elements: "b,strong,i,em,h1,h2",
-            setup: function (editor) {
-                  editor.on('change', function () {
-                    tinymce.triggerSave();
-                });
-            }
-        });
-    </script>
+ 
 
 {% endblock %}

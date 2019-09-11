@@ -16,6 +16,7 @@ class CategoriaType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('code')
             ->add('file', 'file', array("required" => false));
         $builder->add('isRestrict','checkbox',array(
              'value'=>1,

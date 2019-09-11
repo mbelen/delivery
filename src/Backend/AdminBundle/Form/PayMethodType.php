@@ -20,8 +20,8 @@ class PayMethodType extends AbstractType
          	   'value'=>1,
          	   'label'=>"Habilitado",
          	   'required'=>false
-        	));
-            
+        	))
+            ->add('file', 'file', array("required" => false));
     }
     
     /**

@@ -1,0 +1,41 @@
+promocion_new:
+    pattern:  /new
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:new" }
+
+promocion_exportar:
+    pattern:  /exportar
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:exportar" }
+
+promocion_create:
+    pattern:  /create
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:create" }
+    requirements: { _method: post }
+
+promocion_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:edit" }
+
+
+promocion_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:update" }
+    requirements: { _method: post|put }
+
+promocion_status:
+    pattern:  /toupdatestatus
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:toUpdateStatus" }
+    requirements: { _method: post|put }
+
+promocion_cargar:
+    pattern:  /tocreate
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:toCreate" }
+    requirements: { _method: post|put }    
+
+promocion_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:delete" }
+    requirements: { _method: post|delete }
+
+promocion:
+    pattern:  /{search}
+    defaults: { _controller: "BackendCustomerAdminBundle:Promocion:index" , search: ''}

@@ -1,0 +1,32 @@
+{% extends '::front/base_front.html.twig' %}
+ {% block header %}
+  {% include '::front/header_simple.html.twig' %} 
+  {% endblock %}
+
+{% block container %}
+   <section>
+		<div class="container">
+     <div >
+          <h1 class="text-center">Activar Cuenta</h1>
+      </div>
+    
+     <div class=" text-center">
+          {% include '::messages.html.twig' %}
+          
+           
+      </div>
+    
+    </div>
+   </section> 
+
+
+
+
+
+
+{% endblock %}
+{% block javascripts %}
+  {{ parent() }}
+ 
+
+{% endblock %}

@@ -20,4 +20,14 @@
         </div>
     </div>
 
+<div class="form-group">
 
+    {{ form_label(form.file,"Imagen", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <div class="col-xs-6">
+        {{ form_widget(form.file, { 'attr': {'class': 'form-control'} }) }}
+        <span id='backend_adminbundle_categoria_file_errorloc' class="help-block"> {{ form_errors(form.file) }} </span>
+    </div>
+    {% if entity.getWebPath() %}
+        <img src="{{ asset(entity.getWebPath()) }}" width="30" />
+    {% endif %}
+</div>

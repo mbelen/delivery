@@ -1,0 +1,49 @@
+{% extends '::front/base_front.html.twig' %}
+
+{% block container %}
+	
+	<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-1">
+					<div class="login-form"><!--login form-->
+						<h2>Ingresar a su cuenta</h2>
+						<form action="#">
+							<div class="form-group">
+							  <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+							</div>
+							<div class="form-group">
+							  <label for="pwd">Password:</label>
+							  <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Contraseña">
+							</div>
+							<a href="{{ path('login_Customer')}}" class="btn btn-warning" role="button">Ingresar</a>
+						</form>
+					</div><!--/login form-->
+				</div>
+				<div class="col-sm-1">
+					<h2 class="or">O</h2>
+				</div>
+				<div class="col-sm-4">
+					<div class="signup-form"><!--sign up form-->
+						<h2>Crear un usuario</h2>
+						<form action="#">
+							<input type="text" placeholder="Nombre"/>
+							<input type="email" placeholder="Email"/>
+							<input type="password" placeholder="Contraseña"/>
+							<input type="password" placeholder="Repetir contraseña"/>
+							<span>
+								<input type="checkbox" class="checkbox" id="comercio" name="comercio">¿Es un comercio?
+							</span>
+							<span>
+								<input type="checkbox" class="checkbox" id="terminos" name="terminos">Entiende y acepta los terminos y condiciones.
+							</span>
+							
+							<a href="{{ path('regristrar_Customer')}}" class="btn btn-warning" role="button">Registrarse</a>
+						</form>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+	
+{% endblock %}

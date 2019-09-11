@@ -69,7 +69,12 @@ class Customer implements AdvancedUserInterface, \Serializable {
      */
     private $lastname;
     
-
+	/**
+     * @ORM\ManyToOne(targetEntity="TipoDni", inversedBy="customers")
+     * @ORM\JoinColumn(name="tipodni_id", referencedColumnName="id")
+     */
+    
+    private $tipodni;
 	
 	/**
      * @ORM\Column(name="dni", type="string", length=100, nullable=true)
@@ -113,7 +118,7 @@ class Customer implements AdvancedUserInterface, \Serializable {
      * @ORM\ManyToOne(targetEntity="Status", inversedBy="customers")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-   
+    
     private $status;
     
     /**
@@ -145,11 +150,22 @@ class Customer implements AdvancedUserInterface, \Serializable {
      * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Sucursal", mappedBy="customer")
      */
 
-	private $sucursales;
+    private $sucursales;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Promocion", mappedBy="customer")
+     */
+
+    private $promociones;
+
 		
+    /**
+     * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Variedad", mappedBy="customer")
+     */
+
+	 private $variedades;
 	
-    /*falta*/
-    private $productos;
+    
     
    
     
@@ -410,6 +426,18 @@ class Customer implements AdvancedUserInterface, \Serializable {
     public function getGroups()
     {
         return $this->groups;
+    }
+
+
+    public function hasGroup($groupName){
+       $groups = $this->getGroups();
+       $retorna = false;
+       foreach( $groups as $g){
+        if ($g->getRole() == $groupName){
+            $retorna = true;
+        }
+       }
+       return $retorna;
     }
 
     /**
@@ -779,29 +807,7 @@ class Customer implements AdvancedUserInterface, \Serializable {
         return $this->direcciones;
     }
 
-    /**
-     * Set nickname
-     *
-     * @param string $nickname
-     * @return Customer
-     */
-    public function setNickname($nickname)
-    {
-        $this->nickname = $nickname;
-
-        return $this;
-    }
-
-    /**
-     * Get nickname
-     *
-     * @return string 
-     */
-    public function getNickname()
-    {
-        return $this->nickname;
-    }
-
+   
     /**
      * Add productos
      *
@@ -955,5 +961,96 @@ class Customer implements AdvancedUserInterface, \Serializable {
     public function getCodigo()
     {
         return $this->codigo;
+    }
+
+    /**
+     * Add variedades
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Variedad $variedades
+     * @return Customer
+     */
+    public function addVariedade(\Backend\CustomerAdminBundle\Entity\Variedad $variedades)
+    {
+        $this->variedades[] = $variedades;
+
+        return $this;
+    }
+
+    /**
+     * Remove variedades
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Variedad $variedades
+     */
+    public function removeVariedade(\Backend\CustomerAdminBundle\Entity\Variedad $variedades)
+    {
+        $this->variedades->removeElement($variedades);
+    }
+
+    /**
+     * Get variedades
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVariedades()
+    {
+        return $this->variedades;
+    }
+
+    /**
+     * Set tipodni
+     *
+     * @param \Backend\CustomerBundle\Entity\TipoDni $tipodni
+     * @return Customer
+     */
+    public function setTipodni(\Backend\CustomerBundle\Entity\TipoDni $tipodni = null)
+    {
+        $this->tipodni = $tipodni;
+
+        return $this;
+    }
+
+    /**
+     * Get tipodni
+     *
+     * @return \Backend\CustomerBundle\Entity\TipoDni 
+     */
+    public function getTipodni()
+    {
+        return $this->tipodni;
+    }
+
+    
+
+    /**
+     * Add promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     * @return Customer
+     */
+    public function addPromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones[] = $promociones;
+
+        return $this;
+    }
+
+    /**
+     * Remove promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     */
+    public function removePromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones->removeElement($promociones);
+    }
+
+    /**
+     * Get promociones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPromociones()
+    {
+        return $this->promociones;
     }
 }

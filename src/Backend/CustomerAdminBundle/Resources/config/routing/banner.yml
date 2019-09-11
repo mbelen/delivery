@@ -1,0 +1,26 @@
+banner_new:
+    pattern:  /new
+    defaults: { _controller: "BackendCustomerAdminBundle:Banner:new" }
+
+banner_create:
+    pattern:  /create
+    defaults: { _controller: "BackendCustomerAdminBundle:Banner:create" }
+    requirements: { _method: post }
+
+banner_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BackendCustomerAdminBundle:Banner:edit" }
+
+banner_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BackendCustomerAdminBundle:Banner:update" }
+    requirements: { _method: post|put }
+
+banner_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BackendCustomerAdminBundle:Banner:delete" }
+    requirements: { _method: post|delete }
+
+banner:
+    pattern:  /{search}
+    defaults: { _controller: "BackendCustomerAdminBundle:Banner:index" , search: ''}

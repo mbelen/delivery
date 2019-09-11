@@ -1,0 +1,31 @@
+frontend_product_filter:
+    pattern:  /frontProductosFilter/{id}/{search}
+    defaults: { _controller: FrontendHomeBundle:Producto:getProductsByTiendaFilter , search: ''}
+
+frontend_vercarrito:
+    pattern:  /carrito
+    defaults: { _controller: FrontendHomeBundle:Producto:showCarrito }
+
+frontend_llega:
+    pattern:  /llega
+    defaults: { _controller: FrontendHomeBundle:Producto:llega }    
+
+frontend_pedido:
+    pattern:  /realizar_pedido
+    defaults: { _controller: FrontendHomeBundle:Producto:realizarPedido }
+
+frontend_direcciones:
+    pattern:  /direcciones
+    defaults: { _controller: FrontendHomeBundle:Producto:getDirecciones }
+
+frontend_zonas:
+    pattern:  /zonas
+    defaults: { _controller: FrontendHomeBundle:Producto:getZonas }
+
+frontend_barrios:
+    pattern:  /barrios
+    defaults: { _controller: FrontendHomeBundle:Producto:getBarrios }
+
+frontend_variedades:
+    pattern:  /variedades
+    defaults: { _controller: FrontendHomeBundle:Producto:getVariedades }    

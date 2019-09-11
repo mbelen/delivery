@@ -52,8 +52,8 @@ $(document).ready(function() {
 			 messages: {
             "backend_userbundle_usertype[name]": {
             required: "Ingrese su nombre",
-            maxlength: jQuery.format("Máximo {0} carácteres!"),
-            minlength: jQuery.format("Mínimo {0} carácteres!")
+            maxlength: jQuery.validator.format("Máximo {0} carácteres!"),
+            minlength: jQuery.validator.format("Mínimo {0} carácteres!")
             },
             "backend_userbundle_usertype[lastname]": {
             required: "Ingrese su Apellido",

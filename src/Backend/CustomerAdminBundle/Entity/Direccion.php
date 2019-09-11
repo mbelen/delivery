@@ -28,7 +28,7 @@ class Direccion
     private $numero;
 	
     /**
-     * @ORM\Column(name="piso", type="integer",nullable=true)
+     * @ORM\Column(name="piso", type="string",length=4,nullable=true)
      */
     private $piso;
 	
@@ -38,12 +38,12 @@ class Direccion
     private $depto;
 	
     /**
-     * @ORM\Column(name="zip", type="string", length=8)
+     * @ORM\Column(name="zip", type="string", length=8, nullable=true)
      */
     private $zip;
 	
     /**
-     * @ORM\Column(name="is_default", type="boolean")
+     * @ORM\Column(name="is_default", type="boolean", nullable=true)
      */
     private $isDefault;	
 	
@@ -115,7 +115,22 @@ class Direccion
 		  return $direccion;
     }
 
-    
+     public function getFull(){
+      $direccion = $this->calle." ".$this->numero;
+       if ($this->piso != ''){
+         $direccion .=" piso: ".$this->piso;
+       }
+       
+       if ($this->depto != ''){
+         $direccion .=" dto: ".$this->depto;
+       }
+       
+       $direccion .= " - ".$this->getBarrio()->getName().", ".$this->getZona()->getName();
+      
+      return $direccion;
+      
+     
+     }
 
     /**
      * Get id

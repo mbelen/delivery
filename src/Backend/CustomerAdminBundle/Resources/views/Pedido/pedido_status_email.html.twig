@@ -1,0 +1,29 @@
+<div>
+    <p>
+        Hola {{ customerName }}
+    </p>
+
+    <p> Te mantenemos al tanto del avance de tu pedido!</p>
+
+    {% if status == "Cancelado" %}
+    <p> Tu pedido ha sido cancelado. A continuación el comercio detalla el motivo:</p>
+        <p>{{ comentarios }}</p>
+    {% else %}
+    <p>Tu pedido está: {{ status }}</p>
+    {% endif %}
+
+    {% if comentarios is not null %}
+            <p>{{ comentarios }}</p>
+    {% endif %}
+
+    <p>Igualmente te pasamos los datos del comercio por si necesitas comunicarte con ellos!</p>
+
+    <p>
+        Telefóno: {{ sucursalTelefono }}<br>
+        Email: {{ sucursalEmail }}
+    </p>
+
+    <p>Gracias por habernos elegido!</p>
+    <p>{{ empresa }}</p>
+
+</div>

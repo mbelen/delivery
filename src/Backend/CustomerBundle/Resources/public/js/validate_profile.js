@@ -2,44 +2,100 @@ $(document).ready(function() {
 		var validator = $("#tab").validate({
 		
 			rules: {
-				"backend_userbundle_profiletype[name]": {
+				"backend_customerbundle_profiletype[name]": {
 					required:true,
 					minlength:2,
 					maxlength:100,
 				},
-				"backend_userbundle_profiletype[lastname]": {
+				"backend_customerbundle_profiletype[lastname]": {
 					required:true,
 					minlength:2,
 					maxlength:100,
 				},
-				"backend_userbundle_profiletype[email]": {
+				"backend_customerbundle_profiletype[email]": {
 					required:true,
 					minlength:2,
 					maxlength:60,
 					email: true,
+				},
+				"backend_customerbundle_profiletype[phone]": {
+					required:false,
+					minlength:4,
+					maxlength:20,
+					
+				},
+				"backend_customerbundle_profiletype[mobile]": {
+					required:false,
+          
+					minlength:4,
+					maxlength:20,
+					
+				},
+        "backend_customerbundle_profiletype[dni]": {
+					required:false,
+					minlength:6,
+					maxlength:15,
+          digits:true,
+					
+				},
+        "backend_customerbundle_profiletype[tipodni]": {
+					required:false,
+					
+					
+				},
+        "backend_customerbundle_profiletype[cuit]": {
+					required:true,
+					minlength:6,
+					maxlength:20,
+          
+					
 				}
-				
 			
 			},
 			
 			 messages: {
-            "backend_userbundle_profiletype[name]": {
+            "backend_customerbundle_profiletype[name]": {
             required: "Ingrese su nombre",
-            maxlength: jQuery.format("Máximo {0} carácteres!"),
-            minlength: jQuery.format("Mínimo {0} carácteres!")
+            maxlength: jQuery.validator.format("Máximo {0} carácteres!"),
+            minlength: jQuery.validator.format("Mínimo {0} carácteres!")
             },
-            "backend_userbundle_profiletype[lastname]": {
+            "backend_customerbundle_profiletype[lastname]": {
             required: "Ingrese su Apellido",
             maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
             minlength: jQuery.validator.format("Mínimo {0} carácteres!")
             },
-            "backend_userbundle_profiletype[email]": {
+            "backend_customerbundle_profiletype[email]": {
                 required: "Ingrese un email",
                 email: "Ingrese un email con formato válido name@domain.com",
                 maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
                 minlength: jQuery.validator.format("Mínimo {0} carácteres!")
-            }
-             
+            },
+            "backend_customerbundle_profiletype[phone]": {
+                maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
+                minlength: jQuery.validator.format("Mínimo {0} carácteres!"),
+                
+            },
+            "backend_customerbundle_profiletype[mobile]": {
+                maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
+                minlength: jQuery.validator.format("Mínimo {0} carácteres!"),
+                
+            },
+            "backend_customerbundle_profiletype[dni]": {
+                 required: "Ingrese su DNI",
+                maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
+                minlength: jQuery.validator.format("Mínimo {0} carácteres!"),
+                digits: "Ingrese solo números"
+            },
+            "backend_customerbundle_profiletype[dni]": {
+                 required: "Seleccione el Tipo de DNI",
+                
+            },
+            "backend_customerbundle_profiletype[cuit]": {
+                required: "Ingrese su CUIT",
+                maxlength:  jQuery.validator.format("Máximo {0} carácteres!"),
+                minlength: jQuery.validator.format("Mínimo {0} carácteres!"),
+                
+            } 
             
             
       },

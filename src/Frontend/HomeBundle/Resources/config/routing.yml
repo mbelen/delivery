@@ -2,3 +2,6 @@ frontend_homecontroller:
     resource: "@FrontendHomeBundle/Resources/config/routing/home.yml"
     prefix:   /
 
+frontend_productocontroller:
+    resource: "@FrontendHomeBundle/Resources/config/routing/producto.yml"
+    prefix:   /

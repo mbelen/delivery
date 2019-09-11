@@ -30,10 +30,10 @@ class SubcategoriaSubscriber implements EventSubscriberInterface
     {
         $form->add($this->factory->createNamed('subcategoria','entity', null, array(
             'class'         => 'BackendAdminBundle:Subcategoria',
-            'empty_value'   => 'Seleccione Localidad/Subcategoria',
+            'empty_value'   => 'Seleccione Subcategoria',
             'auto_initialize' => false,
             "property"=>"name",
-            "required"=>true,
+            "required"=>false,
             'query_builder' => function (EntityRepository $repository) use ($categoria) {
                 $qb = $repository->createQueryBuilder('subcategoria')
                        ->innerJoin('subcategoria.categoria', 'categoria');

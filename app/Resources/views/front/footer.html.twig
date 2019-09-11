@@ -14,11 +14,10 @@
                         <h3>Politicas del Sitio</h3>
                         <ul>
                             <li>
-                                <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">Términos de Uso</a>
-								
+                                <a href="{{ path('frontend_terminos') }}">Términos de Uso</a>
                             </li>
                             <li>
-								<a href="#">Politica de Privacidad</a>
+								<a href="{{ path('frontend_politicas') }}">Politicas de Privacidad</a>
                             </li>
                             <li>
 								<a href="#">Politica de Devoluciones</a>
@@ -34,17 +33,21 @@
                             <li>
                                 <a href="#">Adhesión de Comercios</a>
                             </li>
-                                                        
-                        </ul>    
-                        <ul class="list-inline">
                             <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                                <a href="{{ path('frontend_faqs') }}">Preguntas Frecuentes</a>
+                            </li>                            
+                        </ul>    
+                        <ul class="list-inline" id="footer_social">
+                            <li>
+                                <a href="https://www.facebook.com/zonadelivery" class="btn-social btn-outline" target="_blank"><i class="fa fa-fw fa-facebook"></i></a>
                             </li>
+                            <!--
                             <li>
                                 <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
                             </li>
+                            -->
                             <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                                <a href="https://twitter.com/zonadeliveryint" class="btn-social btn-outline" target="_blank"><i class="fa fa-fw fa-twitter"></i></a>
                             </li>
                         </ul>                    
                     </div>

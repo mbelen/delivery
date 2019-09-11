@@ -33,7 +33,7 @@
 {% endblock %}
 {% block javascripts %}
   {{ parent() }}
- {% javascripts '@BackendUserBundle/Resources/public/js/login_user.js' %}
+ {% javascripts '@BackendUserBundle/Resources/public/js/login_user.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

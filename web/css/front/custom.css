@@ -15,3 +15,111 @@ display: none;
 .hideElement{
   display: none;
 }
+
+.totalCarrito{
+ border-top: 1px solid #eee;
+ border-bottom: 1px solid #eee;
+ margin-top: 10px;
+ margin-bottom: 10px;
+}
+.columCantidad{
+  padding: 0;
+} 
+
+
+.cart_image{
+ width: 100px;
+ height: 100px;
+}
+
+/*SimpleCart*/
+
+.simpleCart_items hr{
+  display: none;
+}
+
+.simpleCart_items .item-quantity{
+  text-align:center;
+
+}
+
+.simpleCart_items .item-decrement a, .simpleCart_items .item-increment a{
+    background: #F0F0E9;
+    color: #696763;
+    display: inline-block;
+    font-size: 16px;
+    height: 28px;
+    
+    text-align: center;
+    width: 35px;
+    
+}
+
+
+.cart_quantity_up, .cart_quantity_down{
+ text-decoration: none;
+}
+a:visited, a:link { 
+    text-decoration: none;
+}
+
+
+#contentCarrito .popover{
+  max-width: none;
+}
+
+
+
+.textExplicativo{
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.navbar-default{
+background-color: #FAF2BF;
+opacity: 1;
+
+}
+
+.terminos_link{
+  text-decoration: underline;
+}
+.modal_footer_registrar{
+ border-top: 0;
+}
+
+#messageForgot{
+ margin-bottom: 0;
+ margin-top: 10px;
+}
+
+.no_buy{
+ font-size: 14px;
+}
+
+.ui-autocomplete-barrio{
+ text-decoration: underline;
+ color: #333;
+ font-weight: bold;
+ cursor: none;
+}
+
+.ui-autocomplete-barrio:hover{
+ background-color: #fff;
+}
+
+.twitter-typeahead{
+ width: 100%;
+}
+
+#map-canvas {
+  width:500px;
+  height:480px !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+.title-mapa{
+  color: #333;
+
+}

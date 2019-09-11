@@ -3,7 +3,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
      @page { margin: 180px 50px; font-size: 11px;}
-     #header { position: fixed; left: 0px; top: -180px; right: 0px; height: 150px; background-color: #fff; text-align: center; border-bottom: 1px solid #000; }
+     #header { position: fixed; left: 0px; top: -150px; right: 0px; height: 100px; background-color: #fff; text-align: center; border-bottom: 1px solid #000; }
      #footer { position: fixed; left: 0px; bottom: -180px; right: 0px; height: 200px; font-size: 12px; /*border-top: 1px solid #000;*/ text-align:center; }
      .label_span { display: inline-block; width: 100px; font-weight: bold;}
      .label_span_alone { display: inline-block; width: 200px; font-weight: bold;}
@@ -16,11 +16,13 @@
 	 .valores{ text-align:right; margin-left:560px;float:right;}
      .tecnicas{ width: 100%}
      .tecnicas .first{ width: 400px}
-	 .tecnicas .first-long { width:250px;}
-     .tecnicas .second { width: 150px; text-align: right;}
+     .tecnicas .first-long { width:100px;}
+     .tecnicas .second { width: 150px; text-align: left;}
      .tecnicas .third { width: 150px; text-align: right;}
-	 .tecnicas .second-long { width: 450px; text-align: left; }
-	 .tecnicas .third-long { width: 150px; }
+     .tecnicas .fourth { width: 150px; text-align: right; }
+     .tecnicas .second-long { width: 400px; text-align: left; }
+     .tecnicas .third-long { width: 150px; }
+     .tecnicas .fourth-long { width: 150px; text-align: right;}
      .separador {border-top: 1px solid #000; margin: 0; padding: 0}
 	 .subitems {margin-left:20px;}
 	 p{
@@ -31,11 +33,11 @@
    </style>
   <body>
    <div id="header">
-     <img src="img/logo_labo_300x100.jpg" width="300" height="100">
+     <img src="images/home/logo.png" width="253" height="45">
    </div>
    <div id="footer">
       <div id="firma">
-        <div id="firma_name">{{ entity.getSucursal.getName }}</div>
+        <!--<div id="firma_name">{{ entity.getSucursal.getName }}</div>-->
      </div>
      <hr class="separador">
      <p>Telefono: {% if entity.getSucursal().getPhone() %} {{ entity.getSucursal.getPhone }} {% endif %}</p>
@@ -56,18 +58,23 @@
      <hr>
 	 
 	 <table class="tecnicas">
-	            {% for producto in entity.getProductos() %}
+	            {% for d in entity.getDetalles() %}
 	               <tr>
-	                <td class="first">{{ producto.getName() }}</td>
-	                <td class="second">3</td>
-	                <td class="third">{{ producto.getPrecio() }}</td>
+	                <td class="first-long">{{ d.getCantidad() }}</td>
+                        {% if d.getProducto() is not null %}
+	                <td class="second-long">{{ d.getProducto().getName() }}</td>
+                        {% else %}
+                        <td class="second-long">{{ d.getItem().getPromocion().getName()}} {% if d.getItem().getPromocion().getType() == 2 %} {{d.getItem().getPromocion().getUnidad1 ~"x"~ d.getItem().getPromocion().getUnidad2}}{% endif %} {{" : "~ d.getItem().getProducto.getName() }}</td>
+                        {% endif %}
+                        <td class="third-long">{{ d.getVariedades() }}</td>
+	                <td class="fourth-long">{{ d.getPrecio() }}</td>
 	               </tr>
 	            {% endfor %}
 	 </table>
 
-     {% if entity.observaciones is not null %}
+     {% if entity.comentarios is not null %}
      <div class="conclusion">
-     <span class="title_conclusion">Observaciones:</span> {{ entity.observaciones |raw}} 
+     <span class="title_conclusion">Observaciones:</span> {{ entity.comentarios |raw}}
      </div>
     {% endif %}
      

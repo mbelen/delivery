@@ -5,7 +5,7 @@
   <div class="modal-dialog">
   <div class="modal-content">
       <div class="modal-header">
-          <h1 class="text-center">William Hope - Administrador</h1>
+          <h1 class="text-center">Zona Delivery - Administrador</h1>
       </div>
       <div class="modal-body" style="overflow-y: auto; height: 460px;">
        {% include '::messages.html.twig' %}
@@ -61,7 +61,7 @@
 {% endblock %}
 {% block javascripts %}
   {{ parent() }}
- {% javascripts '@BackendUserBundle/Resources/public/js/register_user.js' %}
+ {% javascripts '@BackendUserBundle/Resources/public/js/register_user.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

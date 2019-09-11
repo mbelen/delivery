@@ -12,8 +12,8 @@ $(document).ready(function() {
 			 messages: {
             "backend_adminbundle_categoria[name]": {
             required: "Ingrese el nombre de la categoría",
-            maxlength: jQuery.format("Máximo {0} carácteres!"),
-            minlength: jQuery.format("Mínimo {0} carácteres!")
+            maxlength: jQuery.validator.format("Máximo {0} carácteres!"),
+            minlength: jQuery.validator.format("Mínimo {0} carácteres!")
             },
       },
       

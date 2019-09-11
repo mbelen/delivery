@@ -1,0 +1,169 @@
+{% extends '::customer/backend.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+   <style>
+      
+      #map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+
+{% endblock %}
+
+{% block container -%}
+    <h3>Marcar Región</h3>
+
+
+    <div class="well">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane active in" id="home">
+                <div class="form-group">
+                 <label class="control-label">Dirección para centrar el mapa </label>
+                 <input type="text" class="form-control" name="address" id="address" value="" placeholder="calle nro, localidad, provincia, país">
+                 <div style="text-align: center; margin-top: 10px;">
+                 <button type="button" id="centrar" class="btn btn-danger">Centrar Mapa</button>
+                 </div>
+                </div>
+
+                <div id="map"></div>
+
+                <div class="form-group">
+                 <label class="control-label">Nombre de la Región </label>
+                 <input type="text" class="form-control" name="name" id="name" value="">
+                </div>
+                 <div class="form-group">
+                 <label class="control-label">Coordenadas </label>
+                 <textarea class="form-control" name="vertices" id="vertices"></textarea>
+
+                 <div style="text-align: center; margin-top: 10px;">
+                    <button type="button" class="btn btn-primary" id="obtener">Guardar Coordenadas</button>
+                    <button type="button" id="back" class="btn btn-warning" >Regresar</button>
+                 </div>
+                 </div>
+                 <input type="hidden" name="sucursal" id="sucursal" value="{{ sucursalid }}" >
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+<script>
+
+ $("#back").on("click",function(){
+   window.location.href="{{ path('region',{'sucursal': sucursalid}) }}"
+
+ });
+
+
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 14
+  });
+
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.POLYLINE,
+    drawingControl: true,
+    drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_CENTER,
+      drawingModes: [
+        
+        google.maps.drawing.OverlayType.POLYLINE,
+       
+      ]
+    },
+    
+    
+    polylineOptions:{
+      editable: true
+    }
+  });
+
+  drawingManager.setMap(map);
+  
+ 
+      google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+        var newShape = event.overlay;
+        newShape.type = event.type;
+      });
+
+      google.maps.event.addListener(drawingManager, "overlaycomplete", function(event){
+                overlayClickListener(event.overlay);
+                $('#vertices').val(event.overlay.getPath().getArray());
+            });
+        
+  $("#centrar").on("click",function(){
+       var address = $("#address").val();
+       if (address == ''){
+          alert("Debe ingresar una dirección");
+          return false;
+       }
+        getLatLon(address,function(coordenadas){
+          map.setCenter(coordenadas);
+          map.setZoom(16);
+       });
+  });
+
+$("#obtener").on("click",function(){
+      
+      if ($("#name").val() == ''){
+        alert("Debe ingresar un nombre para la región")
+        return false;
+      }
+      if ($("#vertices").val() == ''){
+        alert("Debe graficar la región para poder obtener las coordenadas");
+        return false;
+      }
+      
+      var params= "coordenadas="+$("#vertices").val()+"&sucursal="+$("#sucursal").val()+"&name="+$("#name").val();   
+      var path = "{{ path("region_add")}}";
+      $.ajax({
+            type: "POST",
+            url: path,
+            dataType: 'json',
+            data: params,
+        })
+            .done(function(data){
+
+                if (data.status == 0){
+                   alert("La región fue guardada");
+                   $("#name").val('');
+                   $("#vertices").val('');
+                }else{
+                  alert(data.message);
+                }
+            });
+
+  });
+
+}
+
+function overlayClickListener(overlay) {
+            google.maps.event.addListener(overlay, "mouseup", function(event){
+                $('#vertices').val(overlay.getPath().getArray());
+            });
+        }
+
+      
+      
+
+
+
+    </script>
+   
+   <!--<script src="https://maps.googleapis.com/maps/api/js?libraries=drawing&callback=initMap"
+         async defer></script>-->
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true&libraries=drawing&callback=initMap"></script>        
+   <script src="{{ asset("js/front/gmaps.js") }}"></script>       
+  {% javascripts '@FrontendHomeBundle/Resources/public/js/utils.js'  filter='?uglifyjs2' %}
+          <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %} 
+{% endblock %}

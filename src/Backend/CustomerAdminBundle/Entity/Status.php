@@ -18,10 +18,7 @@ class Status {
      */
     private $id;   
 
-    /**
-     * @ORM\Column(name="is_delete", type="boolean" )
-     */
-    private $isDelete;
+    
 
     /**
      * @ORM\Column(name="name", type="string",length=100, nullable=true)
@@ -29,25 +26,20 @@ class Status {
     private $name;
 	
     /**
-     * @ORM\OneToMany(targetEntity="Pedido", mappedBy="status")
+     * @ORM\OneToMany(targetEntity="Proceso", mappedBy="status")
      */
-    private $pedidos;
-    
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-    /**
-     * @ORM\Column(name="modified_at", type="datetime", nullable=true)
-     */
-    private $modifiedAt;
+    private $procesos;
 
-    
+    /**
+     * @ORM\Column(name="orden",type="integer")
+     */
+
+    private $orden;
        
     public function __construct() {
        
-        $this->isDelete = false;
-        $this->createdAt = new \DateTime('now');
+    
+        $this->procesos = new \Doctrine\Common\Collections\ArrayCollection();
         
     }
 
@@ -70,28 +62,7 @@ class Status {
         return $this->id;
     }
 
-    /**
-     * Set isDelete
-     *
-     * @param boolean $isDelete
-     * @return Status
-     */
-    public function setIsDelete($isDelete)
-    {
-        $this->isDelete = $isDelete;
-
-        return $this;
-    }
-
-    /**
-     * Get isDelete
-     *
-     * @return boolean 
-     */
-    public function getIsDelete()
-    {
-        return $this->isDelete;
-    }
+   
 
     /**
      * Set name
@@ -116,52 +87,7 @@ class Status {
         return $this->name;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Status
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set modifiedAt
-     *
-     * @param \DateTime $modifiedAt
-     * @return Status
-     */
-    public function setModifiedAt($modifiedAt)
-    {
-        $this->modifiedAt = $modifiedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get modifiedAt
-     *
-     * @return \DateTime 
-     */
-    public function getModifiedAt()
-    {
-        return $this->modifiedAt;
-    }
-
+   
     /**
      * Add customers
      *
@@ -195,36 +121,61 @@ class Status {
         return $this->customers;
     }
 
+    
+
     /**
-     * Add pedidos
+     * Add procesos
      *
-     * @param \Backend\CustomerAdminBundle\Entity\Pedido $pedidos
+     * @param \Backend\CustomerAdminBundle\Entity\Proceso $procesos
      * @return Status
      */
-    public function addPedido(\Backend\CustomerAdminBundle\Entity\Pedido $pedidos)
+    public function addProceso(\Backend\CustomerAdminBundle\Entity\Proceso $procesos)
     {
-        $this->pedidos[] = $pedidos;
+        $this->procesos[] = $procesos;
 
         return $this;
     }
 
     /**
-     * Remove pedidos
+     * Remove procesos
      *
-     * @param \Backend\CustomerAdminBundle\Entity\Pedido $pedidos
+     * @param \Backend\CustomerAdminBundle\Entity\Proceso $procesos
      */
-    public function removePedido(\Backend\CustomerAdminBundle\Entity\Pedido $pedidos)
+    public function removeProceso(\Backend\CustomerAdminBundle\Entity\Proceso $procesos)
     {
-        $this->pedidos->removeElement($pedidos);
+        $this->procesos->removeElement($procesos);
     }
 
     /**
-     * Get pedidos
+     * Get procesos
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPedidos()
+    public function getProcesos()
     {
-        return $this->pedidos;
+        return $this->procesos;
+    }
+
+    /**
+     * Set orden
+     *
+     * @param integer $orden
+     * @return Status
+     */
+    public function setOrden($orden)
+    {
+        $this->orden = $orden;
+
+        return $this;
+    }
+
+    /**
+     * Get orden
+     *
+     * @return integer 
+     */
+    public function getOrden()
+    {
+        return $this->orden;
     }
 }

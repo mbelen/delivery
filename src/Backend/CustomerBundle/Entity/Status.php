@@ -18,10 +18,7 @@ class Status {
      */
     private $id;   
 
-    /**
-     * @ORM\Column(name="is_delete", type="boolean" )
-     */
-    private $isDelete;
+    
 
     /**
      * @ORM\Column(name="name", type="string",length=100, nullable=true)
@@ -33,21 +30,15 @@ class Status {
      */
     private $customers;
     
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-    /**
-     * @ORM\Column(name="modified_at", type="datetime", nullable=true)
-     */
-    private $modifiedAt;
+    
 
     
        
     public function __construct() {
        
-        $this->isDelete = false;
-        $this->createdAt = new \DateTime('now');
+       
+       $this->customers = new ArrayCollection();
+       
         
     }
 
@@ -70,28 +61,7 @@ class Status {
         return $this->id;
     }
 
-    /**
-     * Set isDelete
-     *
-     * @param boolean $isDelete
-     * @return Status
-     */
-    public function setIsDelete($isDelete)
-    {
-        $this->isDelete = $isDelete;
-
-        return $this;
-    }
-
-    /**
-     * Get isDelete
-     *
-     * @return boolean 
-     */
-    public function getIsDelete()
-    {
-        return $this->isDelete;
-    }
+    
 
     /**
      * Set name
@@ -116,52 +86,7 @@ class Status {
         return $this->name;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Status
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set modifiedAt
-     *
-     * @param \DateTime $modifiedAt
-     * @return Status
-     */
-    public function setModifiedAt($modifiedAt)
-    {
-        $this->modifiedAt = $modifiedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get modifiedAt
-     *
-     * @return \DateTime 
-     */
-    public function getModifiedAt()
-    {
-        return $this->modifiedAt;
-    }
-
+    
     /**
      * Add customers
      *

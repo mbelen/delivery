@@ -50,10 +50,17 @@ class Variedad
     private $modifiedAt;
 	
     /**
-     * @ORM\ManyToMany(targetEntity="Producto", mappedBy="variedades")
+     * @ORM\ManyToMany(targetEntity="Producto", mappedBy="variedades", cascade = {"persist", "remove"})
      */
 
     protected $productos;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\Backend\CustomerBundle\Entity\Customer", inversedBy="variedades")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     */
+   
+    private $customer;
 	
 
     public function __construct() {
@@ -234,9 +241,11 @@ class Variedad
      */
     public function addProducto(\Backend\CustomerAdminBundle\Entity\Producto $productos)
     {
-        $this->productos[] = $productos;
+        //$this->productos[] = $productos;
 
-        return $this;
+        //return $this;
+         $this->getProductos()->add($productos);
+         $productos->getVariedades()->add($this);
     }
 
     /**
@@ -247,6 +256,7 @@ class Variedad
     public function removeProducto(\Backend\CustomerAdminBundle\Entity\Producto $productos)
     {
         $this->productos->removeElement($productos);
+        
     }
 
     /**
@@ -257,5 +267,28 @@ class Variedad
     public function getProductos()
     {
         return $this->productos;
+    }
+
+    /**
+     * Set customer
+     *
+     * @param \Backend\CustomerBundle\Entity\Customer $customer
+     * @return Variedad
+     */
+    public function setCustomer(\Backend\CustomerBundle\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \Backend\CustomerBundle\Entity\Customer 
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 }

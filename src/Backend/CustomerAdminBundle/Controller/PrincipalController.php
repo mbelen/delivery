@@ -14,7 +14,15 @@ class PrincipalController extends Controller
 
     public function indexAction()
     {
-        return $this->render('BackendCustomerAdminBundle:Principal:index.html.twig');
+         $user = $this->getUser();
+
+        if ($user->getIsComercio() ){
+             return $this->redirect($this->generateUrl('pedido'));
+        }else{
+
+         return $this->render('BackendCustomerAdminBundle:Principal:index.html.twig');
+      }
+
     }
     
     public function accessAction()
@@ -97,6 +105,8 @@ class PrincipalController extends Controller
   
        return $response;
     }
+    
+    
     
     
     

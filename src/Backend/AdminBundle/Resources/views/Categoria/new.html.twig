@@ -38,7 +38,7 @@
 {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendAdminBundle/Resources/public/js/validate_categoria.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/validate_categoria.js'  filter='?uglifyjs2'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

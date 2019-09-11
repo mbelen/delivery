@@ -1,0 +1,200 @@
+{% extends '::customer/backend.html.twig' %}
+
+{% block container %}
+ 
+ 
+ <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Mis Compras
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-shopping-cart"></i> Mis Compras
+                            </li>
+                        </ol>
+                    </div>
+                </div> <!-- row -->
+
+                 <div class="row">
+                    <div class="col-lg-3">
+                        <!--<button type="button" class="btn btn-primary" id="new_button" data-url="{{ path('compra_new') }}">Nuevo</button>-->
+                     </div>
+                     <div class="col-lg-6">
+                          <form id="custom-search-form" class="form-search form-horizontal" action="#">
+                            
+                            <div class="form-group input-group">
+                                <input type="text" class="form-control search-query" id="search-query" placeholder="Buscar" value="{{ search }}">
+                                <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('compra') }}" type="button"><i class="fa fa-search"></i></button></span>
+                            </div>
+                           
+                          </form>
+                     </div>
+                     <div class="col-lg-3">
+                     {% if is_granted("ROLE_VIEWPRODUCTO") %} <button class="btn btn-primary" type="button" id="exportar_button" data-url="{{ path('pedido_exportar') }}" >Exportar </button> {% endif %}
+                     </div> 
+                 </div>
+                    
+
+                 <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th {% if pagination.isSorted('u.id') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Orden', 'u.id') }}</th>
+                                        <th>Fecha</th>
+                                        <th>Vendedor</th>
+										<th>Direccion</th>
+                                        <th>Total</th>
+										<th>Medio de Pago</th>
+										<th>Detalle</th>										
+										<th>Observaciones</th>
+										<th>Estado</th>
+                                        <th>Ultima modificacion</th>
+                                        <th style="width: 90px;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     {% for pedido in pagination %}
+                                       <tr>
+                                                  <td>{{ pedido.id}}</td>
+												  <td>{{ pedido.createdAt |date('d-m-Y h:m:s') }}</td>
+												  <td>{{ pedido.sucursal.getName() |capitalize}}</td>
+												  <td>{{ pedido.direccion.getCalle() ~ " " ~ pedido.direccion.getNumero() ~ " " ~ pedido.direccion.getPiso() }}
+                                                  <td>{{ pedido.total }}</td>
+                                                  <td>{{ pedido.paymethod.getName() | capitalize}}</td>
+												  <td>
+                                                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detalle{{pedido.id}}" title="Ver detalle"><i class="fa fa-list-ol"></i></button>
+                                                      <div class="modal fade " id="detalle{{pedido.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                                                          <div class="modal-dialog modal-lg">
+                                                              <div class="modal-content">
+
+                                                                  <table class="table table-bordered table-hover" style="margin-top: 10px;">
+                                                                      <th style="width: 80px;">Cantidad</th><th>Producto</th><th>Variedades</th><th style="width: 100px;">Precio</th>
+                                                                      {% for d in pedido.getDetalles %}
+                                                                          <tr><td style="text-align: center;">{{ d.getCantidad() }}</td><td>{{ d.getProducto.getName() }}</td><td>{{ d.getVariedades() }}</td><td style="text-align:right;">$ {{ d.getPrecio() }}</td></tr>
+                                                                      {% endfor %}
+                                                                      <tr><td><strong>Total:</strong></td><td></td><td></td><td style="text-align: right">${{ pedido.total }}</td></tr>
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+
+                                                  </td>
+												  
+                                                  <td>{{ pedido.comentarios }}</td>
+
+                                                  <td>
+                                                      {% if pedido.getLastProceso().getStatus.getOrden() == 1 %}
+
+                                                        <span class="label label-info"> {{ pedido.getLastProceso().getStatus.getName() }} </span>
+                                                      {% elseif pedido.getLastProceso().getStatus.getOrden == 2 %}
+                                                          <span class="label label-warning"> {{ pedido.getLastProceso().getStatus.getName() }} </span>
+                                                      {% elseif pedido.getLastProceso().getStatus.getOrden() == 3 %}
+                                                         <span class="label label-primary"> {{ pedido.getLastProceso().getStatus.getName() }} </span>
+                                                      {% elseif pedido.getLastProceso().getStatus.getOrden() == 4 %}
+                                                          <span class="label label-success">{{ pedido.getLastProceso().getStatus.getName() }}</span>
+                                                      {% elseif pedido.getLastProceso().getStatus.getOrden() == 5 %}
+                                                          <span class="label label-danger">{{ pedido.getLastProceso().getStatus.getName() }}</span>
+                                                      {% endif %}
+
+                                                  </td>
+                                                  <td>{{ pedido.getLastProceso().getModifiedAt() |date('d-m-Y h:m:s') }}</td>
+
+                                                  <td>
+                                                  {% if is_granted("ROLE_MODCOMPRA") %}
+                                                  <a data-toggle="tooltip" title="Editar Pedido" href="{{ path('pedido_edit', { 'id': pedido.id }) }}"><i class="fa fa-pencil"></i></a>
+                                                  {% endif %}
+												  {% if is_granted("ROLE_VIEWCOMPRA") %}
+                                                      <a href="#"  title="Ver Pedido Completo" data-toggle="modal" data-target="#completo{{pedido.id}}"><i class="fa fa-eye"></i></a>
+                                                      <div class="modal fade " id="completo{{pedido.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                                                          <div class="modal-dialog modal-lg">
+                                                              <div class="modal-content">
+
+                                                                  <table class="table table-bordered table-hover" style="margin-top: 10px;">
+                                                                      <th style="width: 100px;text-align: center">Estado</th><th style="width: 180px;">Fecha y hora</th><th>Comentarios</th>
+                                                                      {% for p in pedido.getProcesos() %}
+                                                                          <tr><td style="text-align: center;">{{ p.getStatus().getName() }}</td><td>{{ p.getCreatedAt() |date('d-m-Y h:m:s') }}</td><td>{{ p.getComentarios() | raw }}</td></tr>
+                                                                      {% endfor %}
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+												  <a data-toggle="tooltip" title="Imprimir Pedido" href="{{ path('compra_print',{ 'id': pedido.id }) }}"><i class="fa fa-print"></i></a>
+												  {% endif %}
+                                                  {% if is_granted("ROLE_DELCOMPRA") %}
+                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ pedido.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                                  {% endif %}
+                                                  </td>
+                                      </tr>
+                                      
+                                      {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                 </div>   
+                <!-- /.row -->
+
+                <div class="pagination">
+                       {{ knp_pagination_render(pagination) }}
+    
+               </div>
+
+
+
+    
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
+            </div>
+            <div class="modal-body">
+                <p class="error-text">Esta seguro que desea borrar el pedido?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Borrar</button>
+        </div>
+    </div>
+  </div>
+</div>
+    
+    
+    
+    
+    
+    
+    <form action="" id="delete-form" method="post" {{ form_enctype(delete_form) }}>
+    {{ form_widget(delete_form) }}
+    <input type="hidden" value="DELETE" name="_method">
+    
+    </form>
+ 
+ 
+ 
+    
+    
+    {% endblock %}
+  {% block javascripts %}
+  {{ parent() }}
+ 
+{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}      
+  
+{% endblock %}
+
+

@@ -50,7 +50,7 @@
 {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendUserBundle/Resources/public/js/validate_group.js' %}
+{% javascripts '@BackendUserBundle/Resources/public/js/validate_group.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

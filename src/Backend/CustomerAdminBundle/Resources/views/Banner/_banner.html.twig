@@ -1,0 +1,50 @@
+<div class="form-group">
+
+    {{ form_label(form.file,"Imagen (tamaño recomendado: 1900x250 px)", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <div class="col-xs-6">
+        {{ form_widget(form.file, { 'attr': {'class': 'input-xlarge'} }) }}
+        <span id='backend_customeradminbundle_banner_file_errorloc' class="help-block"> {{ form_errors(form.file) }} </span>
+    </div>
+    {% if entity.getWebPath() %}
+        <img src="{{ asset(entity.getWebPath()) }}" width="900"  />
+    {% endif %}
+</div>
+
+<div class="form-group">
+
+    {{ form_label(form.sucursal,"Sucursal", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Sucursal a la cual se asocia al banner"></i>
+    <div class="col-xs-6">
+        {{ form_widget(form.sucursal, { 'attr': {'class': 'form-control'} }) }}
+        <span id='backend_customeradminbundle_banner_sucursal_errorloc' class="help-block"> {{ form_errors(form.sucursal) }} </span>
+    </div>
+</div>
+
+<div class="form-group">
+
+    {{ form_label(form.name,"Nombre", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <div class="col-xs-6">
+        {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+        <span id='backend_customeradminbundle_banner_name_errorloc' class="help-block"> {{ form_errors(form.name) }} </span>
+    </div>
+</div>
+
+<div class="form-group">
+
+    {{ form_label(form.desde,"Desde", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Fecha desde la que se publica"></i>
+    <div class="col-xs-6">
+        {{ form_widget(form.desde) }}
+        <span id='backend_customeradminbundle_banner_desde_errorloc' class="help-block"> {{ form_errors(form.desde) }} </span>
+    </div>
+</div>
+
+<div class="form-group">
+
+    {{ form_label(form.hasta,"Hasta", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Fecha hasta"></i>
+    <div class="col-xs-6">
+        {{ form_widget(form.hasta) }}
+        <span id='backend_customeradminbundle_banner_hasta_errorloc' class="help-block"> {{ form_errors(form.hasta) }} </span>
+    </div>
+</div>

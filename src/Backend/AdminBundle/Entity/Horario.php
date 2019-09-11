@@ -22,6 +22,18 @@ class Horario
      */
     
 	private $cerrado;
+  
+    /**
+     * @ORM\Column(name="open_all", type="boolean",nullable=true)
+     */
+    
+	private $openAll;
+
+   /**
+     * @ORM\Column(name="horario_partido", type="boolean",nullable=true)
+     */
+  
+  private $horarioPartido;
 
     /**
      * @ORM\Column(name="desde", type="string", length=100,nullable=true)
@@ -34,7 +46,19 @@ class Horario
      */
     
 	private $hasta;
-	
+
+    /**
+     * @ORM\Column(name="desde_tarde", type="string", length=100,nullable=true)
+     */
+
+    private $desdeT;
+
+    /**
+     * @ORM\Column(name="hasta_tarde", type="string", length=100,nullable=true)
+     */
+
+    private $hastaT;
+
     /**
     * @ORM\ManyToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Sucursal", mappedBy="horarios")
     */
@@ -61,8 +85,10 @@ class Horario
     public function __construct()
     {
         $this->sucursales = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->createdAt = new \DateTime('now');
-		
+		    $this->createdAt = new \DateTime('now');
+		    $this->horario_partido = false;
+        $this->openAll = false;
+        
     }
 
     public function __toString()
@@ -273,5 +299,97 @@ class Horario
     public function removeSucursale(\Backend\CustomerAdminBundle\Entity\Sucursal $sucursales)
     {
         $this->sucursales->removeElement($sucursales);
+    }
+
+    /**
+     * Set desdeT
+     *
+     * @param string $desdeT
+     * @return Horario
+     */
+    public function setDesdeT($desdeT)
+    {
+        $this->desdeT = $desdeT;
+
+        return $this;
+    }
+
+    /**
+     * Get desdeT
+     *
+     * @return string 
+     */
+    public function getDesdeT()
+    {
+        return $this->desdeT;
+    }
+
+    /**
+     * Set hastaT
+     *
+     * @param string $hastaT
+     * @return Horario
+     */
+    public function setHastaT($hastaT)
+    {
+        $this->hastaT = $hastaT;
+
+        return $this;
+    }
+
+    /**
+     * Get hastaT
+     *
+     * @return string 
+     */
+    public function getHastaT()
+    {
+        return $this->hastaT;
+    }
+
+    /**
+     * Set openAll
+     *
+     * @param boolean $openAll
+     * @return Horario
+     */
+    public function setOpenAll($openAll)
+    {
+        $this->openAll = $openAll;
+
+        return $this;
+    }
+
+    /**
+     * Get openAll
+     *
+     * @return boolean 
+     */
+    public function getOpenAll()
+    {
+        return $this->openAll;
+    }
+
+    /**
+     * Set horarioPartido
+     *
+     * @param boolean $horarioPartido
+     * @return Horario
+     */
+    public function setHorarioPartido($horarioPartido)
+    {
+        $this->horarioPartido = $horarioPartido;
+
+        return $this;
+    }
+
+    /**
+     * Get horarioPartido
+     *
+     * @return boolean 
+     */
+    public function getHorarioPartido()
+    {
+        return $this->horarioPartido;
     }
 }

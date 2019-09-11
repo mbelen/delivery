@@ -51,7 +51,9 @@ forgot_pass:
 
 change_pass:
     pattern:  /change_pass/{codigo}
-    defaults: { _controller: "BackendUserBundle:User:changePassword", codigo: '' }    
+    defaults: { _controller: "BackendUserBundle:User:changePassword", codigo: '' }
+
+        
     
 access_denied:
     pattern: /panel/caes
@@ -64,3 +66,6 @@ principal:
 customer_access_denied:
     pattern: /access_denied
     defaults: { _controller: BackendCustomerAdminBundle:Principal:access }
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"    

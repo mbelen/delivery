@@ -23,13 +23,7 @@ backend_subcategoria:
     resource: "@BackendAdminBundle/Resources/config/routing/subcategoria.yml"
     prefix:   /subcategoria
 
-backend_producto:
-    resource: "@BackendAdminBundle/Resources/config/routing/producto.yml"
-    prefix:   /producto        
 
-backend_horario:
-    resource: "@BackendAdminBundle/Resources/config/routing/horario.yml"
-    prefix:   /horario
         
 backend_paymethod:
     resource: "@BackendAdminBundle/Resources/config/routing/paymethod.yml"

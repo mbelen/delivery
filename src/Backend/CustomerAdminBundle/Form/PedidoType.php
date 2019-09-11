@@ -9,7 +9,7 @@ use Backend\AdminBundle\Form\EventListener\CategoriaSubscriber;
 use Backend\AdminBundle\Form\EventListener\SubcategoriaSubscriber;
 use Doctrine\ORM\EntityRepository;
 
-class ProductoType extends AbstractType
+class PedidoType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -18,10 +18,8 @@ class ProductoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('code')
-            ->add('file', 'file', array("required" => false))
-			->add('sucursales', 'entity',array(
+            ->add('comentarios')
+			->add('sucursal', 'entity',array(
             'class'=>'BackendCustomerAdminBundle:Sucursal',
             'query_builder' => function(EntityRepository $er) {
                 return $er->createQueryBuilder("u")
@@ -29,16 +27,9 @@ class ProductoType extends AbstractType
                          ->where("u.is_active = true")
                          ->orderBy('u.name', 'ASC');
                       
-            },'mapped'=>true,'required'=>true,'multiple'=>true))
-			->add('variedades', 'entity',array(
-            'class'=>'BackendCustomerAdminBundle:Variedad',
-            'query_builder' => function(EntityRepository $er) {
-                return $er->createQueryBuilder("u")
-                         ->select("u")
-                         //->where("u.is_active = true")
-                         ->orderBy('u.name', 'ASC');
-                      
-            },'mapped'=>true,'required'=>true,'multiple'=>true))			
+            },'mapped'=>true,'required'=>true,'multiple'=>false))
+
+
             /*
 			->add('sucursales', 'collection',
 		            array(
@@ -50,22 +41,9 @@ class ProductoType extends AbstractType
 		            )
 		        )
 			*/
-			->add('precio')
-            ->add('alwaysAvailable')
-            ->add('isActive','checkbox',array(
-             'value'=>1,
-             'required'=>false
-            ))	
-			//->add('isActive')	
-            ->add('description')
+
             ;
-            
-          
-           $categoriaSubscriber = new CategoriaSubscriber($builder->getFormFactory());
-		   $builder->addEventSubscriber($categoriaSubscriber); 
-           
-           $subcategoriaSubscriber = new SubcategoriaSubscriber($builder->getFormFactory());
-    	   $builder->addEventSubscriber($subcategoriaSubscriber);  
+
             
     }
     
@@ -75,7 +53,7 @@ class ProductoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Backend\CustomerAdminBundle\Entity\Producto'
+            'data_class' => 'Backend\CustomerAdminBundle\Entity\Pedido'
         ));
     }
 

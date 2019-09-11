@@ -94,6 +94,8 @@ class LoadGroupData extends AbstractFixture implements OrderedFixtureInterface
         $groupAdmin->addAcceso($this->getReference('del-variedad'));
         $groupAdmin->addAcceso($this->getReference('view-variedad')); 
 
+
+
         
         $manager->persist($groupAdmin);
         $manager->flush();
@@ -101,13 +103,16 @@ class LoadGroupData extends AbstractFixture implements OrderedFixtureInterface
         
         //aun no tiene roles asignados
         $groupAdmin1 = new Group();
-        $groupAdmin1->setName('Visitante');
-        $groupAdmin1->setRole('ROLE_VISITOR');
+        $groupAdmin1->setName('Extra Comercio');
+        $groupAdmin1->setRole('ROLE_EXTRACOMERCIO');
+        $groupAdmin1->addAcceso($this->getReference('importar-producto'));
+        $groupAdmin1->addAcceso($this->getReference('edicion-producto'));
+
         
         
         $manager->persist($groupAdmin1);
         $manager->flush();
-        $this->addReference('visitor-group', $groupAdmin1);
+        $this->addReference('extracomercio-group', $groupAdmin1);
 
         
         
@@ -136,10 +141,18 @@ class LoadGroupData extends AbstractFixture implements OrderedFixtureInterface
         $groupAdmin2->addAcceso($this->getReference('del-favorito'));
         $groupAdmin2->addAcceso($this->getReference('view-compra'));
         $groupAdmin2->addAcceso($this->getReference('view-venta'));
+        $groupAdmin2->addAcceso($this->getReference('add-horario'));
+        $groupAdmin2->addAcceso($this->getReference('mod-horario'));
+        $groupAdmin2->addAcceso($this->getReference('del-horario'));
+        $groupAdmin2->addAcceso($this->getReference('view-horario'));
+        $groupAdmin2->addAcceso($this->getReference('add-region'));
+        $groupAdmin2->addAcceso($this->getReference('mod-region'));
+        $groupAdmin2->addAcceso($this->getReference('del-region'));
+        $groupAdmin2->addAcceso($this->getReference('view-region')); 
         
         $manager->persist($groupAdmin2);
         $manager->flush();
-        $this->addReference('comercio-group', $groupAdmin2);
+        $this->addReference('comercio-group', $groupAdmin2); 
         
         $groupAdmin3 = new Group();
         $groupAdmin3->setName('Cliente');

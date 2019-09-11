@@ -1,0 +1,57 @@
+{% extends '::customer/backend.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/themes/proton/style.min.css')}}" />
+    {% stylesheets '@BackendCustomerAdminBundle/Resources/public/css/banner.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block container -%}
+    <h3>Editar Banner</h3>
+
+
+    <div class="well">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane active in" id="home">
+                <form class="form-horizontal" id="tab" name="tab" method="post" novalidate="true" {{ form_enctype(form) }}   action="{{ path('banner_update', { 'id': entity.id }) }}" >
+                    {{ form_errors(form) }}
+
+                    {% include 'BackendCustomerAdminBundle:Banner:_banner.html.twig' %}
+
+
+                    {{ form_rest(form) }}
+
+                    <div class="form-group">
+                        <!-- Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i>Actualizar</button>
+                            <button type="button" class="btn btn-inverse" data-url="{{ path('banner') }}" ><i class="fa fa-chevron-left"></i> Volver</button>
+                            {% if is_granted("ROLE_DELPRODUCTO") %}
+
+                                <a href="#myModal" class="btn btn-danger confirm-delete" role="button" data-toggle="modal" data-id="{{ entity.id }}" ><i class="fa fa-trashe"></i>Borrar</a>
+
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        Shadowbox.init();
+    </script>
+    <script type="text/javascript" src="{{ asset('js/jstree.min.js') }}"></script>
+    {% javascripts '@BackendCustomerAdminBundle/Resources/public/js/validate_sucursal.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

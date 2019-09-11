@@ -1,0 +1,240 @@
+{% extends '::customer/backend.html.twig' %}
+
+{% block container %}
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Listado de Promociones
+            </h1>
+            <ol class="breadcrumb">
+                <li>
+                    <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-shopping-cart"></i> Listado de Promociones
+                </li>
+            </ol>
+        </div>
+    </div> <!-- row -->
+
+    <div class="row">
+        <div class="col-lg-2">
+            <button type="button" class="btn btn-primary" id="new_button" data-url="{{ path('promocion_new') }}">Nuevo</button>
+        </div>
+        <div class="col-lg-5">
+            <form id="custom-search-form" class="form-search form-horizontal pull-right" action="#">
+
+                <div class="form-group input-group">
+                    <input type="text" class="form-control search-query" id="search-query" placeholder="Buscar" value="{{ search }}">
+                    <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('promocion') }}" type="button"><i class="fa fa-search"></i></button></span>
+                </div>
+
+            </form>
+        </div>
+        <!--
+        <div class="col-lg-2">
+            {% if is_granted("ROLE_VIEWPRODUCTO") %} <button class="btn btn-primary" type="button" id="exportar_button" data-url="{{ path('promocion_exportar') }}" >Exportar </button> {% endif %}
+        </div>
+        -->
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th {% if pagination.isSorted('u.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Nombre', 'u.name') }}</th>
+                        <th>Desde</th>
+                        <th>Hasta</th>
+                        <th>Tipo</th>
+                        <th>Detalle</th>
+                        <th>Terminos</th>
+                        <th>Producto/Categoría</th>
+                        <th>Estado</th>
+                        <th>Sucursales</th>
+                        <th style="width: 86px;">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for promo in pagination %}
+                        <tr>
+                            <td>{{ promo.name |capitalize }}</td>
+                            <td>{{ promo.desde | date("d/m/Y H:i:s")}}</td>
+                            <td class="hasta" data-id="{{ promo.id }}" data-hasta="{{ promo.hasta |date("d/m/Y H:i:s") }}" data-status ="{{promo.status}}" data-url = "{{ path('promocion_status') }}">{{ promo.hasta |date("d/m/Y H:i:s")}}</td>
+                            <td>{% if promo.type == 1 %}
+                                Porcentaje
+                                {% else %}
+                                Unidades
+                                {% endif %}
+                            </td>
+                            <td>{% if promo.type == 1 %}
+                            {{ promo.porcentaje }}
+                            {% else %}
+                            {{ promo.unidad1 ~"x"~ promo.unidad2 }}
+                            {% endif %}
+                            </td>
+                            <td>{{ promo.terms }}</td>
+                            <td>
+                            {% if promo.getSubcategorias() is defined %}
+                            {% for subcategoria in promo.getSubcategorias() %}
+                                {{ subcategoria.getName() }}
+                                {% endfor %}
+                            {% endif %}
+                            {% if  promo.getProductos() is defined %}
+                               {% for prod in promo.getProductos() %}
+                               {{ prod.getName() }}
+                               {% endfor %}
+                            {% endif %}
+                            </td>
+
+                            <!--
+                            <td>
+
+
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#horarios{{promo.id}}">Ver Variedades</button>
+                                    <div class="modal fade " id="horarios{{promo.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                                        <div class="modal-dialog modal-lg">
+
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Variedades del producto</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table align="center">
+                                                        <tr><th width="100px">Código</th><th width="200px";>Nombre</th><th width="300px">Descripcion</th></tr>
+
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                            </td>
+                            -->
+                            <td id="status{{ promo.id }}">
+                                {% if promo.getStatus() == 1 %}
+                                   <span class="label label-success"> Vigente</span>
+                                {% elseif promo.getStatus() == 2 %}
+                                    <span class="label label-info"> Pausada</span>
+                                {% elseif promo.getStatus() == 3 %}
+                                    <span class="label label-default"> Finalizada</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for sucursal in promo.getSucursales() %}
+                                    {{ sucursal.getName() }} <br/>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if is_granted("ROLE_MODPRODUCTO") %}
+                                    <a href="{{ path('promocion_edit', { 'id': promo.id }) }}"><i class="fa fa-pencil"></i></a>
+                                {% endif %}
+                                {% if is_granted("ROLE_MODPRODUCTO") %}
+                                    {% if promo.getStatus() == 1 %}
+                                        <a href="#"  class="btn confirm-status" data-toggle="modal" data-id={{ promo.id }} data-target="#myModal" title="Pausar Promocion"><i class="fa fa-pause"></i></a>
+                                    {% endif %}
+                                        {% if promo.getStatus() == 2 %}
+                                        <a href="#"  class="btn confirm-status" data-toggle="modal" data-id={{ promo.id }} data-target="#myModal" title="Reactivar Promocion"><i class="fa fa-play"></i></a>
+                                    {% endif %}
+                                  <!--  <a href="#"><i class="fa fa-pause"></i></a> -->
+                                {% endif %}
+                                {% if is_granted("ROLE_DELPRODUCTO") %}
+                                    <!--<a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ promo.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>-->
+                                {% endif %}
+
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Modificar Estado</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="control-group">
+
+                        <div class="status">
+                            <p class="error-text">Seleccionar estado</p>
+                            <select name="status" id="status">
+                                    <option value="1">Vigente</option>
+                                    <option value="2">Pausada</option>
+                                    <option value="3">Finalizada</option>
+                            </select>
+                            <br/>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-warning" data-id="0"  data-url="{{ path('promocion_status') }}">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="error-text">Esta seguro que desea borrar el producto?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="" id="delete-form" method="post" {{ form_enctype(delete_form) }}>
+        {{ form_widget(delete_form) }}
+        <input type="hidden" value="DELETE" name="_method">
+
+    </form>
+
+{% endblock %}
+  {% block javascripts %}
+      {{ parent() }}
+
+      {% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2'%}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+      {% javascripts '@BackendCustomerAdminBundle/Resources/public/js/cambiar_promo_status.js' filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+      {% javascripts '@BackendCustomerAdminBundle/Resources/public/js/check_vigencia.js' filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+      {% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+
+  {% endblock %}
+
+

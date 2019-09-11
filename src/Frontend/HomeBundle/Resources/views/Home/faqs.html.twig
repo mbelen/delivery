@@ -1,0 +1,129 @@
+{% extends '::front/base_front.html.twig' %}
+
+{% block container %}
+
+<input type="hidden" name="check" id="check" value="{{ path('frontend_checkbarrio') }}">
+	<section>
+		<div class="container">
+			<div class="row">
+					
+					<div class="recommended_items"><!--recommended_items-->
+						<h2 class="title text-center">Faqs</h2>
+					
+          
+          	<div class="col-sm-12 ">
+                    <div class="bs-example">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="faqs">¿Qué es Zona Delivery?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <p class="faqs">Somos una plataforma que centraliza pedidos de delivery online, conectando a miles de usuarios con una red de más de 1000 comercios de más de 50 rubros que cuentan con servicio de entregas a domicilio.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">¿Cómo funciona Zona Delivery?</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p class="faqs">Permitinos saber donde estás o ingresá la dirección donde querés recibir el pedido. Luego seleccioná el rubro de tu preferencia, al instante te mostraremos todo lo que tenés cerca y podrás seleccionar el comercio de tu preferencia. 
+                      Clickeá y podrás recorrer el catalogo de productos a tu disposición, agregar a tu pedido y recibirlos tranquilamente en la dirección elegida.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="faqs panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">¿Tiene costo adicional realizar un pedido?</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p class="faqs">El servicio de Zona Delivery no tiene costo adicional para realizar pedidos a través de la web o de nuestas apps.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">¿Puedo realizar un pedido a multiples comercios?</a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p class="faqs">No te dejamos sin el postre, realizar pedidos a más de un comercio es posible. El servicio de Zona Delivery te permite seleccionar productos de distintos comercios al mismo tiempo. </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">¿Puedo realizar un pedido fuera del horario de atencion del comercio?</a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p class="faqs">Al momento de listar los comercios cercanos agregamos una leyenda que te permitirá saber si el comercio acepta pedidos fuera del horario de atención.</p>
+                </div>
+            </div>
+        </div>
+         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">¿Cuáles son los medios de pago habilitados?</a>
+                </h4>
+            </div>
+            <div id="collapseSix" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p class="faqs">Zona Delivery no media en el pago, por lo tanto los medios de pago que podrás utilizar serán los que habilite el comercio, los cuáles se listan en el detalle del mismo.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="faqs panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">¿Debo estar registrado para realizar un pedido?</a>
+                </h4>
+            </div>
+            <div id="collapseSix" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p class="faqs">Para poder completar el proceso de pedido deberás estar registrado en Zona Delivery.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="horarioModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+       <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           <h4 class="modal-title" id="myModalLabel">Horarios de Atención</h4>  
+       </div>
+       <div class="modal-body">
+            
+       </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+  {% block javascripts %}
+  {{ parent()}}
+
+ {% endblock %} 

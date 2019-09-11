@@ -18,21 +18,31 @@ class DireccionController extends Controller
 
      public function generateSQL($search){
 		 
-		$user=$this->getUser(); 
+		    $user=$this->getUser(); 
      
         $dql="SELECT u FROM BackendCustomerAdminBundle:Direccion u JOIN u.customers c where c.id = ".$user->getId() ;
         $search=mb_convert_case($search,MB_CASE_LOWER);
         
        
-        if ($search)
+        if ($search) {
           
-		  $dql.=" where u.calle like '%$search%' ";
+		     $dql.=" and u.calle like '%$search%' ";
+         }
           
           $dql .=" order by u.calle"; 
         
         return $dql;
      
      }
+ 
+	 public function getAddressByUser(){
+		 
+		 return $this->generateSQL("")
+            ->getQuery()
+            ->getResult();		 
+	}	
+     
+     
 
     /**
      * Lists all Direcciones entities.
@@ -68,35 +78,69 @@ class DireccionController extends Controller
      * Creates a new Direccion entity.
      *
      */
-    public function createAction(Request $request)
+     
+    private function oneDefault(){
+         
+       	$customerId = $this->getUser()->getId();
+        $dql="SELECT u FROM BackendCustomerAdminBundle:Direccion u JOIN u.customers c where c.id = ".$customerId ;
+   		  $dql.=" and u.isDefault = 1 ";
+          
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery($dql);
+        
+        $resultados = $query->getResult();
+        foreach($resultados as $r){
+            $r->setIsDefault(false);
+            $em->persist($r);
+            $em->flush();
+        }  
+    
+    } 
+     
+    public function createAction(Request $request, $type)
+
     {
         if ( $this->get('security.context')->isGranted('ROLE_ADDDIRECCION')) {
         $entity  = new Direccion();
         $form = $this->createForm(new DireccionType(), $entity);
         $form->bind($request);
-		$customerId = $this->getUser()->getId();
-		$em = $this->getDoctrine()->getManager();
-		$customer = $em->getRepository('BackendCustomerBundle:Customer')->find($customerId);
+        $addSucursal=false; 
+    		$customerId = $this->getUser()->getId();
+    		$em = $this->getDoctrine()->getManager();
+    		$customer = $em->getRepository('BackendCustomerBundle:Customer')->find($customerId);
 		
          
         if ($form->isValid()) {
-            
-			$entity->addCustomer($customer);
+            if ($entity->getIsDefault()){
+              $this->oneDefault(); //quito el default a las demas direcciones
+            }
+			      $entity->addCustomer($customer);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success' , 'Se ha agregado una nueva direccion.');
-            return $this->redirect($this->generateUrl('direccion_edit', array('id' => $entity->getId())));
+            if ($type){
+                return $this->redirect($this->generateUrl('direccion_edit', array('id' => $entity->getId())));
+            }else{
+                $addSucursal = true;
+            }
+            
+            
         }
-                
+        
         return $this->render('BackendCustomerAdminBundle:Direccion:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form'   => $form->createView(),
+            'type' => $type,
+            'addSucursal'=>$addSucursal,
+            'direccionId'=>$entity->getId()
            
-        ));
+        )); 
       }
       else
        throw new AccessDeniedException();
     }
+
+     
 
     /**
     * Creates a form to create a Cliente entity.
@@ -118,20 +162,23 @@ class DireccionController extends Controller
     }
 
     /**
-     * Displays a form to create a new Barrio entity.
+     * Displays a form to create a new direccion entity.
      *
      */
-    public function newAction()
+    public function newAction(Request $request, $type)
     {
        if ( $this->get('security.context')->isGranted('ROLE_ADDDIRECCION')) {
         $entity = new Direccion();
         $form   = $this->createForm(new DireccionType(), $entity);
-
+		    $addSucursal = false;
         return $this->render('BackendCustomerAdminBundle:Direccion:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form'   => $form->createView(),
+            'type' => $type,
+            'addSucursal'=>$addSucursal
             
         ));
+		 
        }
        else
           throw new AccessDeniedException();
@@ -152,7 +199,7 @@ class DireccionController extends Controller
         if (!$entity) {
             
              $this->get('session')->getFlashBag()->add('error' , 'No se ha encontrado la direccion.');
-             return $this->redirect($this->generateUrl('barrio'));
+             return $this->redirect($this->generateUrl('direccion'));
         }
 
         $editForm = $this->createForm(new DireccionType(), $entity);
@@ -176,7 +223,7 @@ class DireccionController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Barrio $entity)
+    private function createEditForm(Direccion $entity)
     {
         $form = $this->createForm(new DireccionType(), $entity, array(
             'action' => $this->generateUrl('direccion_update', array('id' => $entity->getId())),
@@ -188,7 +235,7 @@ class DireccionController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Barrio entity.
+     * Edits an existing Direccion entity.
      *
      */
     public function updateAction(Request $request, $id)
@@ -200,7 +247,7 @@ class DireccionController extends Controller
 
         if (!$entity) {
              $this->get('session')->getFlashBag()->add('error' , 'No se ha encontrado la direccion.');
-             return $this->redirect($this->generateUrl('barrio'));
+             return $this->redirect($this->generateUrl('direccion'));
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -208,10 +255,14 @@ class DireccionController extends Controller
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
+        
+            if ($entity->getIsDefault()){
+              $this->oneDefault(); //quito el default a las demas direcciones
+            }
             $em->persist($entity);
             $em->flush();
              $this->get('session')->getFlashBag()->add('success' , 'Se han actualizado los datos de la direccion .');
-            return $this->redirect($this->generateUrl('barrio_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('direccion_edit', array('id' => $id)));
         }
 
         return $this->render('BackendCustomerAdminBundle:Direccion:edit.html.twig', array(
@@ -261,7 +312,7 @@ class DireccionController extends Controller
     }
 
     /**
-     * Creates a form to delete a Barrio entity by id.
+     * Creates a form to delete a Direccion entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -333,6 +384,45 @@ class DireccionController extends Controller
         else{
            throw new AccessDeniedException(); 
         }
+    }
+    
+    public function getBarrioByZonaAction(Request $request)
+    {
+     
+      $zona_id=$request->request->get("zona");
+      $barrios = $this->getDoctrine()->getRepository('BackendAdminBundle:Barrio')->findBy(array("zona"=>$zona_id));
+     
+      $resultado=array();
+      foreach($barrios as $v){
+            $r=array();
+            $r["id"]=$v->getId();
+            $r["text"]=$v->getName();
+            $resultado[] = $r;
+       }
+       $response = new Response(json_encode($resultado));
+        
+       $response->headers->set('Content-Type', 'application/json');
+  
+       return $response;
+    }
+    
+    public function getAllAction(Request $request){
+       $dql=$this->generateSQL(false);
+       $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery($dql);
+       $direcciones = $query->getResult();
+       $resultado=array();
+      foreach($direcciones as $d){
+            $r=array();
+            $r["id"]=$d->getId();
+            $r["text"]=$d->__toString();
+            $resultado[] = $r;
+       }
+       $response = new Response(json_encode($resultado));
+        
+       $response->headers->set('Content-Type', 'application/json');
+  
+       return $response;
     }
         
     

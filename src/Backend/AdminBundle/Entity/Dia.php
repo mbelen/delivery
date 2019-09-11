@@ -21,11 +21,29 @@ class Dia
      * @ORM\Column(name="name", type="string", length=100,nullable=true)
      */
     private $name;
-	
+
+    /**
+     * @ORM\Column(name="short", type="string", length=100,nullable=true)
+     */
+    private $short;
+    
+    /**
+     * @ORM\Column(name="nro", type="integer")
+     */
+    private $nro;
+
     /**
     * @ORM\OneToMany(targetEntity="Horario", mappedBy="dia")
     */
    private $horarios;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Promocion", mappedBy="dias")
+     */
+
+    private $promociones;
+
+
 
     /**
      * Constructor
@@ -104,5 +122,84 @@ class Dia
     public function getHorarios()
     {
         return $this->horarios;
+    }
+
+    /**
+     * Set short
+     *
+     * @param string $short
+     * @return Dia
+     */
+    public function setShort($short)
+    {
+        $this->short = $short;
+
+        return $this;
+    }
+
+    /**
+     * Get short
+     *
+     * @return string 
+     */
+    public function getShort()
+    {
+        return $this->short;
+    }
+
+    /**
+     * Set nro
+     *
+     * @param integer $nro
+     * @return Dia
+     */
+    public function setNro($nro)
+    {
+        $this->nro = $nro;
+
+        return $this;
+    }
+
+    /**
+     * Get nro
+     *
+     * @return integer 
+     */
+    public function getNro()
+    {
+        return $this->nro;
+    }
+
+    /**
+     * Add promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     * @return Dia
+     */
+    public function addPromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones[] = $promociones;
+
+        return $this;
+    }
+
+    /**
+     * Remove promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     */
+    public function removePromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones->removeElement($promociones);
+    }
+
+    /**
+     * Get promociones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPromociones()
+    {
+        return $this->promociones;
     }
 }

@@ -30,13 +30,7 @@ class LoadSeteoData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
         $this->addReference('empresa', $seteoAdmin2);
         
-        $seteoAdmin3 = new Seteo();
-        $seteoAdmin3->setName('cercania');
-        $seteoAdmin3->setValue('10');
-
-        $manager->persist($seteoAdmin3);
-        $manager->flush();
-        $this->addReference('cercania', $seteoAdmin3);
+        
         
     }
 

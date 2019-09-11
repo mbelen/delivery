@@ -2,7 +2,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="{{ path('principal') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="{{ path('principal') }}"><i class="fa fa-fw fa-dashboard"></i> Principal</a>
                     </li>
                     {% if is_granted('ROLE_VIEWUSER') %}
                     <li>
@@ -11,22 +11,14 @@
                     {% endif %}
                     {% if is_granted('ROLE_VIEWCUSTOMER') %}
                     <li>
-                        <a href="{{ path('customer') }}"><i class="fa fa-users"></i> Clientes</a>
+                        <a href="{{ path('customer') }}"><i class="fa fa-male"></i> Clientes</a>
                     </li>
                     {% endif %}
-                    {% if is_granted('ROLE_VIEWPRODUCTO') %}
-                    <li>
-                        <a href="{{ path('admin_producto') }}"><i class="fa fa-file"></i> Productos</a>
-                    </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_VIEWCUSTOMER') %}
-                    <li>
-                        <a href="{{ path('paymethod') }}"><i class="fa fa-money"></i> Medios de Pago</a>
-                    </li>
-                    {% endif %}
+                    
+                    
 					
                     {% if  is_granted('ROLE_SETEO') or is_granted('ROLE_ADMIN') or  is_granted('ROLE_VIEWZONA')
-                        or is_granted('ROLE_VIEWBARRIO')
+                        or is_granted('ROLE_VIEWBARRIO') or is_granted('ROLE_VIEWMETODOPAGO')
                     %}
                       <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Configuración <i class="fa fa-fw fa-caret-down"></i></a>
@@ -62,9 +54,17 @@
                                 <a href="{{ path('subcategoria') }}"> Subcategorías</a>
                             </li>
                             {% endif %}
+                            {% if is_granted('ROLE_VIEWMETODOPAGO') %}
+                            <li>
+                                <a href="{{ path('paymethod') }}"> Medios de Pago</a>
+                            </li>
+                            {%endif%}
+                            
                         </ul>
                     </li>
                      {% endif %}
-                     
+                     <li >
+                                <a href="{{ path('frontend_homepage')}}"><i class="fa fa-thumbs-up"></i>Volver al sitio </a>
+                            </li> 
                 </ul>
             </div>

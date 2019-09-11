@@ -12,8 +12,8 @@ $(document).ready(function() {
 			 messages: {
             "backend_adminbundle_paymethod[name]": {
             required: "Ingrese el nombre del medio de pago",
-            maxlength: jQuery.format("Máximo {0} carácteres!"),
-            minlength: jQuery.format("Mínimo {0} carácteres!")
+            maxlength: jQuery.validator.format("Máximo {0} carácteres!"),
+            minlength: jQuery.validator.format("Mínimo {0} carácteres!")
             },
       },
       

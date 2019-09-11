@@ -8,7 +8,14 @@
         </div>
 </div>
 
+<div class="form-group">
 
+    {{ form_label(form.code,"Codigo", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <div class="col-xs-6">
+        {{ form_widget(form.code, { 'attr': {'class': 'form-control'} }) }}
+        <span id='backend_adminbundle_categoria_codigo_errorloc' class="help-block"> {{ form_errors(form.code) }} </span>
+    </div>
+</div>
 
 
 <div class="form-group">

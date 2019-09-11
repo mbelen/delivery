@@ -10,7 +10,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-globe"></i> Listado de Categorías
@@ -46,6 +46,7 @@
                                 <thead>
                                     <tr>
                                         <th {% if pagination.isSorted('u.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Nombre', 'u.name') }}</th>
+                                        <th>Codigo</th>
                                         <th>Imagen</th>
                                         <th>Restringida</th>
                                         <th style="width: 36px;">Acciones</th>
@@ -55,6 +56,7 @@
                                      {% for categoria in pagination %}
                                        <tr>
                                                   <td>{{ categoria.name |capitalize}}</td>
+                                                  <td>{{ categoria.code }}</td>
                                                   <td>
                                                   {% if categoria.getWebPath() %}
                                                   <img src="{{ asset(categoria.getWebPath()) }}" width="100" height="100" />
@@ -129,10 +131,10 @@
   {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}      
   

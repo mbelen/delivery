@@ -15,6 +15,8 @@ class VariedadType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $customerId = $options['customerId'];
+       
         $builder
             ->add('name')
             ->add('code')
@@ -22,12 +24,11 @@ class VariedadType extends AbstractType
 	        ->add('description')
             ->add('productos','entity',array(
             'class'=>'BackendCustomerAdminBundle:Producto',
-            'query_builder' => function(EntityRepository $er) {
-                return $er->createQueryBuilder("u")
-                         ->select("u")
-                         //->where("u.is_active = true")
-                         ->orderBy('u.name', 'ASC');
-                      
+            'query_builder'=>function(EntityRepository $er ) use ( $customerId ) {
+                  return $er->createQueryBuilder('u')
+                  ->innerjoin("u.sucursales", "s")
+                  ->where('s.customer = '.$customerId)
+                  ->orderBy('u.name', 'ASC');
             },'mapped'=>true,'required'=>true,'multiple'=>true))	
 			;
          
@@ -41,7 +42,8 @@ class VariedadType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Backend\CustomerAdminBundle\Entity\Variedad'
+            'data_class' => 'Backend\CustomerAdminBundle\Entity\Variedad',
+            'customerId' => null
         ));
     }
 

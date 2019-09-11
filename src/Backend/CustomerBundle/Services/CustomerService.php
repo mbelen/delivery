@@ -99,6 +99,7 @@ class CustomerService
          $user = new Customer();
          $grupo=$this->em->getRepository('BackendUserBundle:Group')->findOneByRole($usuario["role"]);
          
+         
           
            $user->setEmail($usuario["email"]);
            $user->setPassword($usuario["password"]);
@@ -107,6 +108,7 @@ class CustomerService
            $user->setIsComercio($usuario["isComercio"]);
            $user->setIsActive(true);
            $user->setIsDelete(false);
+           $user->setStatus($usuario["status"]);
            $codigo=md5($usuario["email"].rand().date("now"));
            $user->setCodigo($codigo);
            $user->addGroup($grupo);

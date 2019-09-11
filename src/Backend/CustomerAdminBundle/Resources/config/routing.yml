@@ -14,6 +14,7 @@ customer_profile:
 frontend_login:        
     pattern:  /loginFront
     defaults: { _controller: "BackendCustomerAdminBundle:Principal:loginFront" }
+    
 
 customer_login:
     pattern: /login
@@ -27,7 +28,11 @@ customer_logout:
 
 customer_direccion:
     resource: "@BackendCustomerAdminBundle/Resources/config/routing/direccion.yml"
-    prefix:   /direccion    
+    prefix:   /direccion
+
+customer_favorito:
+    resource: "@BackendCustomerAdminBundle/Resources/config/routing/favorito.yml"
+    prefix:   /favorito        
 
 customer_sucursal:
     resource: "@BackendCustomerAdminBundle/Resources/config/routing/sucursal.yml"
@@ -35,11 +40,7 @@ customer_sucursal:
 
 customer_producto:
     resource: "@BackendCustomerAdminBundle/Resources/config/routing/producto.yml"
-    prefix:   /producto    
-   
-customer_horario:
-    resource: "@BackendCustomerAdminBundle/Resources/config/routing/horario.yml"
-    prefix:   /horario  
+    prefix:   /producto
 
 customer_variedad:
     resource: "@BackendCustomerAdminBundle/Resources/config/routing/variedad.yml"
@@ -49,4 +50,18 @@ customer_pedido:
     resource: "@BackendCustomerAdminBundle/Resources/config/routing/pedido.yml"
     prefix:   /pedido  
 
+customer_compra:
+    resource: "@BackendCustomerAdminBundle/Resources/config/routing/compra.yml"
+    prefix:   /compra
             
+customer_promocion:
+    resource: "@BackendCustomerAdminBundle/Resources/config/routing/promocion.yml"
+    prefix:   /promocion
+
+customer_banner:
+    resource: "@BackendCustomerAdminBundle/Resources/config/routing/banner.yml"
+    prefix:   /banner
+
+customer_region:
+    resource: "@BackendCustomerAdminBundle/Resources/config/routing/region.yml"
+    prefix:   /region

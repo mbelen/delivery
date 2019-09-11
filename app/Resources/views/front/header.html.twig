@@ -1,194 +1,4 @@
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#page-top"><img class="logo" src="{{ asset("images/home/logo.png")}}" alt="" /></a>    
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>                              
-                    
-                    <li class="page-scroll {%if not app.session.get("login")  %} hideOption {%endif%} " id="liMiCuenta">
-                        <a href="{{ path('customer_principal')}}"  id="miCuenta" title="Mi cuenta" ><img src="{{ asset("images/home/usr.png")}}" class="icon"></a>
-                    </li>
-                       
-                    <li class="page-scroll {%if app.session.get("login") %} hideOption {%endif%} ">
-                        <a id="btnLogin" data-placement="bottom" data-toggle="popover" data-title="Login" data-container="body" type="button" data-html="true" href="javascript:void(0)" title="Ingresar"><img src="{{ asset("images/home/lock.png")}}" class="icon"></a>
-                        
-                        <div id="popover-content" class="hide">
-                              <form class="form-inline" role="form" id="formLogin" name="formLogin"  method="POST">
-                                  <div class="form-group">
-                                  <input type="email" placeholder="Email" class="form-control" name="email" id="email" >
-                                  <div id='formLogin_email_errorloc' class="help-block error" ></div>
-                                  </div>
-                                  
-                                  <div class="form-group">
-                                  <input type="password" placeholder="Contraseña" class="form-control" name="password" id="password" >
-                                  <div id='formLogin_password_errorloc' class="help-block error" ></div>
-                                  </div>
-                                  
-                                  <button type="button" data-url="{{ path('frontend_login')}}" id="btnSubmitLogin" class="btn btn-primary">Ingresar »</button>
-                                  <div class="alert alert-danger hideElement" role="alert" id="message" ></div>
-                                  <div>
-                                  <button class="btn btn-link" id="btnRegistrarse" type="button">Registrarse</button> | <button type="button" id="btnRecover" class="btn btn-link">Recuperar Contraseña</button>
-                                  </div>
-                                   <input type="hidden" name="_target_path" value="frontend_homepage" />
-                                   
-                              </form>
-                    
-                            <form  class="form-inline hideElement" role="form" id="formForgot" name="formForgot">
-                                 <div class="form-group">
-                                      <input type="email" placeholder="Email" class="form-control" name="emailForgot" id="emailForgot" value="" placeholder="email" >
-                                      <div id='formLogin_emailForgot_errorloc' class="help-block error" ></div>
-                                  </div>
-                                 <button type="button" data-url="{{ path('frontend_forgot')}}" id="btnSubmitForgot" class="btn btn-primary">Enviar »</button>
-                                 <div class="alert alert-danger hideElement" role="alert" id="messageForgot" ></div>
-                                 <div>
-                                  <button class="btn btn-link" id="btnRegistrarse" type="button">Registrarse</button> | <button type="button" id="btnLoginBack" class="btn btn-link">Login</button>
-                                  </div> 
-                            </form>
-           
-                  </div>  
-                  
-                  
-                  
-                  
-                  
-                  
-                        
-                    </li>
-                    
-					<li class="page-scroll">
-						<a href="{{ path('customer_login')}}" title="Carrito"><img src="{{ asset("images/home/bicy.png")}}" class="icon"></a>
-					</li>
-                    <!--
-                    <li class="page-scroll">
-                        <a href="#contact">Contact</a>
-                    </li>
-                    -->
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
-
-
-
-
-    <!-- Form de Registro-->
-                  
-                   <div id="registrarModal" class="modal fade"  tabindex="-1" role="dialog" aria-hidden="true">
-                      <div class="modal-dialog">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                    	     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                              <h2 class="text-center">Registrate</h2>
-                          </div>
-                          <div class="modal-body" style="height: 460px;">
-                           {% include '::messages.html.twig' %}
-                              <form class="form col-md-12 center-block"  method="POST" id="formRegister" name="formRegister">
-                                <div class="form-group col-xs-12">
-                                  <label class="control-label col-xs-2">Nombre</label>
-                                  <div class="col-xs-10">
-                                    <input type="text" id="inputNombre" placeholder="Nombre" name="name" value="" class="form-control">
-                                    <span id='backend_userbundle_usertype_name_errorloc' class="help-block ">  </span>
-                                  </div>
-                                </div>
-                                <div class="form-group  col-xs-12">
-                                  <label class="control-label col-xs-2">Apellido</label>
-                                  <div class="col-xs-10">
-                                    <input type="text" id="inputApellido" placeholder="Apellido" name="lastname" value="" class="form-control">
-                                    <span id='backend_userbundle_usertype_name_errorloc' class="help-block"> </span>
-                                  </div>
-                                </div>
-                                <div class="form-group  col-xs-12">
-                                  <label class="control-label col-xs-2">Email</label>
-                                  <div class="col-xs-10">
-                                    <input type="text" id="inputEmail" placeholder="Email" name="email" value="" class="form-control">
-                                    <span id='backend_userbundle_usertype_name_errorloc' class="help-block">  </span>
-                                  </div>
-                                </div>
-                                
-                                <div class="form-group  col-xs-12">
-                                  <label class="control-label col-xs-2">Contraseña</label>
-                                  <div class="col-xs-10">
-                                    <input type="password" id="inputPass" placeholder="" name="password" value="" class="form-control">
-                                    <span id='backend_userbundle_usertype_name_errorloc' class="help-block">  </span>
-                                  </div>
-                                </div>
-                                <div class="form-group  col-xs-12">
-                                  <label class="control-label col-xs-2">Repetir Contraseña</label>
-                                  <div class="col-xs-10">
-                                    <input type="password" id="inputConfirmPass" placeholder="" name="confirmPassword" value="" class="form-control">
-                                    <span id='backend_userbundle_usertype_name_errorloc' class="help-block">  </span>
-                                  </div>
-                                </div>
-                    			<div class="form-group">
-                    			    <div class="col-sm-offset-2 col-xs-12">
-                    			      <div class="checkbox">
-                    			        <label class="control-label">
-                    			          <input type="checkbox" id="comercio" name="comercio" value="1">Usuario Comercial
-                    			        </label>
-                    			      </div>
-                    			    </div>
-                    			 </div>
-                    			<div class="form-group">
-                    			    <div class="col-sm-offset-2 col-xs-12">
-                    			      <div class="checkbox">
-                    			        <label>
-                    			          <input type="checkbox" id="terminos" name="terminos" value="1">
-                                    <span  data-toggle="modal" data-target="#myModal">Comprendo y acepto los términos y condiciones.</span>
-                    			        </label>
-                    			      </div>
-                    			    </div>
-                    			  </div>
-                                <div class="form-group col-xs-12 text-center">
-                                  <button class="btn btn-primary btn-lg" type="button" data-url="{{ path('frontend_register') }}" id="btn_reg">Registrarse</button>
-                                </div>
-                                
-                              </form>
-                          </div>
-                          <div class="modal-footer">
-                             <div class="alert alert-danger hideElement" role="alert" id="messageRegister" ></div>
-                          </div>
-                      </div>
-                      </div>
-                    </div>
-                    
-                    	  <div class="modal fade" id="myModal" tabindex="-2" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-                    	    <div class="modal-dialog">
-                    	        <div class="modal-content">
-                    	            <div class="modal-header">
-                    	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    	            <h4 class="modal-title" id="myModalLabel">Terminos y Condiciones</h4>
-                    	            </div>
-                    	            <div class="modal-body">
-                    	                {% include 'FrontendHomeBundle:Registro:terminos.html.twig' %}
-                    	            </div>
-                    	            <div class="modal-footer">
-                    	                <button type="button" class="btn btn-warning" data-dismiss="modal">Aceptar</button>
-                    	                
-                    	        </div>
-                    	    </div>
-                    	  </div>
-                    	</div>
-                  
-                  
-                  <!-- -->
-
+    
 
     <!-- Header -->
     <header>
@@ -204,50 +14,61 @@
             
             <div class="row">
 				
-                <div class="col-md-6">
-					<div class="intro-text">
-                        <span class="name">Donde</span>
-                        <!--<hr class="star-light">-->                        
-                    </div>
-                </div>
-                                <div class="col-md-6">
-                    <div class="intro-text">
-                        <span class="name">QUE</span>
-                        <!--<hr class="star-light">-->
-                    </div>
-                </div>        
-                    <!--<img class="img-responsive" src="img/circle.png" alt="">-->
-                <div class="row">
-					<div class = "col-md-6">    
-                    <div class="input-group">
-      <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tu zona<span class="caret"></span></button>
-        <ul class="dropdown-menu" id="menuZona" role="menu" data-url="{{ path('frontend_menuZona')}}">
-        </ul>
-      </div><!-- /btn-group -->
-      <input type="text" class="form-control" placeholder="Ej. Av. Cabildo 350" aria-label="...">
-    </div><!-- /input-group -->
-       
-                </div>
-
-                   <div class = "col-md-6">  
-					<div class="input-group">
-					  <input type="text" class="form-control" placeholder="Comida, indumentaria, libros,..." aria-label="...">
-					  <div class="input-group-btn">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categorías<span class="caret"></span></button>
-						<ul class="dropdown-menu dropdown-menu-right" id="menuCategoria" role="menu" data-url="{{ path('frontend_menuCategoria')}}">
-						  
-						</ul>
-					  </div><!-- /btn-group -->
-					</div><!-- /input-group -->
+        		<div class="col-md-6">
+				
+					<div class="row">
+					
+  					   <div class="intro-text">
+                          <span class="name">Donde</span>
+                        </div>
+					
 					</div>
-                </div> <!-- row -->
-                <div class="row">
+					
+					<div class="row">
+					
+                        <div class="input" id="menuZona" data-url="{{ path('frontend_menuZona')}}">
+
+                            <input id="barrio" class="form-control ui-autocomplete-input" placeholder="Barrio o localidad">
+                            <input type="hidden" id="barrio-id">
+                            <input type="hidden" id="zona-id">
+
+                        </div><!-- /input-group -->				
+					
+					</div>
+				
+				</div> <!-- end column donde -->
+				
+				<div class="col-md-6">
+				
+   			     	<div class="row">
+                    	<div class="intro-text">
+                        	<span class="name">QUE</span>
+                    	   </div>
+                    </div>
+					
+					<div class="row">
+					
+ 					 <div class="input" id="menuCategoria" data-url="{{ path('frontend_que')}}">
+                       <input id="que" class="form-control ui-autocomplete-input typeahead" placeholder="pizza, empanadas, lo que quieras!">
+                       </div><!-- /input-group -->
+					
+					
+					</div>
+				
+				
+				</div> <!-- end column que -->
+		
+		    		
+			
+        	</div>	  		  
+
+	
+          <div class="row">
 					<div class="col-sm-4">
 					</div>
 					<div class="col-sm-4">	
 					<div class="search">
-					<button type="button" class="btn btn-primary btn-lg btn-block">BUSCAR</button>
+					<button id="buscar" type="button" class="btn btn-primary btn-lg btn-block">BUSCAR</button>
 					</div>
 					</div>
 					<div class="col-sm-4">
@@ -259,3 +80,4 @@
         </div>
     </header>
 
+  

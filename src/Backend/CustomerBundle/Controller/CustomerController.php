@@ -351,7 +351,7 @@ class CustomerController extends Controller
           $empresa = $em->getRepository('BackendCustomerBundle:Seteo')->findOneByName("empresa");
     		  $email_site = $em->getRepository('BackendCustomerBundle:Seteo')->findOneByName("email");
     		  $url= $this->generateUrl(
-            'change_pass',
+            'customer_change_pass',
             array('codigo' =>$respuesta->codigo ), true );
         
           $message = \Swift_Message::newInstance()
@@ -553,6 +553,138 @@ class CustomerController extends Controller
        $response->headers->set('Content-Type', 'application/json');
   
        return $response;
+    }
+    
+    public function changeActiveAction(Request $request){
+    
+        $resultado=array("status"=>1, "message"=>'');
+        $em = $this->getDoctrine()->getManager();
+        $customerId=$request->get("customer");
+        $entity = $em->getRepository('BackendCustomerBundle:Customer')->find($customerId);
+
+        if (!$entity) {
+            $resultado["message"]='No se ha encontrado el cliente.';
+        }else{
+            if ( $entity->getIsActive() ){
+                  $entity->setIsActive(false);
+                  $resultado["message"]="Se ha desactivado el cliente";
+            }else{
+                  $entity->setIsActive(true);
+                  $resultado["message"]="Se ha activado el cliente";
+            }
+            
+            $em->persist($entity);
+            $em->flush();
+            $resultado["status"]=0;
+            
+        }
+        
+        $response = new Response(json_encode($resultado));
+        
+        $response->headers->set('Content-Type', 'application/json');
+  
+        return $response;
+    
+    }
+
+     public function changeExtraAction(Request $request){
+    
+        $resultado=array("status"=>1, "message"=>'');
+        $em = $this->getDoctrine()->getManager();
+        $customerId=$request->get("customer");
+        $entity = $em->getRepository('BackendCustomerBundle:Customer')->find($customerId);
+
+        if (!$entity) {
+            $resultado["message"]='No se ha encontrado el cliente.';
+        }else{
+            $group=$em->getRepository('BackendUserBundle:Group')->findOneByRole("ROLE_EXTRACOMERCIO");
+            if ( $entity->hasGroup("ROLE_EXTRACOMERCIO") ){
+                  $entity->removeGroup($group);
+                  $resultado["message"]="Se han desactivado los permisos extras del cliente";
+            }else{
+                  $entity->addGroup($group);
+                  $resultado["message"]="Se han agregado permisos extras al cliente";
+            }
+            
+            $em->persist($entity);
+            $em->flush();
+            $resultado["status"]=0;
+            
+        }
+        
+        $response = new Response(json_encode($resultado));
+        
+        $response->headers->set('Content-Type', 'application/json');
+  
+        return $response;
+    
+    }
+    
+    
+    public function changePremiumAction(Request $request){
+    
+        $resultado=array("status"=>1, "message"=>'');
+        $em = $this->getDoctrine()->getManager();
+        $sucursalId=$request->get("sucursal");
+        $entity = $em->getRepository('BackendCustomerAdminBundle:Sucursal')->find($sucursalId);
+
+        if (!$entity) {
+            $resultado["message"]='No se ha encontrado la sucursal.';
+        }else{
+            if ( $entity->getPremium() ){
+                  $entity->setPremium(false);
+                  $resultado["message"]="La sucursal dejo de ser premium";
+            }else{
+                  $entity->setPremium(true);
+                  $resultado["message"]="La sucursal se convirtio en premium";
+            }
+            
+            $em->persist($entity);
+            $em->flush();
+            $resultado["status"]=0;
+            
+        }
+        
+        $response = new Response(json_encode($resultado));
+        
+        $response->headers->set('Content-Type', 'application/json');
+  
+        return $response;
+    
+    }
+    
+    public function changeStatusAction(Request $request){
+    
+        $resultado=array("status"=>1, "message"=>'');
+        $em = $this->getDoctrine()->getManager();
+        $customerId=$request->get("customer");
+        $entity = $em->getRepository('BackendCustomerBundle:Customer')->find($customerId);
+
+        if (!$entity) {
+            $resultado["message"]='No se ha encontrado el cliente.';
+        }else{
+            if ( $entity->getStatus()->getName() == "Pendiente" ){
+                  $status=$em->getRepository('BackendCustomerBundle:Status')->findOneBy(array("name"=>"Habilitado"));
+                  $entity->setStatus($status);
+                  $resultado["message"]="Se ha habilitado el cliente";
+            }else{
+                  $status=$em->getRepository('BackendCustomerBundle:Status')->findOneBy(array("name"=>"Pendiente"));
+                  $entity->setStatus($status);
+                  $resultado["message"]="Se ha pasado a pendiente el estado del cliente";
+            }
+            
+            $em->persist($entity);
+            $em->flush();
+            $resultado["status"]=0;
+            
+        }
+        
+        $response = new Response(json_encode($resultado));
+        
+        $response->headers->set('Content-Type', 'application/json');
+  
+        return $response;
+    
     }
 
     

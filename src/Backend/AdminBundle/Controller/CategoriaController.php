@@ -289,6 +289,7 @@ class CategoriaController extends Controller
                             
         $excelService->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'Nombre')
+                    ->setCellValue('B1', 'Código')
                     ;
                     
         $resultados=$query->getResult();
@@ -297,6 +298,7 @@ class CategoriaController extends Controller
         {
            $excelService->setActiveSheetIndex(0)
                          ->setCellValue("A$i",$r->getName())
+                         ->setCellValue("B$i",$r->getCode())
                          ;
           $i++;
         }
@@ -305,6 +307,7 @@ class CategoriaController extends Controller
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $excelService->setActiveSheetIndex(0);
         $excelService->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $excelService->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         
         $fileName="categorias_".date("Ymd").".xls";
         //create the response

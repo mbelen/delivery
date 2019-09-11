@@ -31,7 +31,7 @@ class DefaultController extends Controller {
             if ($error)
                $this->get('session')->getFlashBag()->add('error' , 'Usuario y/o clave incorrectas.');
         }
-          echo $error;
+          
         return $this->render(
             'BackendCustomerBundle:Security:login.html.twig', array(
             // last username entered by the user

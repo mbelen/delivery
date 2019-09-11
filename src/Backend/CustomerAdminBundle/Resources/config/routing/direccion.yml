@@ -1,14 +1,14 @@
 direccion_new:
-    pattern:  /new
-    defaults: { _controller: "BackendCustomerAdminBundle:Direccion:new" }
+    pattern:  /new/{type}
+    defaults: { _controller: "BackendCustomerAdminBundle:Direccion:new", type: true  }
 
 direccion_exportar:
     pattern:  /exportar
     defaults: { _controller: "BackendCustomerAdminBundle:Direccion:exportar" }
     
 direccion_create:
-    pattern:  /create
-    defaults: { _controller: "BackendCustomerAdminBundle:Direccion:create" }
+    pattern:  /create/{type}
+    defaults: { _controller: "BackendCustomerAdminBundle:Direccion:create", type: true  }
     requirements: { _method: post }
 
 direccion_edit:
@@ -24,7 +24,14 @@ direccion_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "BackendCustomerAdminBundle:Direccion:delete" }
     requirements: { _method: post|delete }
-        
+
+customer_barrio_zona:
+    pattern:  /barrio_zona
+    defaults: { _controller: "BackendCustomerAdminBundle:Direccion:getBarrioByZona" }
+
+direccion_loadDireccion:
+    pattern:  /all_direccion
+    defaults: { _controller: "BackendCustomerAdminBundle:Direccion:getAll" }        
 direccion:
     pattern:  /{search}
     defaults: { _controller: "BackendCustomerAdminBundle:Direccion:index" , search: ''}

@@ -9,7 +9,7 @@
 
 <div class="form-group">
         
-        {{ form_label(form.numero,"Numero", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        {{ form_label(form.numero,"Número", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">
             {{ form_widget(form.numero, { 'attr': {'class': 'form-control'} }) }}
             <span id='backend_customeradminbundle_direccion_numero_errorloc' class="help-block"> {{ form_errors(form.numero) }} </span>
@@ -27,7 +27,7 @@
 
 <div class="form-group">
         
-        {{ form_label(form.depto,"Depto", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        {{ form_label(form.depto,"Departamento", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">
             {{ form_widget(form.depto, { 'attr': {'class': 'form-control'} }) }}
             <span id='backend_customeradminbundle_direccion_depto_errorloc' class="help-block"> {{ form_errors(form.depto) }} </span>
@@ -36,7 +36,7 @@
 
 <div class="form-group">
         
-        {{ form_label(form.zip,"C.P.", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        {{ form_label(form.zip,"Código Postal", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">
             {{ form_widget(form.zip, { 'attr': {'class': 'form-control'} }) }}
             <span id='backend_customeradminbundle_direccion_zip_errorloc' class="help-block"> {{ form_errors(form.zip) }} </span>
@@ -48,7 +48,7 @@
         
         {{ form_label(form.zona,"Zona", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
         <div class="col-xs-6">
-            {{ form_widget(form.zona, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_widget(form.zona, { 'attr': {'class': 'form-control','data-url':  path ('customer_barrio_zona')} }) }}
             <span id='backend_customeradminbundle_direccion_zona_errorloc' class="help-block"> {{ form_errors(form.zona) }} </span>
         </div>
 </div>
@@ -70,8 +70,24 @@
             <span id='backend_customeradminbundle_direccion_tipo_errorloc' class="help-block"> {{ form_errors(form.tipo) }} </span>
         </div>
 </div>
+<div class="help-block" style="color: #333 !important;" >Si no sabes latitud y longitud dejalas en blanco que se autocompletan!</div>
+<div class="form-group">
+        
+        {{ form_label(form.lat,"Latitud.", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.lat, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_direccion_lat_errorloc' class="help-block"> {{ form_errors(form.lat) }} </span>
+        </div>
+</div>
 
-
+<div class="form-group">
+        
+        {{ form_label(form.lon,"Longitud", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.lon, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_direccion_lon_errorloc' class="help-block"> {{ form_errors(form.lon) }} </span>
+        </div>
+</div>
 
 
 <div class="form-group">

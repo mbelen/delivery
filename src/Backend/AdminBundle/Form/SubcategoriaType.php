@@ -18,6 +18,7 @@ class SubcategoriaType extends AbstractType
         $builder
             ->add('categoria')
             ->add('name')
+            ->add('code')
             ->add('file', 'file', array("required" => false));
         
         

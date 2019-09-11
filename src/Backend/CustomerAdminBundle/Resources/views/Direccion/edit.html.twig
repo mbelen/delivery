@@ -1,4 +1,4 @@
-{% extends '::backend.html.twig' %}
+{% extends '::customer/backend.html.twig' %}
 
 {% block container -%}
     <h3>Editar Direccion</h3>
@@ -23,9 +23,9 @@
     <div class="form-group">
     <!-- Button -->
     <div class="text-center">
-    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i>Actualizar</button>
+    <button type="button" class="btn btn-primary" id="addBtnDireccion"><i class="fa fa-check"></i>Actualizar</button>
     <button type="button" class="btn btn-inverse" data-url="{{ path('direccion') }}" ><i class="fa fa-chevron-left"></i> Volver</button>
-    {% if is_granted("ROLE_DELCATEGORIA") %}
+    {% if is_granted("ROLE_DELDIRECCION") %}
   
     <a href="#myModal" class="btn btn-danger confirm-delete" role="button" data-toggle="modal" data-id="{{ entity.id }}" ><i class="fa fa-trashe"></i>Borrar</a>
     
@@ -47,11 +47,11 @@
       <h3 id="myModalLabel">Confirmar Borrado</h3>
      </div>
      <div class="modal-body">
-       <p class="error-text">Esta seguro que desea borrar la categoria?</p>
+       <p class="error-text">Esta seguro que desea borrar la direccion?</p>
      </div>
      <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-      <button class="btn btn-danger " data-id="0"  data-url="{{ path('categoria_delete', { 'id': 'id' }) }}" >Borrar</button>
+      <button class="btn btn-danger " data-id="0"  data-url="{{ path('direccion_delete', { 'id': 'id' }) }}" >Borrar</button>
      </div>
     </div>
 
@@ -65,8 +65,12 @@
 {% endblock %}
 {% block javascripts %}
   {{ parent() }}
-
-{% javascripts '@BackendAdminBundle/Resources/public/js/validate_categoria.js' %}
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
+<script src="{{ asset("js/front/gmaps.js") }}"></script>  
+{% javascripts '@FrontendHomeBundle/Resources/public/js/utils.js'  filter='?uglifyjs2' %}
+          <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% javascripts '@BackendCustomerAdminBundle/Resources/public/js/validate_direccion.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

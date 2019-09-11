@@ -9,7 +9,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-customers"></i> Tus Sucursales
@@ -27,7 +27,7 @@
                             
                             <div class="form-group input-group">
                                 <input type="text" class="form-control search-query" id="search-query" placeholder="Buscar" value="{{ search }}">
-                                <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('customer') }}" type="button"><i class="fa fa-search"></i></button></span>
+                                <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('sucursal') }}" type="button"><i class="fa fa-search"></i></button></span>
                             </div>
                            
                           </form>
@@ -46,12 +46,14 @@
                                         <th>Telefono</th>
 										<th>Cuit</th>
 										<th>Direccion</th>
-										<th>Zona/Prov.</th>
-										<th>Barrio/Localidad</th>
-										<th>Categoria</th>
+										<th>Zona</th>
+										<th>Localidad</th>
+                                       
+                                        <th>Subcategorías</th>
 										<th>Horario</th>
 										<th>Pedidos <br/> 24 hs</th>
 										<th>Medios de Pago</th>
+										<th>Premium</th>
                                         <th style="width: 92px;">Acciones</th>
                                     </tr>
                                 </thead>
@@ -65,22 +67,72 @@
 												  <td>{{ sucursal.getDireccion.getCalle ~ " " ~  sucursal.getDireccion().getNumero() }}</td>
 												  <td>{{ sucursal.getDireccion.getZona.getName }}</td>
 												  <td>{{ sucursal.getDireccion.getBarrio.getName }}</td>
-												  <td>{% for categoria in sucursal.getCategorias %}
-												  		{{ categoria.getName }}
-													  {% endfor %}	
+												  
+                          <td> 
+                              {% for subcategoria in sucursal.getSubcategorias %}
+												  		   {{ subcategoria.getName }}
+													    {% endfor %}	
 												  </td>
 
 												 <td>
-												 <a href="{{ path("sucursal_listar_horario", { 'id': sucursal.id }) }}" rel="shadowbox" role="button" class="btn"><i class="fa fa-calendar"></i></a></td>
+												    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#horarios{{sucursal.id}}">Ver horarios</button>
+                           <div class="modal fade " id="horarios{{sucursal.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                              <div class="modal-dialog modal-lg">
+
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Horarios de atención</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                   <table align="center">
+                                   <tr><th width="100px";>Lunes</th><th width="100px">Martes</th><th width="100px">Miercoles</th><th width="100px">Jueves</th><th width="100px">Viernes</th><th width="100px">Sabado</th><th width="100px">Domingo</th></tr>
+                                       <tr>
+                                   {% for h in sucursal.getHorarios %}
+                                       <td>
+                                       {% if h.getCerrado() == 1%}
+                                        <span class="label label-warning">Cerrado</span>
+                                       {% elseif h.getOpenAll()  %}
+                                           <span class="label label-success">24 hs</span>
+                                       {% else %}
+                                           {{ h.getDesde() }} - {{ h.getHasta() }}
+                                       {% endif %}
+                                       </td>
+                                   {% endfor %}
+                                       </tr>
+                                       <tr>
+                                           {% for h in sucursal.getHorarios %}
+                                               <td>
+                                                   {% if h.getCerrado() == 1%}
+                                                       <span class="label label-warning">Cerrado</span>
+                                                   {% elseif h.getOpenAll()  %}
+                                                       <span class="label label-success">24 hs</span>
+                                                   {% else %}
+                                                       {% if h.getDesdeT() is not null and h.getHastaT() is not null %}
+                                                       {{ h.getDesdeT() }} - {{ h.getHastaT() }}
+                                                       {% endif %}
+                                                   {% endif %}
+                                               </td>
+                                           {% endfor %}
+                                       </tr>
+                                   </table>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                         
+                         
+                         </td>
 												  <td>{% if sucursal.open %} <span class="label label-success"> Si  </span> {% else %} <span class="label label-danger"> No  </span>{% endif %}</td>
 												  <td>{% for pay in sucursal.getPaymethods %}
 												  	  {{ pay.getName }}
 												  	  <br/>
 													  {% endfor %}
 												  </td>
+												  <td>{% if sucursal.premium %} <span class="label label-success"> Si  </span>{% endif %}</td>
 												  <td>
-                                                  <a href="{{ path('sucursal_edit', { 'id': sucursal.id }) }}"><i class="fa fa-pencil"></i></a>
-                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ sucursal.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                                  <a href="{{ path('sucursal_edit', { 'id': sucursal.id }) }}"><i class="fa fa-pencil" title="editar"></i></a>
+                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ sucursal.id }}  data-target="#myModal"><i class="fa fa-trash" title="borrar"></i></a>
+                                                  <a href="{{ path('region',{'sucursal': sucursal.id}) }}" class="btn btn-primary" title="definir zona de delivery">Zona Entrega</a>
                                                   </td>
                                       </tr>
                                       
@@ -136,7 +188,7 @@
 
 {% block javascripts %}
   {{ parent() }}
-   {% javascripts '@BackendCustomerBundle/Resources/public/js/customer_index.js' %}
+   {% javascripts '@BackendCustomerBundle/Resources/public/js/customer_index.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
    {% endjavascripts %}
 {% endblock %}

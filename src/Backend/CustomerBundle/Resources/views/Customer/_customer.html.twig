@@ -16,6 +16,14 @@
         </div>
 </div>
 
+<div class="form-group">
+
+    {{ form_label(form.tipodni,"Tipo Documento", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+    <div class="col-xs-6">
+        {{ form_widget(form.tipodni, { 'attr': {'class': 'form-control'} }) }}
+        <span id='backend_userbundle_usertype_tipodni_errorloc' class="help-block"> {{ form_errors(form.tipodni) }} </span>
+    </div>
+</div>
 
 <div class="form-group">
         

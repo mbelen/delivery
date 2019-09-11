@@ -24,6 +24,11 @@ class Categoria
      */
     private $name;
 
+    /**
+     * @ORM\Column(name="code", type="string", length=50)
+     */
+    private $code;
+
      /**
      * @ORM\OneToMany(targetEntity="Subcategoria", mappedBy="categoria")
      */
@@ -60,6 +65,7 @@ class Categoria
     public function __construct()
     {
         $this->subcategorias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sucursales = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productos = new \Doctrine\Common\Collections\ArrayCollection();
          $this->isRestrict = false;
     }
@@ -352,5 +358,28 @@ class Categoria
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Categoria
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 }

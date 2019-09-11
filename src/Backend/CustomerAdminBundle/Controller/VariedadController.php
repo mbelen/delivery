@@ -17,13 +17,13 @@ class VariedadController extends Controller
 {
 
      public function generateSQL($search){
-     
-        $dql="SELECT u FROM BackendCustomerAdminBundle:Variedad u "  ;
+         $user=$this->getUser();
+        $dql="SELECT u FROM BackendCustomerAdminBundle:Variedad u where u.customer=".$user->getId()  ;
         $search=mb_convert_case($search,MB_CASE_LOWER);
         
        
         if ($search)
-          $dql.=" where u.name like '%$search%' ";
+          $dql.=" and u.name like '%$search%' ";
           
         $dql .=" order by u.name"; 
         
@@ -66,29 +66,31 @@ class VariedadController extends Controller
      *
      */
     public function createAction(Request $request)
-    {
+    {                          
         if ( $this->get('security.context')->isGranted('ROLE_ADDVARIEDAD')) {
         $entity  = new Variedad();
-        $form = $this->createForm(new VariedadType(), $entity);
-		$p = $request->request->get('backend_customeradminbundle_variedad');
+         $customerId=$this->getUser()->getId();
+        $form = $this->createForm(new VariedadType(), $entity, array("customerId"=>$customerId));
+		    $p = $request->request->get('backend_customeradminbundle_variedad');
+        $productos = array();
+        if (isset($p["productos"])){
         $productos = $p['productos'];
-        unset($p['productos']);
-		$form->bind($request);
-		
+        }
+        
+		    $form->bind($request);
+		    $em = $this->getDoctrine()->getManager();
          
         if ($form->isValid()) {
-			
-			$em = $this->getDoctrine()->getManager();
+			      $entity->setCustomer($this->getUser());
+             
+			      
             foreach ($productos as $id) {
-				
-                $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
-				$prod->addVariedades($entity);
-				$em->persist($prod);
-                $entity->addProducto($prod);                
                 
-            }
+                $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
+                $entity->addProducto($prod);                
+            } 
 			
-			$em->persist($entity);
+			      $em->persist($entity);
             $em->flush();
 			
             $this->get('session')->getFlashBag()->add('success' , 'Se ha agregado una nueva variedad.');
@@ -133,7 +135,8 @@ class VariedadController extends Controller
     {
        if ( $this->get('security.context')->isGranted('ROLE_ADDVARIEDAD')) {
         $entity = new Variedad();
-        $form   = $this->createForm(new VariedadType(), $entity);
+         $customerId=$this->getUser()->getId();
+        $form   = $this->createForm(new VariedadType(), $entity, array("customerId"=>$customerId));
 
         return $this->render('BackendCustomerAdminBundle:Variedad:new.html.twig', array(
             'entity' => $entity,
@@ -154,7 +157,7 @@ class VariedadController extends Controller
     {
         if ( $this->get('security.context')->isGranted('ROLE_MODVARIEDAD')) { 
         $em = $this->getDoctrine()->getManager();
-
+          $customerId=$this->getUser()->getId();
         $entity = $em->getRepository('BackendCustomerAdminBundle:Variedad')->find($id);
 
         if (!$entity) {
@@ -163,7 +166,7 @@ class VariedadController extends Controller
              return $this->redirect($this->generateUrl('variedad'));
         }
 
-        $editForm = $this->createForm(new VariedadType(), $entity);
+        $editForm = $this->createForm(new VariedadType(), $entity, array("customerId"=>$customerId));
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BackendCustomerAdminBundle:Variedad:edit.html.twig', array(
@@ -210,77 +213,58 @@ class VariedadController extends Controller
              $this->get('session')->getFlashBag()->add('error' , 'No se ha encontrado la variedad.');
              return $this->redirect($this->generateUrl('variedad'));
         }
-
+       
+         $customerId=$this->getUser()->getId();
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new VariedadType(), $entity);
-		$p = $request->request->get('backend_customeradminbundle_variedad');
-        $productos = $p['productos'];
-        unset($p['productos']);
+        $editForm = $this->createForm(new VariedadType(), $entity, array("customerId"=>$customerId));
+		   
+        $productos = $request->get("backend_customeradminbundle_variedad");
+        
+         $existProductos=array();
+            foreach($entity->getProductos() as $p){
+              $existProductos[]=$p->getId();
+            }
+            
+        
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
 			
-			$em = $this->getDoctrine()->getManager();
+			   $em = $this->getDoctrine()->getManager();
 			
-			foreach ($productos as $id) {
-				
-				$existe = false;
-                $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
-				$variedades  = $prod->getVariedades();
-				
-				foreach($variedades as $v){
-					
-					if($v->getId() == $entity->getId()){
-						
-						$existe = true; 						
-					}					
-				}				
-				if(!$existe){ 
-					
-					$prod->addVariedades($entity); 
-					$em->persist($prod);
-					$entity->addProducto($prod);
-				}				
-			 }	
-			
-			$prods = $entity->getProductos();
-			
-			//if(count($productos) < count($prods)){
-				
-				foreach($prods as $pr){
-					
-					$existe = false;					
-					/*if (in_array($pr->getId(), $productos) == false){ 
-					
-						$pr->removeVariedades($entity);
-						$em->persist($pr);
-						$entity->removeProducto($pr);
-					}*/
-						foreach($productos as $id){
-							
-							if($id == $pr->getId()){
-								
-								$existe = true;
-							}
-						}
-					if(!$existe){
-						
-						$p = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($pr->getId());
-						$p->removeVariedades($entity);
-						$em->persist($p);
-						$entity->removeProducto($p);
-						
-					}											
-				}               
-			//}
+			      
+             
+            if (isset($productos["productos"])){ 
+                  
+               foreach($productos["productos"] as $id){
+                  
+                   if (!in_array($id,$existProductos)){ //no esta la agrego la relacion
+                                         
+                      $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($id);
+                      $entity->addProducto($prod);
+                   }else{ //asi que lo quito de $existProductos
+                       
+                        $existProductos=array_diff($existProductos,array($id));
+                   }   
+                }
+             
+            }
+            
+            foreach($existProductos as $d){  //elimino las que quedan porque ya no se seleccionaron
+                 
+                  $prod = $em->getRepository('BackendCustomerAdminBundle:Producto')->find($d);
+                  $entity->removeProducto($prod);
+                  $prod->removeVariedades($entity);
+                  
+             } 
 			    			
-			$em->persist($entity);
+			      $em->persist($entity);
             $em->flush();
 			
             $this->get('session')->getFlashBag()->add('success' , 'Se han actualizado los datos de la variedad.');
             return $this->redirect($this->generateUrl('variedad_edit', array('id' => $entity->getId())));
         }
-
+           
         return $this->render('BackendCustomerAdminBundle:Variedad:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),

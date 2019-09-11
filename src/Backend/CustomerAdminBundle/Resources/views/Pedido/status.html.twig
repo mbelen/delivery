@@ -1,0 +1,18 @@
+<label> Comentarios</label>
+<div class="control-group">
+    <textarea id="comentarios" name="comentarios" rows="4" cols="50">
+    </textarea>
+</div>
+
+<div class="control-group">
+
+    <div class="status">
+        <p class="error-text">Seleccionar estado</p>
+        <select name="status" id="status">
+            {% for s in status %}
+                <option value="{{ s.orden }}">{{ s.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+</div>

@@ -17,8 +17,8 @@ $(document).ready(function() {
 			 messages: {
             "backend_userbundle_group[name]": {
             required: "Ingrese el nombre",
-            maxlength: jQuery.format("Máximo {0} carácteres!"),
-            minlength: jQuery.format("Mínimo {0} carácteres!")
+            maxlength: jQuery.validator.format("Máximo {0} carácteres!"),
+            minlength: jQuery.validator.format("Mínimo {0} carácteres!")
             },
             "backend_userbundle_group[role]": {
             required: "Ingrese el rol",

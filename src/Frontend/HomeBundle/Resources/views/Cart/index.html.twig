@@ -1,125 +1,132 @@
-	<section id="cart_items">
+{% extends '::front/base_front.html.twig' %}
+{% block header %}
+<header class="header_checkout">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+	            <div class="div_checkout"></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% endblock %}
+
+{% block container %}	
+  
+  <section id="cart_items">
 		<div class="container">
-			<div class="breadcrumbs">
-				<ol class="breadcrumb">
-				  <li><a href="#">Home</a></li>
-				  <li class="active">Su compra</li>
-				</ol>
+      <div class="heading">
+				<h3 class="subtitle">Sus Pedidos</h3>
+				<p>A continuación se detallan sus pedidos. Si ha realizado compras a diferentes comercios deberá realizar
+           la aceptación de cada pedido por separado.</p>
 			</div>
-			<div class="table-responsive cart_info">
-				<table class="table table-condensed">
-					<thead>
-						<tr class="cart_menu">
-							<td class="image">Item</td>
-							<td class="description"></td>
-							<td class="price">Precio</td>
-							<td class="quantity">Cantidad</td>
-							<td class="total">Total</td>
-							<td></td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/one.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
+       <div id="pedidos">
+       </div>
+      
+  </section><!--/#do_action-->
+  
+  
+  <div class="modal fade" id="modalDireccion" data-url="{{ path('frontend_direcciones') }}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+       Dirección de Entrega
+      </div>
+      
+      <div class="modal-body" >  
+        <p>Ingrese la dirección a donde quiere recibir su pedido y verificaremos si el comercio llega a la zona.
+        </p>
+        
+        <div class=" container-fluid">
+        <p class="textExplicativo">Puede seleccionar una de las ya previamente cargadas </p>
+        
+        
+        <form class="form-horizontal" id="formDireccion">
+         <div class="form-group">
+          <div class="col-md-12">
+              <select class="form-control" id="selectDireccion" name="direccion"><option value="0">Seleccione una dirección</option></select>
+          </div>
+         </div>
+         <p class="textExplicativo">o ingresar una nueva</p> 
+        <div class="form-group">
+          <div class="col-md-6">
+            <input type="text" name="calle" value="" id="calle" placeholder="calle">
+          </div>
+          <div class="col-md-6">  
+            <input type="text" name="nro" value="" id="nro" placeholder="nro">
+          </div>
+         </div>
+          
+         <div class="form-group"> 
+          <div class="col-md-6">
+            <input type="text" name="piso" value="" id="piso" placeholder="piso">
+          </div>
+          <div class="col-md-6">
+            <input type="text" name="dto" value="" id="dto" placeholder="dto">
+          </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-6">
+              <select class="form-control" id="zona" name="zona" data-urlbarrios="{{ path('frontend_barrios')}}" data-url="{{ path('frontend_zonas')}}"><option value="0">Seleccione provincia</option></select>
+            </div>
+            <div class="col-md-6">
+              <select  class="form-control" id="barrio" name="barrio"><option value="0">Seleccione ciudad</option></select>
+            </div>
+        </div>
+        
+        <input type="hidden"  name="tienda" value="" id="modalTiendaId">
+        </form>
+        
+        </div> <!-- container-fluid -->
+        
+        <div id="modalMessage"> </div>
+      
+      </div> <!-- modalbody-->  
+       <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="modalContinuar" data-url="{{ path('frontend_llega') }}">Continuar</button>
+      </div>  
+    </div>
+  </div>
+</div>
 
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/two.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/three.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</section> <!--/#cart_items-->
+<div class="modal fade" id="modalComprar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+       COMPRAR
+      </div>
+      <div class="modal-body">  
+        <p>El comercio llegá a su dirección.Se lo enviaremos a<br>
+         <span id="direccion-envio"></span>
+        </p>
+         
+        <p>Si presiona comprar realizaremos su pedido.</p>
+        <textarea name="comentario" id="comentario" placeholder="Alguna aclaración"></textarea>
+        <input type="hidden"  name="tienda" value="" id="comprarTiendaId">
+        <input type="hidden" name="direccionid" value="" id="direccionid">
+        <div id="modalComprarMessage"> </div>
+      </div>  
+       <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="modalBtnComprar" data-url="{{ path('frontend_pedido')}}">Comprar</button>
+      </div>  
+    </div>
+  </div>
+</div>
+  
+  
+{% endblock %}
 
-	<section id="do_action">
-		<div class="container">
-			<div class="heading">
-				<h3>Resumen</h3>
-				<p>Verifique su pedido y continue el proceso de compra.</p>
-			</div>
-			<div class="row">
+{% block javascripts %}
+  {{ parent()}}
+  
+   <script src="{{ asset("js/gmaps.js") }}"></script>
 
-					<div class="total_area">
-						<ul>
-							<li>SubTotal <span>$59</span></li>
-							<li>Extras <span>$2</span></li>
-							<li>Costo de envio <span>Sin cargo</span></li>
-							<li>Total <span>$61</span></li>
-						</ul>
-							<a class="btn btn-default update" href="">Modificar</a>
-							<a class="btn btn-default check_out" href="">Continuar</a>
-					</div>
-				</div>
-			</div>
-		
-	</section><!--/#do_action-->
+   {% javascripts '@FrontendHomeBundle/Resources/public/js/tablaCarrito.js'filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+   {% endjavascripts %}
+ {% endblock %} 

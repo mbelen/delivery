@@ -1,0 +1,8 @@
+favorito_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BackendCustomerAdminBundle:Favorito:delete" }
+    requirements: { _method: post|delete }
+        
+favorito:
+    pattern:  /{search}
+    defaults: { _controller: "BackendCustomerAdminBundle:Favorito:index" , search: ''}

@@ -29,6 +29,7 @@
 <div class="form-group">
         
         {{ form_label(form.productos,"Productos", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <i class="fa fa-comment" data-toggle="tooltip" data-placement="right" title="Podes elegir a que productos asignarles la variedad"></i>
         <div class="col-xs-6">
             {{ form_widget(form.productos, { 'attr': {'class': 'form-control'} }) }}
             <span id='backend_adminbundle_variedad_productos_errorloc' class="help-block"> {{ form_errors(form.productos) }} </span>

@@ -1,0 +1,103 @@
+<div class="form-group">
+        
+        {{ form_label(form.sucursales,"Sucursales", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.sucursales, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_sucursales_errorloc' class="help-block"> {{ form_errors(form.sucursales) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.code,"Código", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.code, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_code_errorloc' class="help-block"> {{ form_errors(form.code) }} </span>
+        </div>
+</div>
+
+
+<div class="form-group">
+        
+        {{ form_label(form.name,"Nombre", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_name_errorloc' class="help-block"> {{ form_errors(form.name) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.precio,"Precio", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.precio, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_precio_errorloc' class="help-block"> {{ form_errors(form.precio) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.categoria,"Categoría", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.categoria, { 'attr': {'class': 'form-control','data-url':  path ('subcategoria_categoria')} }) }}
+            <span id='backend_customeradminbundle_producto_categoria_errorloc' class="help-block"> {{ form_errors(form.categoria) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.subcategoria,"Subcategoría", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.subcategoria, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_subcategoria_errorloc' class="help-block"> {{ form_errors(form.subcategoria) }} </span>
+        </div>
+</div>
+
+
+<div class="form-group">
+        
+        {{ form_label(form.variedades,"Variedades", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.variedades, { 'attr': {'class': ''} }) }}
+            <span id='backend_customeradminbundle_producto_variedades_errorloc' class="help-block"> {{ form_errors(form.variedades) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.isActive,"Publicado", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.isActive, { 'attr': {'class': ''} }) }}
+            <span id='backend_customeradminbundle_producto_isActive_errorloc' class="help-block"> {{ form_errors(form.isActive) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.alwaysAvailable,"Siempre Disponible", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.alwaysAvailable, { 'attr': {'class': ''} }) }}
+            <span id='backend_customeradminbundle_producto_alwaysAvailable_errorloc' class="help-block"> {{ form_errors(form.alwaysAvailable) }} </span>
+        </div>
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.file,"Imagen (tamaño recomendado: 300x300 px)", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.file, { 'attr': {'class': 'input-xlarge'} }) }}
+            <span id='backend_customeradminbundle_producto_file_errorloc' class="help-block"> {{ form_errors(form.file) }} </span>
+        </div>
+        {% if entity.getWebPath() %}
+          <img src="{{ asset(entity.getWebPath()) }}" width="100" height="100" />
+        {% endif %}
+</div>
+
+<div class="form-group">
+        
+        {{ form_label(form.description,"Descripción", { 'label_attr': {'class': 'control-label col-xs-2'} }) }}
+        <div class="col-xs-6">
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+            <span id='backend_customeradminbundle_producto_description_errorloc' class="help-block"> {{ form_errors(form.description) }} </span>
+        </div>
+</div>

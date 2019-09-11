@@ -41,7 +41,7 @@
 {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendUserBundle/Resources/public/js/validate_seteo.js' %}
+{% javascripts '@BackendUserBundle/Resources/public/js/validate_seteo.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

@@ -9,7 +9,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-users"></i> Listado de Usuarios
@@ -116,7 +116,7 @@
 
 {% block javascripts %}
   {{ parent() }}
-   {% javascripts '@BackendUserBundle/Resources/public/js/user_index.js' %}
+   {% javascripts '@BackendUserBundle/Resources/public/js/user_index.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
    {% endjavascripts %}
 {% endblock %}

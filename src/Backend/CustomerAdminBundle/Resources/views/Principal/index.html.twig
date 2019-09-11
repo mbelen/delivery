@@ -3,6 +3,85 @@
 {% block container %}
  
 <h4> BIENVENIDO {{ app.user.name }} !!</h4>
-  
+
+
+{% if is_granted('ROLE_VIEWVENTA') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('pedido') }}"><i class="fa fa-credit-card fa-5"></i></a><br>
+      <span>MIS VENTAS</span>
+ </div>
+{% endif %}
+
+{% if is_granted('ROLE_VIEWCOMPRA') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('compra') }}"><i class="fa fa-wa fa-shopping-cart fa-5"></i></a><br>
+      <span>MIS COMPRAS</span>
+ </div>
+{% endif %}
+
+
+{% if is_granted('ROLE_VIEWSUCURSAL') %}    
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('sucursal') }}"><i class="fa fa-wa fa-home fa-5"></i></a><br>
+      <span>MIS SUCURSALES</span>
+ </div>
+ {% endif %}  
+
+
+
+{% if is_granted('ROLE_VIEWPRODUCTO') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('producto') }}"><i class="fa fa-wa fa-cube fa-5"></i></a><br>
+      <span>MIS PRODUCTOS</span>
+ </div>
+{% endif %}
+
+
+{% if is_granted('ROLE_VIEWDIRECCION') %}    
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('direccion') }}"><i class="fa fa-wa fa-map-marker fa-5"></i></a> <br>
+      <span>MIS DIRECCIONES</span>
+ </div>
+ {% endif %}    
+
+
+{% if is_granted('ROLE_VIEWFAVORITO') %}    
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('favorito') }}"><i class="fa fa-wa fa-star fa-5"></i></a><br>
+      <span>MIS FAVORITOS</span>
+ </div>
+ {% endif %} 
+
+ 
+
+{% if is_granted('ROLE_IMPORTAR') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('producto_importar') }}"><i class="fa fa-wa fa-upload fa-5"></i></a><br>
+      <span>CARGA MASIVA</span>
+ </div>
+{% endif %}
+
+{% if is_granted('ROLE_EDICION') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('producto_edicion_masiva') }}"><i class="fa fa-pencil-square-o fa-5"></i></a><br>
+      <span>EDICION MASIVA</span>
+ </div>
+{% endif %}
+
+{% if is_granted('ROLE_ADDPRODUCTO') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('promocion') }}"><i class="fa fa-wa fa-gift fa-5"></i></a><br>
+      <span>MIS PROMOCIONES</span>
+ </div>
+{% endif %}
+
+{% if is_granted('ROLE_VIEWVARIEDAD') %}  
+<div class="col-md-3 boton_initial">
+      <a href="{{ path('variedad') }}"><i class="fa fa-wa fa-cubes fa-5"></i></a><br>
+      <span>VARIEDADES</span>
+ </div>
+{% endif %}
+
+
 
 {% endblock %}

@@ -10,7 +10,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-shopping-cart"></i> Listado de Productos
@@ -20,10 +20,10 @@
                 </div> <!-- row -->
 
                  <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <button type="button" class="btn btn-primary" id="new_button" data-url="{{ path('producto_new') }}">Nuevo</button>
                      </div>
-                     <div class="col-lg-4">
+                     <div class="col-lg-5">
                           <form id="custom-search-form" class="form-search form-horizontal pull-right" action="#">
                             
                             <div class="form-group input-group">
@@ -33,9 +33,10 @@
                            
                           </form>
                      </div>
-                     <div class="col-lg-3">
-                     {% if is_granted("ROLE_VIEWPRODUCTO") %} <button class="btn btn-primary" type="button" id="exportar_button" data-url="{{ path('producto_exportar') }}" >Exportar </button> {% endif %}
-                     </div> 
+                     <div class="col-lg-2">
+                         {% if is_granted("ROLE_VIEWPRODUCTO") %} <button class="btn btn-primary" type="button" id="exportar_button" data-url="{{ path('producto_exportar') }}" >Exportar </button> {% endif %}
+                     </div>
+
                  </div>
                     
 
@@ -50,6 +51,7 @@
                                         <th>Descripción</th>
                                         <th>Precio</th>
 										<th>Categoría</th>
+                    <th>Subcategoría</th>
 										<th>Variedades</th>
                                         <th>Imagen</th>
 										<th>Publicado</th>
@@ -64,13 +66,38 @@
 												  <td>{{ producto.name |capitalize}}</td>
                                                   <td>{{ producto.description | capitalize}}</td>
                                                   <td>{{ producto.getPrecio }}</td>
-												  <td>{{ producto.getSubcategoria.getName}}</td>
+												  <td>{{ producto.getCategoria.getName }}</td>
+                          <td>{%if producto.getSubcategoria %} {{ producto.getSubcategoria.getName}} {% endif %}</td>
 												  <td>
-												  {% for variedad in producto.getVariedades() %}	
-												  	{{ variedad.getName()  }}
-                                                  	<br/>
-												  {% endfor %}	
-												  </td>
+                                                      {% if producto.getVariedades().isEmpty()  %}
+                                                      el producto no tiene variedades definidas.
+                                                      {% else %}
+                                                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#horarios{{producto.id}}">Ver Variedades</button>
+                                                      <div class="modal fade " id="horarios{{producto.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                                                          <div class="modal-dialog modal-lg">
+
+                                                              <div class="modal-content">
+                                                                  <div class="modal-header">
+                                                                      <h4 class="modal-title">Variedades del producto</h4>
+                                                                  </div>
+                                                                  <div class="modal-body">
+                                                                      <table align="center">
+                                                                          <tr><th width="100px">Código</th><th width="200px";>Nombre</th><th width="300px">Descripcion</th></tr>
+                                                                          {% for variedad in producto.getVariedades() %}
+                                                                          <tr>
+                                                                                <td>{{ variedad.getCode()  }}</td>
+                                                                                <td>{{ variedad.getName()  }}</td>
+                                                                                <td>{{ variedad.getDescription()  }}</td>
+                                                                          </tr>
+                                                                          {% endfor %}
+
+                                                                      </table>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                      {% endif %}
+                                                  </td>
                                                   <td>
                                                   {% if producto.getWebPath() %}
                                                   <img src="{{ asset(producto.getWebPath()) }}" width="100" height="100" />
@@ -93,7 +120,7 @@
                                                   <a href="{{ path('producto_edit', { 'id': producto.id }) }}"><i class="fa fa-pencil"></i></a>
                                                   {% endif %}
                                                   {% if is_granted("ROLE_DELPRODUCTO") %}
-                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ producto.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                                  <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ producto.id }}  data-target="#myModal"><i class="fa fa-eye-slash"></i></a>
                                                   {% endif %}
                                                   </td>
                                       </tr>
@@ -120,24 +147,19 @@
         <div class="modal-content">
             <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
+            <h4 class="modal-title" id="myModalLabel">Confirmar Despublicación</h4>
             </div>
             <div class="modal-body">
-                <p class="error-text">Esta seguro que desea borrar el producto?</p>
+                <p class="error-text">Esta seguro que desea despublicar el producto?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Borrar</button>
+                <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('producto_delete', { 'id': 'id' }) }}">Confirmar</button>
         </div>
     </div>
   </div>
 </div>
-    
-    
-    
-    
-    
-    
+
     <form action="" id="delete-form" method="post" {{ form_enctype(delete_form) }}>
     {{ form_widget(delete_form) }}
     <input type="hidden" value="DELETE" name="_method">
@@ -152,10 +174,10 @@
   {% block javascripts %}
   {{ parent() }}
  
-{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/exportar_entidad.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}      
   

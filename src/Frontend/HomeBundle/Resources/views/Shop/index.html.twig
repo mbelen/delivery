@@ -1,406 +1,504 @@
-	<section id="advertisement">
-		<div class="container">
-			<img src="images/shop/advertisement.jpg" alt="" />
-		</div>
-	</section>
+{% extends '::front/base_front.html.twig' %}
+{% block header %}
+<header id="header_tienda" class="{{ tienda.getHeader() }}">
+    <div class="container">
+        <div class="row shop-bg">
+
+            <div class="col-xs-12 col-md-8">
+                <div class="intro-text">
+
+                    {% if tienda.getWebPath() %}
+                        <img src="{{ asset(tienda.getWebPath()) }}" class="logo" />
+                     {%else%}
+                           <img src="{{ asset('images/home/shop_default.png') | imagine_filter('logo_thumb') }}" class="logo" />
+                    {% endif %}
+                    <input type="hidden" name="restricted" id="restricted" value="{{restricted}}" >
+                    <div class="info">
+                        <p class="shop-open">{% if tienda.getOpen() %}<span class="label label-success">Recibe pedidos estando cerrado</span>{% else %}<span class="label label-danger">No recibe pedidos estando cerrado</span>  {% endif %}</p>
+                        <p class="shop-payment text-left">Medios de pago disponibles:</p>
+
+                        <ul class="list-inline text-left payments-method">
+                            {% for p in  tienda.getPaymethods() %}
+                                <li>
+                                    <img src="{{ asset(p.getWebPath())  }}" class="icon" title="{{ p.getName() }}">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <p class="shop-delivery text-left">Tiempo de entrega estimado: {%if tienda.getTiempoEntrega()%} {{ tienda.getTiempoEntrega() }} {% else %} No especifícado {% endif %}</p>
+                        <p class="shop-delivery text-left">Servicio de delivery: {% if tienda.getDelivery() is null or tienda.getDelivery() == 0 %} Sin cargo {% else %} ${{ tienda.getDelivery() }}{% endif %}</p>
+                        
+                    </div> <!-- info -->
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-4">
+                <div class="intro-text">
+                    <div class="info">
+                        <p class="shop-title text-right">{{ tienda.getName() }}</p>
+                        {% if tienda.getShowDireccion() %}
+                        <p class="shop-address text-right">{{ tienda.getDireccion().getCalle() ~ " " ~ tienda.getDireccion().getNumero() ~ " - " ~ tienda.getDireccion().getBarrio().getName()~ ", " ~ tienda.getDireccion().getZona().getName() }}</p>
+                        {%else %}
+                        <p class="shop-address text-right">{{ tienda.getDireccion().getBarrio().getName()~ ", " ~ tienda.getDireccion().getZona().getName() }}</p>
+                     
+                        {% endif %}
+                        {% if tienda.getRegiones() | length > 0 %}
+                         <p class="shop-delivery text-right">Zona de entrega: <a href="#myMapModal" class="btn btn-primary" data-toggle="modal">Ver</a></p>
+                         
+
+                         <div class="modal fade" id="myMapModal">
+							    <div class="modal-dialog">
+							        <div class="modal-content">
+							            <div class="modal-header">
+							                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							                 <h4 class="modal-title title-mapa">Zonas de Entrega del Comercio</h4>
+
+							            </div>
+							            <div class="modal-body">
+							                <div class="container">
+							                    <div class="row">
+							                        <div id="map-canvas" class=""></div>
+							                    </div>
+							                </div>
+							            </div>
+							            <div class="modal-footer">
+							                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							                
+							            </div>
+							        </div>
+							        <!-- /.modal-content -->
+							    </div>
+							    <!-- /.modal-dialog -->
+					    </div>
+							    <!-- /.modal -->
+
+
+
+                        {% else %}
+                        <p class="shop-delivery text-right">Radio de entrega: {{ tienda.getRadio() }} km.</p>
+                        {% endif %}
+                        <p class="shop-delivery text-right">Pedido mínimo: {% if tienda.getMinimo() is null %} -- {% else %}  {{ " $ " ~tienda.getMinimo() }} {% endif %}</p>
+                        <h3 class="shop-status label label-warning" data-url = "{{ path('frontend_checkTime') }}" id = "status" data-tienda = " {{ tienda.getId() }} "></h3>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12">
+            <div class="shop-horarios" id="horarios">
+                <table style="margin-left:15%;">
+                    <tr>
+                    {% for h in horarios %}
+                    <td style="text-align: center">{{ h.getDia.getName() }}</td>
+                    {% endfor %}
+                    </tr>
+                    <tr>
+                    {% for h in horarios %}
+                        {% if h.getCerrado() %}<td> Cerrado </td> 
+                        {% elseif h.getOpenAll() %} <td> 24hs </td>
+                        {% else %}
+                        
+                            <td>
+                                {% if h.getDesde() is not null and h.getHasta() is not null %}
+                                    {{ h.getDesde() ~ " - "~ h.Hasta()~"hs."}}
+                                {% endif %}
+                                 <br>
+                                {% if h.getHorarioPartido() and h.getDesdeT() is not null and h.getHastaT() is not null %}
+                                        {{ h.getDesdeT() ~ " - "~ h.HastaT()~"hs."}}
+                                {% endif %}
+                            </td>
+                       
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                    
+                   
+                    
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</header> 
+{% endblock %}
+
+{% block container %}
+
+    <div class="container">
+
+        <!-- Buscador interno -->
+        <div class="row buscador_tienda">
+            <div class="col-lg-6">
+                <!--<h2 class="subtitle">Nuestros productos</h2>-->
+                <button class="btn btn-warning" type="button">
+                    {{ subcategoria~" " }} <span class="badge"> {{ count }}</span>
+                </button>
+                {% if subcategoria != "Todos" %}
+                <!--
+                <button class="btn btn-danger" type="button" id="quitar_filtro">
+                    Quitar filtros
+                </button>
+                    -->
+                    <a href="{{ path('frontend_all_products', { 'id': tienda.id }) }}" class="btn btn-danger" role="button">Quitar filtros</a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <form id="custom-search-form" class="form-search form-horizontal" action="#">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar mas productos" id="search-query" value="{{ search }}">
+                    
+                    <span class="input-group-btn"><button class="btn btn-warning" id="search-button" data-url="{{ path('frontend_product_filter', { 'id': tienda.id}) }}" type="button"><i class="fa fa-search"></i></button></span>
+                </div><!-- /input-group -->
+                </form>
+            </div>
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                {% if promos %}
+                <h2 class="subtitle_shop">Nuestras promos del día</h2>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row text-center" id="productos">
+            {% for promo in promos %}
+            <div class="col-md-6 col-sm-6">
+                <div class="promo-item">
+                    <div class="thumbnail">
+                        {% if promo['promo'].getType() == 1 %}
+                            <h1>{{ promo['promo'].getPorcentaje() ~"%" }}</h1>
+                        {% else %}
+                            <h1>{{ promo['promo'].getUnidad1()}}<span>x</span>{{promo['promo'].getUnidad2() }}</h1>
+                        {% endif %}
+                    </div>
+                    <div class="caption">
+                        <p class="title">{{ promo['promo'].getName() }}</p>
+                            {% if promo['promo'].getType() == 1 %}
+                                <div class="unidades">
+                                    <p>LLEVATE TODO AL <span class="unidades-precio">{{ promo['promo'].getPorcentaje() }}%</span> DE DESCUENTO</p>
+                                </div>
+                            {% else %}
+                                <div class="unidades">
+                                    <p>LLEVATE <span class="unidades-precio">{{ promo['promo'].getUnidad1() }}</span> al precio de <span class="unidades-precio">{{ promo['promo'].getUnidad2() }}</span></p>
+                                </div>
+                            {% endif %}
+                            <p class="terms">{{ promo['promo'].getTerms() }}</p>
+                            
+                        <!--    <button class="btn btn-warning">Ver todos los productos</button> -->
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Title -->
+        <div class="row">
+            <div class="col-lg-12">
+                {% if items %}
+                <h2 class="subtitle_shop">Nuestros productos en promoción</h2>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row text-center id="productos-promos">
+           
+            {% if items is not empty %}
+ 
+                {% for it in items %}
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <!-- <img src="{{ asset(it.getProducto().getWebPath()) | imagine_filter('product_thumb')  }}" alt="" class="product-img"> -->
+          
+                    <img src="{{ asset(it.getProducto().getWebPath()) }}" alt="" class="product-img">
+                    <div class="caption">
+                        <p class="product-title">{{ it.getProducto.getName() }}</p>
+                        <p class="product-desc">{{ it.getProducto().getDescription }}</p>
+                        {% if it.getPromocion().getType() == 1 %}
+                        <div class="promo-producto">
+                            <div class="antes">
+                                <p>ANTES</p>
+                                <p class="antes-precio">$ {{ it.getProducto.getPrecio() }}</p>
+                            </div>
+                            <div class="ahora">
+                                <p>AHORA</p>
+                                <p class="ahora-precio">$ {{ it.getPrecio() }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="promo-producto">
+                            <div class="unidades">
+                                <p>{{ it.getPromocion().getUnidad1() }}<span> x</span> {{ it.getPromocion().getUnidad2() }}</p>
+                                <div class="antes">
+                                <p class="antes-precio"> $ {{ it.getProducto().getPrecio() }} c/u</p>
+                                </div>
+                                <div class="ahora">
+                                <p class="ahora-precio"> {{it.getPromocion().getUnidad1()}} x $ {{ it.getPrecio() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    
+                    <p class="product-details">
+                            {% if it.getProducto().getVariedades() is not empty %}
+                            <button type="button" class="btn btn-link variedades" data-toggle="modal" data-target="#variedades{{it.getProducto().getId() }}" >Ver Variedades</button>
+                            <div class="modal fade" id="variedades{{it.getProducto.getId() }}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                              <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                 <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                      <h4 class="modal-title" >Variedades Disponibles</h4>
+                                    </div>
+                                    <div class="modal-body">
+
+                                              <ul class="list-unstyled">
+                                              {% for v in it.getProducto().getVariedades()%}
+                                                <li class="col-md-4">{{ v.getName() }}</li>
+                                                
+                                                {% endfor %}
+                                              </ul>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                      
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                            {% else %}
+                                <button type="button" class="btn btn-link variedades not-active" data-toggle="modal" data-target="#variedades{{it.getProducto().getId() }}"><span class="grey">Sin Variedades</span></button>
+                            {% endif %}
+                        </p>  
+	                        <button type="button"  data-id="{{it.getProducto.getId}}" class="btn btn-warning  {% if it.getProducto().getVariedades() is not empty %} comprar_variedades  {% else %} comprar_comun{% endif %}">Comprar</button>         
+                    </div>					
+                    <p>
+                    
+						<div class="center">
+						  
+						      <div class="input-group">
+						          <span class="input-group-btn">
+						              <button type="button" class="btn btn-warning btn-number"  data-type="minus" data-field="quant[2]">
+						                <span class="glyphicon glyphicon-minus slider-minus" data-id="{{it.getProducto.getId}}"></span>
+						              </button>
+						          </span>
+						          <input type="text" name="quant[2]" class="form-control input-number" id="input-producto-{{it.getProducto.getId}}" value="0" min="0" max="100" style="text-align:center">
+						          <span class="input-group-btn">
+						              <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[2]">
+						                  {% if it.getProducto().getVariedades() is not empty %}
+                              <span class="glyphicon glyphicon-plus slider-plus-variedad" id="slider-plus-variedad-{{it.getProducto().getId()}}" data-id="{{it.getProducto().getId}}" data-item = "{{ it.getId() }}" data-thumb="{{ it.getProducto().getWebPath() }}" data-name="{{ it.getPromocion().getName()~":"~ it.getPromocion().getUnidad1()~"x"~it.getPromocion().getUnidad2() ~" "~it.getProducto().getName() }}"  data-sucursalId="{{ tienda.id }}" data-sucursalName="{{ tienda.getName() }}" data-sucursalImg="{{ tienda.getWebPath() }}"  data-price="{{ it.getPrecio() }}" data-costo="{{ tienda.getDelivery() }}" data-minimo="{{ tienda.getMinimo()}}" data-maxvariedad="{{ it.getProducto.getMaxVariedad()}}" data-minvariedad="{{ it.getProducto().getMinVariedad()}}" data-typevariedad="{{ it.getProducto().getQtyVariedad()}}"></span>
+                              {% else %}
+                              <span class="glyphicon glyphicon-plus slider-plus" id="slider-plus-{{it.getProducto().getId()}}" data-id="{{it.getProducto().getId}}" data-item="{{it.getId()}}" data-thumb="{{ it.getProducto.getWebPath() }}" data-name="{{ it.getPromocion().getName()~":"~ it.getPromocion().getUnidad1()~"x"~it.getPromocion().getUnidad2() ~" "~it.getProducto().getName() }}"  data-sucursalId="{{ tienda.id }}" data-sucursalName="{{ tienda.getName() }}" data-sucursalImg="{{ tienda.getWebPath() }}"  data-price=" {{ it.getPrecio() }}" data-costo="{{ tienda.getDelivery() }}" data-minimo="{{ tienda.getMinimo()}}"></span>
+                              {% endif %}
+						              </button>
+						          </span>
+						      </div>
+							          
+						</div>
+						
+                    </p>
+                </div> <!-- thumbnail -->        
+                </div> <!-- producto -->
+                {% endfor %}
+                 
+                {% endif %}
+            
+        </div> <!-- row productos-promo -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="subtitle_shop">Nuestros productos</h2>
+            </div>
+        </div>
+        <!-- Page Features -->
+        
+        <div class="row text-center" id="productos">
+            {% for p in productos %}
+            
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="{{ asset(p.getWebPath()) | imagine_filter('product_thumb')  }}" alt="">
+                    <div class="caption">
+                        <p class="product-title">{{ p.getName() }}</p>
+                        <p class="product-desc">{{ p.getDescription }}</p>
+                         <p class="product-price">$ {{ p.getPrecio() }}</p>
+                           <p class="product-details">
+                            {% if p.getVariedades() is not empty %}
+                            <button type="button" class="btn btn-link variedades" data-toggle="modal" data-target="#variedades{{p.getId() }}" >Ver Variedades</button>
+                            <div class="modal fade" id="variedades{{p.getId() }}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                              <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                 <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                      <h4 class="modal-title" >Variedades Disponibles</h4>
+                                    </div>
+                                    <div class="modal-body">
+
+                                              <ul class="list-unstyled">
+                                              {% for v in p.getVariedades()%}
+                                                <li class="col-md-4">{{ v.getName() }}</li>
+                                                
+                                                {% endfor %}
+                                              </ul>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                      
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                            {% else %}
+                                <button type="button" class="btn btn-link variedades not-active" data-toggle="modal" data-target="#variedades{{p.getId() }}"><span class="grey">Sin Variedades</span></button>
+                            {% endif %}
+                        </p>  
+						           <button type="button"  data-id="{{p.getId}}" class="btn btn-warning  {% if p.getVariedades() is not empty %} comprar_variedades  {% else %} comprar_comun{% endif %}">Comprar</button>         
+                    </div>					
+                    <p>
+                    
+						<div class="center">
+						  
+						      <div class="input-group">
+						          <span class="input-group-btn">
+						              <button type="button" class="btn btn-warning btn-number"  data-type="minus" data-field="quant[2]">
+						                <span class="glyphicon glyphicon-minus slider-minus" data-id="{{p.getId}}"></span>
+						              </button>
+						          </span>
+						          <input type="text" name="quant[2]" class="form-control input-number" id="input-producto-{{p.getId}}" value="0" min="0" max="100" style="text-align:center">
+						          <span class="input-group-btn">
+						              <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[2]">
+						                  {% if p.getVariedades() is not empty %}
+                              <span class="glyphicon glyphicon-plus slider-plus-variedad" id="slider-plus-variedad-{{p.getId()}}" data-id="{{p.getId}}" data-item="0" data-thumb="{{ p.getWebPath() }}" data-name="{{ p.getName() }}" data-sucursalId="{{ tienda.id }}" data-sucursalName="{{ tienda.getName() }}" data-sucursalImg="{{ tienda.getWebPath() }}" data-price="{{ p.getPrecio() }}" data-costo="{{ tienda.getDelivery() }}" data-minimo="{{ tienda.getMinimo()}}" data-maxvariedad="{{ p.getMaxVariedad()}}" data-minvariedad="{{ p.getMinVariedad()}}" data-typevariedad="{{ p.getQtyVariedad()}}"></span>
+                              {% else %}
+                              <span class="glyphicon glyphicon-plus slider-plus" id="slider-plus-{{p.getId()}}" data-id="{{p.getId}}" data-item="0" data-thumb="{{ p.getWebPath() }}" data-name="{{ p.getName() }}" data-sucursalId="{{ tienda.id }}" data-sucursalName="{{ tienda.getName() }}" data-sucursalImg="{{ tienda.getWebPath() }}" data-price="{{ p.getPrecio() }}" data-costo="{{ tienda.getDelivery() }}" data-minimo="{{ tienda.getMinimo()}}"></span>
+                              {% endif %}
+						              </button>
+						          </span>
+						      </div>
+							          
+						</div>
+						
+                    </p>
+                </div> <!-- thumbnail -->
+            </div> <!-- product -->
+			{% endfor %}
+
+      <!-- modal para seleccionar variedades -->
+                  <div class="modal fade" id="seleccionarvariedades" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" data-url="{{path('frontend_variedades')}}">
+                              <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                 <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                      <h4 class="modal-title" >Variedades Disponibles</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                         
+                                         <p class="textExplicativo" id="text-max-variedad">
+                                         La cantidad máxima de distintas variedades 
+                                         a seleccionar son <span id="max-variedad"></span></p>
+                                           <div class="col-md-12">
+                                           
+                                              <ul class="list-unstyled" id="listVariedad" >
+                                              
+                                              </ul>
+                                           </div> 
+                                      <div class="  hideElement " style="color: #a94442"  id="messageVariedad" ></div>  
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" data-id="" class="btn btn-primary aceptarVariedades" >Aceptar</button>
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                      
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                     <!-- fin modal variedades--> 
+
+
+        </div>
+        <!-- /.row -->
+
+       </div>
+    <!-- /.container -->
+	  
+
 	
-	<section>
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-3">
-					<div class="left-sidebar">
-						<h2>Category</h2>
-						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Sportswear
-										</a>
-									</h4>
-								</div>
-								<div id="sportswear" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="">Nike </a></li>
-											<li><a href="">Under Armour </a></li>
-											<li><a href="">Adidas </a></li>
-											<li><a href="">Puma</a></li>
-											<li><a href="">ASICS </a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#mens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Mens
-										</a>
-									</h4>
-								</div>
-								<div id="mens" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="">Fendi</a></li>
-											<li><a href="">Guess</a></li>
-											<li><a href="">Valentino</a></li>
-											<li><a href="">Dior</a></li>
-											<li><a href="">Versace</a></li>
-											<li><a href="">Armani</a></li>
-											<li><a href="">Prada</a></li>
-											<li><a href="">Dolce and Gabbana</a></li>
-											<li><a href="">Chanel</a></li>
-											<li><a href="">Gucci</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#womens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Womens
-										</a>
-									</h4>
-								</div>
-								<div id="womens" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="">Fendi</a></li>
-											<li><a href="">Guess</a></li>
-											<li><a href="">Valentino</a></li>
-											<li><a href="">Dior</a></li>
-											<li><a href="">Versace</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Kids</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Fashion</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Households</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Interiors</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Clothing</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Bags</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Shoes</a></h4>
-								</div>
-							</div>
-						</div><!--/category-productsr-->
-					
-						<div class="brands_products"><!--brands_products-->
-							<h2>Brands</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href=""> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href=""> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href=""> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href=""> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href=""> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href=""> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
-								</ul>
-							</div>
-						</div><!--/brands_products-->
-						
-						<div class="price-range"><!--price-range-->
-							<h2>Price Range</h2>
-							<div class="well">
-								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-								 <b>$ 0</b> <b class="pull-right">$ 600</b>
-							</div>
-						</div><!--/price-range-->
-						
-						<div class="shipping text-center"><!--shipping-->
-							<img src="images/home/shipping.jpg" alt="" />
-						</div><!--/shipping-->
-						
-					</div>
-				</div>
-				
-				<div class="col-sm-9 padding-right">
-					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">Features Items</h2>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product12.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product11.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product10.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product9.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-									<img src="images/home/new.png" class="new" alt="" />
-								</div>
-								
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product8.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-									<img src="images/home/sale.png" class="new" alt="" />
-								</div>
-								
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product7.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>					
-							</div>
-						</div>
-						
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product6.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product5.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product4.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>								
-							</div>
-						</div>
-						
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product3.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product2.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>								
-							</div>
-						</div>
-						
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product1.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<ul class="pagination">
-							<li class="active"><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li><a href="">3</a></li>
-							<li><a href="">&raquo;</a></li>
-						</ul>
-					</div><!--features_items-->
-				</div>
-			</div>
-		</div>
-	</section>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent()}}
+ <script src="{{ asset("js/readmore.min.js") }}"></script>
+
+ {% javascripts '@FrontendHomeBundle/Resources/public/js/producto.js'filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+  {% javascripts '@FrontendHomeBundle/Resources/public/js/checkTime.js'filter='?uglifyjs2' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+
+ <script>
+
+{% if tienda.getRegiones() | length > 0 %}
+var map;       
+var myCenter=new google.maps.LatLng({{ tienda.getRegiones()[0].getCoordenadas()[0].getLat() }}, {{ tienda.getRegiones()[0].getCoordenadas()[0].getLng() }});
+
+
+function initialize() {
+  var mapProp = {
+      center:myCenter,
+      zoom: 14,
+      draggable: true,
+      scrollwheel: true,
+      mapTypeId:google.maps.MapTypeId.ROADMAP
+
+  };
+  
+  map=new google.maps.Map(document.getElementById("map-canvas"),mapProp);
+ 
+ {% for poligono in regiones %}
+
+ var poligonoCoords{{ loop.index }} = [ {{poligono}} ]; 
+
+  myPolygon{{ loop.index }} = new google.maps.Polygon({
+    paths: poligonoCoords{{ loop.index }},
+    draggable: true, // turn off if it gets annoying
+    editable: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35
+  });
+
+  myPolygon{{ loop.index }}.setMap(map);
+
+ {% endfor %}
+
+};
+google.maps.event.addDomListener(window, 'load', initialize);
+
+google.maps.event.addDomListener(window, "resize", resizingMap());
+
+$('#myMapModal').on('show.bs.modal', function() {
+   //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
+   resizeMap();
+})
+
+function resizeMap() {
+   if(typeof map =="undefined") return;
+   setTimeout( function(){resizingMap();} , 400);
+}
+
+function resizingMap() {
+   if(typeof map =="undefined") return;
+   var center = map.getCenter();
+   google.maps.event.trigger(map, "resize");
+   map.setCenter(center); 
+}
+
+{% endif %}
+
+
+ </script>
+
+
+ {% endblock %}                         

@@ -3,10 +3,14 @@
 namespace Backend\CustomerAdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="sucursal")
  * @ORM\Entity()
+ * @UniqueEntity("direccion")
+ * @ORM\HasLifecycleCallbacks  
  */
 class Sucursal 
 {
@@ -43,14 +47,20 @@ class Sucursal
     private $cuit;
     
     /**
-     * @ORM\Column(name="is_unica", type="boolean",nullable=true)
+     * @ORM\Column(name="radio", type="integer")
      */
-    private $is_unica;	
+    private $radio; 
+  	
 	
     /**
      * @ORM\Column(name="open", type="boolean",nullable=true)
      */
     private $open;	
+	
+    /**
+     * @ORM\Column(name="premium", type="boolean",nullable=true)
+     */
+    private $premium;	
 	
     /**
      * @ORM\ManyToOne(targetEntity="\Backend\CustomerBundle\Entity\Customer", inversedBy="sucursales")
@@ -65,18 +75,33 @@ class Sucursal
      */
    
     private $direccion;	
+
+    /**
+     * @ORM\OneToMany(targetEntity="Region", mappedBy="sucursal")
+     */
+   
+    private $regiones; 
 	
     /**
      * @ORM\ManyToMany(targetEntity="\Backend\AdminBundle\Entity\Categoria", inversedBy="sucursales")
      */
     protected $categorias;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Backend\AdminBundle\Entity\Subcategoria", inversedBy="sucursales")
+     */
+    protected $subcategorias;
 	
     /**
-     * @ORM\ManyToMany(targetEntity="Producto", inversedBy="sucursales", cascade={"persist","remove"})
-	 * @ORM\JoinTable(name="sucursal_producto")
+     * @ORM\ManyToMany(targetEntity="Producto", mappedBy="sucursales", cascade={"persist","remove"})
      */
     protected $productos;
-	
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Promocion", mappedBy="sucursales", cascade={"persist","remove"})
+     */
+    protected $promociones;
+
     /**
      * @ORM\ManyToMany(targetEntity="\Backend\AdminBundle\Entity\PayMethod", inversedBy="sucursales")
 	 * @ORM\JoinTable(name="paymethod_sucursal")
@@ -89,7 +114,8 @@ class Sucursal
     */
 	
     private $horarios;
-	
+
+  
     /**
      * @ORM\OneToMany(targetEntity="Pedido", mappedBy="sucursal")
      */
@@ -100,6 +126,12 @@ class Sucursal
      */
 	
     private $createdAt;
+    
+    /**
+     * @ORM\Column(name="modified_at", type="datetime")
+     */
+	
+    private $modifiedAt;
 	
     /**
      * @ORM\Column(name="is_active", type="boolean",nullable=true)
@@ -109,17 +141,72 @@ class Sucursal
      /**
      * @ORM\OneToMany(targetEntity="\Backend\CustomerAdminBundle\Entity\Favorito", mappedBy="sucursal")
      */
-    private $favoritos;
+    private $favoritos; 
+	
+    /**
+     * costo del envio    
+     * @ORM\Column(name="costo", type="decimal", scale=2, nullable=true)
+     */
+	
+	private $delivery;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+	
+	private $tiempo_entrega;
+	
+    /**
+     * @ORM\Column(name="minimo", type="decimal", scale=2, nullable=true)
+     */
+	
+	private $minimo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Banner", mappedBy="sucursal")
+     */
+    private $banners;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+
+    private $header;
     
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    
+    /**
+     * @ORM\Column(name="show_direccion", type="boolean", nullable=true)
+     */
+    private $show_direccion;	
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    
+    private $path;
+    private $temp;
+    private $file;
+     
+
     
     public function __construct() {
 	
-		$this->createdAt = new \DateTime('now');
-		$this->open = false;
-		$this->active = true;
-		$this->productos = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->horarios = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->favoritos =  new ArrayCollection();     
+        $this->createdAt = new \DateTime('now');
+        $this->modifiedAt = new \DateTime('now');
+        $this->open = false;
+        $this->active = true;
+        $this->is_premium = false;
+        $this->radio = 0;
+        $this->minimo = 0;
+        $this->delivery = 0;
+        $this->productos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->regiones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->horarios = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subcategorias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->favoritos =  new ArrayCollection();     
     }
     
     public function __toString()
@@ -127,6 +214,122 @@ class Sucursal
           return $this->name;
     }
 	
+	 /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+        // check if we have an old image path
+        if (isset($this->path)) {
+            // store the old name to delete after the update
+            $this->temp = $this->path;
+            $this->path = null;
+        } else {
+            $this->path = 'initial';
+        }
+    }
+
+     /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->getFile()) {
+            // do whatever you want to generate a unique name
+            $filename = sha1(uniqid(mt_rand(), true));
+            $this->path = $filename.'.'.$this->getFile()->guessExtension();
+        }
+    }
+    
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+        $this->getFile()->move($this->getUploadRootDir(), $this->path);
+
+        // check if we have an old image
+        if (isset($this->temp)) {
+            // delete the old image
+            @unlink($this->getUploadRootDir().'/'.$this->temp);
+            // clear the temp image path
+            $this->temp = null;
+        }
+        $this->file = null;
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            @unlink($file);
+        }
+    }
+    
+    
+    
+    public function getFile()
+    {
+        return $this->file;
+    }
+    
+
+    
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+    
+    
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/sucursales';
+    }
+    
+    
+     /**
+     * @ORM\PreUpdate()
+     * 
+     */
+     
+    public function modifiedUpdate(){
+    
+      $this->setModifiedAt(new \DateTime('now'));
+    }
+
 
     /**
      * Get id
@@ -633,5 +836,371 @@ class Sucursal
     public function getFavoritos()
     {
         return $this->favoritos;
+    }
+
+ 
+
+    /**
+     * Set premium
+     *
+     * @param boolean $premium
+     * @return Sucursal
+     */
+    public function setPremium($premium)
+    {
+        $this->premium = $premium;
+
+        return $this;
+    }
+
+    /**
+     * Get premium
+     *
+     * @return boolean 
+     */
+    public function getPremium()
+    {
+        return $this->premium;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return Sucursal
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Add subcategorias
+     *
+     * @param \Backend\AdminBundle\Entity\Subcategoria $subcategorias
+     * @return Sucursal
+     */
+    public function addSubcategoria(\Backend\AdminBundle\Entity\Subcategoria $subcategorias)
+    {
+        $this->subcategorias[] = $subcategorias;
+
+        return $this;
+    }
+
+    /**
+     * Remove subcategorias
+     *
+     * @param \Backend\AdminBundle\Entity\Subcategoria $subcategorias
+     */
+    public function removeSubcategoria(\Backend\AdminBundle\Entity\Subcategoria $subcategorias)
+    {
+        $this->subcategorias->removeElement($subcategorias);
+    }
+
+    /**
+     * Get subcategorias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubcategorias()
+    {
+        return $this->subcategorias;
+    }
+
+    /**
+     * Set modifiedAt
+     *
+     * @param \DateTime $modifiedAt
+     * @return Sucursal
+     */
+    public function setModifiedAt($modifiedAt)
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get modifiedAt
+     *
+     * @return \DateTime 
+     */
+    public function getModifiedAt()
+    {
+        return $this->modifiedAt;
+    }
+
+    /**
+     * Set radio
+     *
+     * @param integer $radio
+     * @return Sucursal
+     */
+    public function setRadio($radio)
+    {
+        $this->radio = $radio;
+
+        return $this;
+    }
+
+    /**
+     * Get radio
+     *
+     * @return integer 
+     */
+    public function getRadio()
+    {
+        return $this->radio;
+    }
+
+    /**
+     * Set delivery
+     *
+     * @param string $delivery
+     * @return Sucursal
+     */
+    public function setDelivery($delivery)
+    {
+        $this->delivery = $delivery;
+
+        return $this;
+    }
+
+    /**
+     * Get delivery
+     *
+     * @return string 
+     */
+    public function getDelivery()
+    {
+        return $this->delivery;
+    }
+
+    /**
+     * Set minimo
+     *
+     * @param string $minimo
+     * @return Sucursal
+     */
+    public function setMinimo($minimo)
+    {
+        $this->minimo = $minimo;
+
+        return $this;
+    }
+
+    /**
+     * Get minimo
+     *
+     * @return string 
+     */
+    public function getMinimo()
+    {
+        return $this->minimo;
+    }
+
+    /**
+     * Set tiempo_entrega
+     *
+     * @param string $tiempoEntrega
+     * @return Sucursal
+     */
+    public function setTiempoEntrega($tiempoEntrega)
+    {
+        $this->tiempo_entrega = $tiempoEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get tiempo_entrega
+     *
+     * @return string 
+     */
+    public function getTiempoEntrega()
+    {
+        return $this->tiempo_entrega;
+    }
+
+    /**
+     * Set headerPath
+     *
+     * @param string $headerPath
+     * @return Sucursal
+     */
+    public function setHeaderPath($headerPath)
+    {
+        $this->headerPath = $headerPath;
+
+        return $this;
+    }
+
+    /**
+     * Get headerPath
+     *
+     * @return string 
+     */
+    public function getHeaderPath()
+    {
+        return $this->headerPath;
+    }
+
+    /**
+     * Set header
+     *
+     * @param string $header
+     * @return Sucursal
+     */
+    public function setHeader($header)
+    {
+        $this->header = $header;
+
+        return $this;
+    }
+
+    /**
+     * Get header
+     *
+     * @return string 
+     */
+    public function getHeader()
+    {
+        return $this->header;
+    }
+
+    /**
+     * Add promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     * @return Sucursal
+     */
+    public function addPromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones[] = $promociones;
+
+        return $this;
+    }
+
+    /**
+     * Remove promociones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Promocion $promociones
+     */
+    public function removePromocione(\Backend\CustomerAdminBundle\Entity\Promocion $promociones)
+    {
+        $this->promociones->removeElement($promociones);
+    }
+
+    /**
+     * Get promociones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPromociones()
+    {
+        return $this->promociones;
+    }
+
+    /**
+     * Add banners
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Banner $banners
+     * @return Sucursal
+     */
+    public function addBanner(\Backend\CustomerAdminBundle\Entity\Banner $banners)
+    {
+        $this->banners[] = $banners;
+
+        return $this;
+    }
+
+    /**
+     * Remove banners
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Banner $banners
+     */
+    public function removeBanner(\Backend\CustomerAdminBundle\Entity\Banner $banners)
+    {
+        $this->banners->removeElement($banners);
+    }
+
+    /**
+     * Get banners
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBanners()
+    {
+        return $this->banners;
+    }
+
+    
+
+    /**
+     * Add regiones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Region $regiones
+     * @return Sucursal
+     */
+    public function addRegione(\Backend\CustomerAdminBundle\Entity\Region $regiones)
+    {
+        $this->regiones[] = $regiones;
+
+        return $this;
+    }
+
+    /**
+     * Remove regiones
+     *
+     * @param \Backend\CustomerAdminBundle\Entity\Region $regiones
+     */
+    public function removeRegione(\Backend\CustomerAdminBundle\Entity\Region $regiones)
+    {
+        $this->regiones->removeElement($regiones);
+    }
+
+    /**
+     * Get regiones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRegiones()
+    {
+        return $this->regiones;
+    }
+
+    /**
+     * Set show_direccion
+     *
+     * @param boolean $showDireccion
+     * @return Sucursal
+     */
+    public function setShowDireccion($showDireccion)
+    {
+        $this->show_direccion = $showDireccion;
+
+        return $this;
+    }
+
+    /**
+     * Get show_direccion
+     *
+     * @return boolean 
+     */
+    public function getShowDireccion()
+    {
+        return $this->show_direccion;
     }
 }

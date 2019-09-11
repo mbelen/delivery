@@ -1,0 +1,80 @@
+<html>
+  <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+     @page { margin: 180px 50px; font-size: 11px;}
+     #header { position: fixed; left: 0px; top: -160px; right: 0px; height: 150px; background-color: #fff; text-align: center; border-bottom: 1px solid #000; }
+     #footer { position: fixed; left: 0px; bottom: -150px; right: 0px; height: 50px; font-size: 12px; /*border-top: 1px solid #000;*/ text-align:center; }
+     .label_span { display: inline-block; width: 100px; font-weight: bold;}
+     .label_span_alone { display: inline-block; width: 200px; font-weight: bold;}
+     .margin_left_10 { margin-left: 10px;}
+     #firma {  width: 100%; height: 140px; text-align: right;}
+     .table{ width: 100%;}
+     .table td { width: 50%; text-align: left;}
+     .title_conclusion{ font-weight: bold; width: 100px; margin-top: 20px; }
+     .subtitle{ font-weight: bold; width: 100%; margin-top: 20px;}
+	 .valores{ text-align:right; margin-left:560px;float:right;}
+     .tecnicas{ width: 100%}
+     .tecnicas .first{ width: 100px; text-align: center;}
+     .tecnicas .second { width: 200px;}
+     .tecnicas .third { width: 200px;}
+     .tecnicas .fourth { width: 150px; text-align: right;}
+     .separador {border-top: 1px solid #000; margin: 0; padding: 0}
+	 .subitems {margin-left:20px;}
+	 p{
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+   }
+   </style>
+  <body>
+   <div id="header">
+     <img src="img/zd_header_constancia.png" height="100">
+   </div>
+   <div id="footer">
+
+     <hr class="separador">
+     <p>www.zonadelivery.com - hola@zonadelivery.com</p>
+   </div>
+   <div id="content">
+    <table class="table">
+      <tr>
+        <td> <span class="label_span">Fecha:</span> {{ entity.createdAt |date('d-m-Y H:m:s') }} </td>
+        <td> <span class="label_span">Pedido:</span> {{ entity.id }} </td>
+      </tr>
+      <tr>       
+        <td> <span class="label_span">Comercio:</span> {{ entity.getSucursal.getName() | title }} </td>
+		
+      	<td> <span class="label_span">Telefono:</span> {{ entity.getSucursal.getPhone()  }} </td>
+	  </tr>
+    </table>
+     
+     <hr>
+
+       <table class="tecnicas">
+           <tr><td class="first"><strong>Cantidad</strong></td><td class="second"><strong>Descripcion</strong></td><td class="third"><strong>Variedades</strong></td><td class="fourth"><strong>Precio</strong></td></tr>
+           {% for d in entity.getDetalles() %}
+               <tr>
+                   <td class="first">{{ d.getCantidad() }}</td>
+                   <td class="second">{{ d.getProducto.getName() }}</td>
+                   <td class="third">{% if d.getVariedades is null %} Este producto no tiene variedades {% else %}{{ d.getVariedades() }} {% endif %}</td>
+                   <td class="fourth">{{ d.getProducto.getPrecio() }}</td>
+               </tr>
+           {% endfor %}
+           <tr>
+               <td class="first"><strong>Total:</strong></td>
+               <td></td>
+               <td></td>
+               <td class="fourth"><strong>$ {{ entity.getTotal() }}</strong></td>
+           </tr>
+       </table>
+
+     {% if entity.comentarios is not null %}
+     <div class="conclusion">
+     <span class="title_conclusion">Observaciones:</span> {{ entity.comentarios |raw}}
+     </div>
+    {% endif %}
+     
+   </div>
+ </body>
+ </html>

@@ -1,0 +1,34 @@
+compra_new:
+    pattern:  /new
+    defaults: { _controller: "BackendCustomerAdminBundle:Pedido:new" }
+
+compra_exportar:
+    pattern:  /exportar
+    defaults: { _controller: "BackendCustomerAdminBundle:Pedido:exportar" }
+    
+compra_create:
+    pattern:  /create
+    defaults: { _controller: "BackendCustomerAdminBundle:Pedido:create" }
+    requirements: { _method: post }
+
+compra_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BackendCustomerAdminBundle:Pedido:edit" }
+
+compra_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BackendCustomerAdminBundle:Pedido:update" }
+    requirements: { _method: post|put }
+
+compra_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BackendCustomerAdminBundle:Pedido:delete" }
+    requirements: { _method: post|delete }
+
+compra_print:
+    pattern:  /{id}/print
+    defaults: { _controller: "BackendCustomerAdminBundle:Compra:print" }
+        
+compra:
+    pattern:  /{search}
+    defaults: { _controller: "BackendCustomerAdminBundle:Compra:index" , search: ''}

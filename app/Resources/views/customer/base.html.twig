@@ -16,7 +16,8 @@
           <link href="{{ asset("css/custom.css") }}" rel="stylesheet">
         <!-- Morris Charts CSS -->
           <link href="{{ asset("css/plugins/morris.css") }}" rel="stylesheet">
-
+          <!-- Shadowbox -->
+         <link rel="stylesheet" href="{{ asset('js/shadowbox/shadowbox.css') }}"  >
         <!-- Custom Fonts -->
           <link href="{{ asset("font-awesome/css/font-awesome.min.css") }}" rel="stylesheet" type="text/css">
 
@@ -34,7 +35,7 @@
         {% block body %}
         
             <div id="wrapper">
-
+        {% block navigation %}
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -45,9 +46,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ path('customer_principal') }}">Zona delivery</a>
+                <a class="navbar-brand" href="{{ path('customer_principal') }}"><img src="{{ asset('images/home/logo.png') }}" style="height:30px;"></a>
             </div>
-          
+            {% endblock %}
             {% block topmenu %}
                 
             {% endblock %}
@@ -84,12 +85,17 @@
       
           <!-- Bootstrap Core JavaScript -->
           <script src="{{ asset("js/bootstrap.min.js") }}"></script>
-          <script src="{{ asset("js/admin.js") }}"></script>
-          <script src="{{ asset('js/jquery.validate.min.js') }}"></script> 
+          {% javascripts '@BackendAdminBundle/Resources/public/js/admin.js'  filter='?uglifyjs2' %}
+          <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+          
+          <script src="{{ asset('js/shadowbox/shadowbox.js') }}"></script>
+          <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script> 
           <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/js/select2.min.js"></script>
           <script type="text/javascript">
             $('select').select2();
           </script>
+          <script src="{{ asset("js/moment.min.js")}}"></script>
         {% endblock %}
     </body>
 </html>

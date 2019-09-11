@@ -29,7 +29,28 @@ customer_list_sucursales:
     pattern:  /{id}/list_sucursales_customer
     defaults: { _controller: "BackendCustomerBundle:Customer:listSucursales" }
 
+customer_habilitar:
+    pattern:  /habilitar_customer
+    defaults: { _controller: "BackendCustomerBundle:Customer:changeActive" }
+
+customer_extra:
+    pattern:  /extra_customer
+    defaults: { _controller: "BackendCustomerBundle:Customer:changeExtra" }
+
+    
+customer_validar:
+    pattern:  /validar_customer
+    defaults: { _controller: "BackendCustomerBundle:Customer:changeStatus" }
+    
+customer_premium:
+    pattern:  /premium_customer
+    defaults: { _controller: "BackendCustomerBundle:Customer:changePremium" }
+    
 customer:
     pattern:  /{search}
     defaults: { _controller: "BackendCustomerBundle:Customer:index", search: '' }
 
+customer_front_login:
+    pattern:  /login/frontlogin
+    defaults: { _controller: "BackendCustomerBundle:Customer:login" }
+    

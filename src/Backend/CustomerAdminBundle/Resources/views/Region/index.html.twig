@@ -1,0 +1,128 @@
+{% extends '::customer/backend.html.twig' %}
+
+{% block container %}
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Listado de Regiones - Sucursal: {{ sucursalName }}
+            </h1>
+            <ol class="breadcrumb">
+                <li>
+                    <i class="fa fa-dashboard"></i>  <a href="{{ path("customer_principal") }}">Principal</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-shopping-cart"></i> Listado de Regiones
+                </li>
+            </ol>
+        </div>
+    </div> <!-- row -->
+
+    <div class="row">
+        <div class="col-lg-2">
+        {% if  is_granted("ROLE_ADDREGION") %}
+            <button type="button" class="btn btn-primary" id="new_button" data-url="{{ path('region_new',{id: sucursal }) }}">Nuevo</button>
+        {% endif %}
+        </div>
+        <div class="col-lg-5">
+            <form id="custom-search-form" class="form-search form-horizontal pull-right" action="#">
+
+                <div class="form-group input-group">
+                    <input type="text" class="form-control search-query" id="search-query" placeholder="Buscar" value="{{ search }}">
+                    <span class="input-group-btn"><button class="btn btn-default" id="search-button" data-url="{{ path('region') }}" type="button"><i class="fa fa-search"></i></button></span>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-lg-2">
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th {% if pagination.isSorted('u.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Nombre', 'u.name') }}</th>
+                        
+                        <th>Sucursal</th>
+                        <th style="width: 36px;">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for region in pagination %}
+                        <tr>
+                            <td>{{ region.name |capitalize }}</td>
+                          
+                            <td>{{ region.getSucursal().getName() }}</td>
+                            <td>
+                                {% if is_granted("ROLE_MODREGION") %}
+                                    <a href="{{ path('region_edit', { 'id': region.id }) }}"><i class="fa fa-pencil"></i></a>
+                                {% endif %}
+                                {% if is_granted("ROLE_DELREGION") %}
+                                    <a href="#" class="btn confirm-delete"   data-toggle="modal" data-id={{ region.id }}  data-target="#myModal"><i class="fa fa-trash"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+
+    </div>
+
+
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmar Borrado</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="error-text">Esta seguro que desea borrar la región?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" data-id="0"  data-url="{{ path('region_delete', { 'id': 'id' }) }}">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="" id="delete-form" method="post" {{ form_enctype(delete_form) }}>
+        {{ form_widget(delete_form) }}
+        <input type="hidden" value="DELETE" name="_method">
+
+    </form>
+
+
+
+
+
+{% endblock %}
+  {% block javascripts %}
+      {{ parent() }}
+
+      {% javascripts '@BackendAdminBundle/Resources/public/js/search_index.js' filter='?uglifyjs2'%}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+      
+
+  {% endblock %}
+
+

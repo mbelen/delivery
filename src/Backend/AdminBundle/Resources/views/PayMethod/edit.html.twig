@@ -9,7 +9,7 @@
     <div class="well">
     <div id="myTabContent" class="tab-content">
     <div class="tab-pane active in" id="home">
-    <form class="form-horizontal" id="tab" method="post" novalidate  {{ form_enctype(form) }} action="{{ path('categoria_update', { 'id': entity.id }) }}" >
+    <form class="form-horizontal" id="tab" method="post" novalidate  {{ form_enctype(form) }} action="{{ path('paymethod_update', { 'id': entity.id }) }}" >
     <input type="hidden" name="_method" value="PUT" />
      {{ form_errors(form) }}
      
@@ -66,7 +66,7 @@
 {% block javascripts %}
   {{ parent() }}
 
-{% javascripts '@BackendAdminBundle/Resources/public/js/validate_categoria.js' %}
+{% javascripts '@BackendAdminBundle/Resources/public/js/validate_paymethod.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

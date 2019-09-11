@@ -38,5 +38,17 @@ Backend\AdminBundle\Entity\Subcategoria:
                 maxMessage: "El nombre debe tener 100 carácteres máximo"
         categoria:
             - NotBlank: { message: Olvido ingresar la categoría }                            
+Backend\CustomerAdminBundle\Entity\Producto:
+    properties:
+        name:
+            - NotBlank: { message: Olvido ingresar el nombre de la subcategoría }
+            - Length: 
+                min: 2
+                max: 200
+                minMessage: "El nombre debe tener al menos 2 carácteres"
+                maxMessage: "El nombre debe tener 100 carácteres máximo"
+        categoria:
+            - NotBlank: { message: Olvido ingresar la categoría }
+                   
     
                                                                                                             

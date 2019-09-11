@@ -13,20 +13,46 @@
  
   {% if is_granted('ROLE_VIEWUSER') %}
      <div class="col-md-3 boton_initial">
-      <a href="{{ path('user') }}"><img src="{{ asset("img/user.png")}}" width="150" height="150"></a>
+      <a href="{{ path('user') }}"><i class="fa fa-users fa-5"></i></a><br>
       <span>USUARIOS</span>
+     </div>
+  {% endif %}
+  {% if is_granted('ROLE_VIEWCUSTOMER') %}
+     <div class="col-md-3 boton_initial">
+      <a href="{{ path('customer') }}"><i class="fa fa-male fa-5"></i></a><br>
+      <span>CLIENTES</span>
      </div>
   {% endif %}
   {% if is_granted('ROLE_VIEWZONA') %}
       <div class="col-md-3 boton_initial">
-        <a href="{{ path('zona') }}"><img src="{{ asset("img/localidad.png")}}" width="150" height="150"></a>
+        <a href="{{ path('zona') }}"><i class="fa fa-globe fa-5"></i></a><br>
         <span>ZONAS</span>
      </div>
   {% endif %}
   {% if is_granted('ROLE_VIEWBARRIO') %}
       <div class="col-md-3 boton_initial">
-        <a href="{{ path('barrio') }}"><img src="{{ asset("img/barrio.png")}}" width="150" height="150"></a>
+        <a href="{{ path('barrio') }}"><i class="fa fa-map-marker fa-5"></i></a><br>
         <span>BARRIOS</span>
+     </div>
+  {% endif %}
+  {% if is_granted('ROLE_VIEWMETODOPAGO') %}
+      <div class="col-md-3 boton_initial">
+        <a href="{{ path('paymethod') }}"><i class="fa fa-credit-card fa-5"></i></a><br>
+        <span>MEDIOS DE PAGO</span>
+     </div>
+  {% endif %}
+
+  {% if is_granted('ROLE_VIEWCATEGORIA') %}
+      <div class="col-md-3 boton_initial">
+        <a href="{{ path('categoria') }}"><i class="fa fa-bullseye fa-5"></i></a><br>
+        <span>CATEGORIAS</span>
+     </div>
+  {% endif %}
+
+  {% if is_granted('ROLE_VIEWSUBCATEGORIA') %}
+      <div class="col-md-3 boton_initial">
+        <a href="{{ path('subcategoria') }}"><i class="fa fa-asterisk fa-5"></i></a><br>
+        <span>SUBCATEGORIAS</span>
      </div>
   {% endif %}
 
